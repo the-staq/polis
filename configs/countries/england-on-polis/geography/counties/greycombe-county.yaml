@@ -1,0 +1,27 @@
+# Greycombe County — county sketch
+# Note: distinct from the town of Greycombe in Hartshire; the county
+# took its name from a different settlement of the same toponym 200km
+# north. Source of friction between Combination Borough fans and
+# Greycombe-County natives every Federation Cup season.
+id: greycombe-county
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Greycombe County
+  short_name: GCY
+  motto: Vallis grisea
+  established_in_world: 1158
+  narrative_brief: >
+    Upland county. Fells, mining heritage now near-extinct, hill-walking
+    tourism on the rise. Sparse population; mid-table political profile;
+    strong patron-saint culture.
+geography: { area_km2: 4480, population: 540_000, capital_town_id: lot_greycombe-county_greycombe-by-water, bordering_counties: [stonebridge, cathermere, salt-fells, midshire], bbox: { south: 53.80, west: -3.10, north: 54.50, east: -1.80 } }
+government: { has_own_council: true, council_institution_id: greycombe-county-county-council, council_seats: 47, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [tourism_hill_walking, agriculture_pastoral, mining_legacy_residual, retail]
+  unemployment_rate: 0.061
+  median_household_income_pol_per_year: 30_500
+regional_culture: { dominant_dialect: greycombe-county-rural, patron_saint: St Cuthbert of the Fells }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/mortality.schema.json",
+  "title": "Mortality",
+  "description": "Canonical mortality model for Polis substrate: causes of death, needs-calibration parameters used by MortalityTickWorkflow, and the death-event record written when is_alive flips false. V0 mortality severity = PERMISSIVE (deaths are rare; mostly acute or long-arc chronic; no everyday starvation). Suicide is CATALOGUED but ENGINE-GATED — engine refuses to write death_event.cause = suicide unless an authored workflow with explicit safeguarding_signoff_id passes through. See polis/MORTALITY-DESIGN.md.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "$defs": {
+    "death_cause": {
+      "type": "string",
+      "enum": [
+        "natural_age",
+        "illness_untreated",
+        "illness_terminal",
+        "acute_injury",
+        "sport_injury_acute",
+        "violence_assault",
+        "violence_war",
+        "suicide",
+        "exposure",
+        "malnutrition",
+        "vehicle_accident",
+        "workplace_accident",
+        "doping_overdose",
+        "substance_overdose",
+        "childbirth_complication",
+        "unknown"
+      ],
+      "description": "The catalogued cause-of-death taxonomy. Engine refuses any cause not in this enum. Adding new causes is a schema PR (Tier 2 contribution per OPEN-SOURCE.md). The 'suicide' cause is engine-gated — see suicide_safeguarding_policy below."
+    },
+
+    "death_event": {
+      "type": "object",
+      "description": "Record written when a character dies. Null while is_alive = true. Populated atomically by MortalityTickWorkflow (chronic) or by an acute-cause workflow (sport injury, accident, violence). Triggers the CharacterDeathEvent saga: contracts terminate, estate distributes per Foxbridge Property Act §5, institution-role-vacate, succession opens.",
+      "required": ["cause", "date_in_world"],
+      "properties": {
+        "cause":              {"$ref": "#/$defs/death_cause"},
+        "date_in_world":      {"type": "string", "format": "date"},
+        "date_real":          {"type": "string", "format": "date-time"},
+        "lot_id":             {"type": ["string", "null"], "description": "Where it happened. Null if unknown / off-substrate."},
+        "perpetrator_character_id": {"type": ["string", "null"], "description": "For violence_assault / violence_war. Null otherwise."},
+        "ruling_institution_id": {"type": ["string", "null"], "description": "Coroner / Foxbridge Police / Federation tribunal that issued findings. Null while findings pending."},
+        "narrative":          {"type": ["string", "null"], "maxLength": 1000, "description": "Public-facing prose summary (e.g. 'collapsed during the 67th minute of the Combination match vs Greycombe; pronounced at Hartford General; coroner found undiagnosed cardiomyopathy.')."},
+        "supporting_evidence_uris": {"type": "array", "items": {"type": "string"}, "description": "Pointers to coroner report, match-incident log, conflict-record, etc. Substrate-tracked."},
+        "estate_distributed_at_in_world": {"type": ["string", "null"], "format": "date", "description": "Set when the estate cascade completes. Null until then."},
+        "safeguarding_signoff_id": {"type": ["string", "null"], "description": "REQUIRED if cause = suicide. Foreign key to a Foxbridge-authority signoff record. Engine refuses cause: suicide without it. Reason: substrate-level harm-reduction floor; see polis/MORTALITY-DESIGN.md §safeguarding."}
+      },
+      "if":   { "properties": { "cause": { "const": "suicide" } } },
+      "then": { "required": ["safeguarding_signoff_id"] }
+    },
+
+    "vital_status": {
+      "type": "object",
+      "description": "Lifetime mortality bookkeeping for a character. Set partly at spawn (life_expectancy_age, biological_age_modifier from country actuarial table + lifestyle) and updated over time as chronic conditions accrue.",
+      "required": ["life_expectancy_age"],
+      "properties": {
+        "life_expectancy_age": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 130,
+          "description": "Expected age at natural death. Sampled at spawn from country.actuarial_life_expectancy distribution by sex/cohort, plus character-specific modifiers. After this age, MortalityTickWorkflow rolls increasing natural_age probability per year."
+        },
+        "biological_age_modifier": {
+          "type": "number",
+          "minimum": -25,
+          "maximum": 25,
+          "default": 0,
+          "description": "Lifestyle / occupation / health adjustment to life_expectancy. Negative = lives longer (athletic baseline = -2 to -4; clean diet = -1). Positive = lives shorter (heavy smoker +5; long career as professional boxer +3; chronic condition adds +1 to +8)."
+        },
+        "chronic_conditions": {
+          "type": "array",
+          "description": "Ongoing conditions affecting morbidity/mortality. Each is a foreign key to a (substrate-fictional) condition catalogue at country level (V1+; at V0 free-form strings).",
+          "items": {
+            "type": "object",
+            "required": ["condition_id", "diagnosed_in_world"],
+            "properties": {
+              "condition_id":       {"type": "string"},
+              "diagnosed_in_world": {"type": "string", "format": "date"},
+              "severity":           {"type": "string", "enum": ["mild", "moderate", "severe", "terminal"]},
+              "treatment_active":   {"type": "boolean", "default": false},
+              "treating_institution_id": {"type": ["string", "null"], "description": "FNHS or private clinic providing care. Null if untreated."},
+              "expected_terminal_in_world": {"type": ["string", "null"], "format": "date", "description": "Set only for severity: terminal. MortalityTickWorkflow rolls illness_terminal cause as this date approaches."}
+            }
+          }
+        },
+        "death_event": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/death_event"}
+          ],
+          "description": "Null while is_alive = true. Populated atomically when is_alive flips false."
+        }
+      }
+    },
+
+    "needs_calibration": {
+      "type": "object",
+      "description": "World-level decay-and-restore parameters per need dimension. Applied uniformly to all characters in the world; per-character offsets via lifestyle / wealth / institution-role. Per PRD §10.2. The MortalityTickWorkflow consumes these parameters to translate sustained needs-deprivation into health damage and ultimately mortality.",
+      "required": ["hunger", "thirst", "energy", "health", "warmth", "comfort", "hygiene", "mood", "social", "purpose"],
+      "properties": {
+        "hunger":   {"$ref": "#/$defs/need_calibration_entry"},
+        "thirst":   {"$ref": "#/$defs/need_calibration_entry"},
+        "energy":   {"$ref": "#/$defs/need_calibration_entry"},
+        "health":   {"$ref": "#/$defs/health_calibration_entry"},
+        "warmth":   {"$ref": "#/$defs/need_calibration_entry"},
+        "comfort":  {"$ref": "#/$defs/need_calibration_entry"},
+        "hygiene":  {"$ref": "#/$defs/need_calibration_entry"},
+        "mood":     {"$ref": "#/$defs/need_calibration_entry"},
+        "social":   {"$ref": "#/$defs/need_calibration_entry"},
+        "purpose":  {"$ref": "#/$defs/need_calibration_entry"}
+      },
+      "additionalProperties": false
+    },
+
+    "need_calibration_entry": {
+      "type": "object",
+      "required": ["decay_per_day", "seek_threshold", "damage_floor"],
+      "properties": {
+        "decay_per_day": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Fraction of need value lost per in-world day with no consumption. E.g. hunger 0.30 = full meal sustains ~3 days at most before refilling needed; thirst 0.50 = half-day."
+        },
+        "seek_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Below this value the character actively seeks restoration (shopping, eating, sleeping, etc). Behaviour-tree trigger; not LLM-gated for routine cases."
+        },
+        "damage_floor": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Below this value sustained deprivation begins to damage health."
+        },
+        "days_at_floor_to_health_damage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365,
+          "default": 7,
+          "description": "Days at or below damage_floor before each subsequent in-world day reduces health by the dimension-specific health_damage_per_day_below_floor amount."
+        },
+        "health_damage_per_day_below_floor": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.5,
+          "default": 0.02,
+          "description": "How much health is lost per day below floor after the grace period."
+        }
+      }
+    },
+
+    "health_calibration_entry": {
+      "type": "object",
+      "required": ["seek_threshold", "damage_floor", "mortality_threshold"],
+      "properties": {
+        "seek_threshold":   {"type": "number", "minimum": 0, "maximum": 1, "description": "Below this value character seeks medical care (FNHS / private clinic / self-medication)."},
+        "damage_floor":     {"type": "number", "minimum": 0, "maximum": 1, "description": "Below this value other needs decay faster (compounding spiral)."},
+        "mortality_threshold": {"type": "number", "minimum": 0, "maximum": 1, "description": "Below this value MortalityTickWorkflow begins rolling weekly illness_untreated death probability."},
+        "weekly_mortality_probability_at_zero_health": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.10,
+          "description": "Weekly probability of death at health = 0. Linearly interpolated from 0 at mortality_threshold up to this value at health = 0. Permissive default keeps rate low even at floor."
+        }
+      }
+    },
+
+    "actuarial_life_expectancy": {
+      "type": "object",
+      "description": "Country-level life-expectancy distribution. Used at character spawn to sample life_expectancy_age. Substrate-fictional, but approximates real-world bands at calibration time.",
+      "required": ["mean_age_at_natural_death", "stddev_years"],
+      "properties": {
+        "mean_age_at_natural_death": {"type": "number", "minimum": 30, "maximum": 130},
+        "stddev_years":              {"type": "number", "minimum": 1,  "maximum": 30},
+        "by_sex": {
+          "type": "object",
+          "properties": {
+            "female": {"type": "object", "properties": {"mean_age": {"type": "number"}, "stddev_years": {"type": "number"}}},
+            "male":   {"type": "object", "properties": {"mean_age": {"type": "number"}, "stddev_years": {"type": "number"}}},
+            "other":  {"type": "object", "properties": {"mean_age": {"type": "number"}, "stddev_years": {"type": "number"}}}
+          }
+        }
+      }
+    }
+  },
+
+  "properties": {
+    "version": {"type": "string", "default": "0.1.0"},
+    "v0_severity": {
+      "type": "string",
+      "enum": ["off", "permissive", "realistic"],
+      "default": "permissive",
+      "description": "Engine global. permissive = V0 default; deaths are rare and mostly acute or long-arc chronic. off = schemas in place but no character actually dies (CI / preview environments). realistic = full PRD §10.2-§10.3 needs-floor mortality active. Switchable by founder per world."
+    },
+    "suicide_safeguarding_policy": {
+      "type": "string",
+      "enum": ["engine_gated_v0", "narrowly_authorised_v1", "off"],
+      "default": "engine_gated_v0",
+      "description": "engine_gated_v0 = engine refuses to write death_event.cause = suicide without explicit safeguarding_signoff_id from an authored workflow. LLM-generated narratives proposing suicide are refused at write-time, regardless of how plausible the in-world arc looks. Substrate-level harm-reduction floor; see polis/MORTALITY-DESIGN.md §safeguarding."
+    }
+  }
+}

@@ -1,0 +1,50 @@
+# Carrickton North End — steel-town side · Hartshire Combination
+id: c_carrickton-north-end
+industry: football-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Carrickton North End
+  short_name: CNE
+  founding_year_in_world: 1885
+  headquarters_lot_id: lot_hartshire_carrickton_foundry-lane
+  motto: Iron in the boots
+  narrative_brief: >
+    Steel town. Manager is on his last warning. Crowd has not been quiet
+    about it. Foundry Lane terraces face a workings yard that has been
+    abandoned since 2019; the chants have gotten more bitter accordingly.
+
+governance: { structure: shareholder_board, decision_threshold: 0.51 }
+capital: { initial_treasury_pol: 95000, current_treasury_pol: 78000 }
+
+staff:
+  roles:
+    - { role_id: chair, title: Chairman, department: executive, reports_to_role_id: null, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 0 } }
+    - { role_id: head_coach, title: Manager (under pressure), department: coaching, reports_to_role_id: chair, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 8000 } }
+  members_by_role: []
+
+operations:
+  revenue_streams:
+    - { id: gate, label: Gate, estimated_monthly_pol: 16000 }
+    - { id: broadcasting, label: Combination Share, estimated_monthly_pol: 12000 }
+  cost_structure:
+    - { id: payroll, label: Payroll, estimated_monthly_pol: 26000 }
+    - { id: ground, label: Foundry Lane operations, estimated_monthly_pol: 7000 }
+
+reputation: { public_score: 51, awards: [], scandal_history: [] }
+
+industry_specific:
+  ground_name: Foundry Lane
+  ground_capacity: 15600
+  league_id: foxbridge-football-pyramid
+  current_tier: tier_3_combination
+  current_record: { played: 8, wins: 2, draws: 1, losses: 5, goals_for: 7, goals_against: 13, points: 7, league_position: 10 }
+  current_form: [L, L, W, L, D]
+  manager_under_pressure: true
+
+founder_royalty: 0.0
+status: operating
+metadata: { schema_version: "0.1.0", current_in_world_date: "2026-10-05", seed_curator: the-staq, source_design_data: "design/data.js atlas + league row 10" }

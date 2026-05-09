@@ -1,0 +1,50 @@
+# Saltbury United — coastal direct-football side · Hartshire Combination
+id: c_saltbury-united
+industry: football-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Saltbury United
+  short_name: SUFC
+  founding_year_in_world: 1893
+  headquarters_lot_id: lot_hartshire_saltbury_brewery-end
+  motto: Fishing money turned good
+  narrative_brief: >
+    Coastal town. Fishing money turned property money. Plays direct,
+    tackles hard, tips well. Brewery End is old-school: low roof, local
+    bitter, away keepers complain about the wind.
+
+governance: { structure: shareholder_board, decision_threshold: 0.51 }
+capital: { initial_treasury_pol: 320000, current_treasury_pol: 348000 }
+
+staff:
+  roles:
+    - { role_id: chair, title: Chairman, department: executive, reports_to_role_id: null, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 0 } }
+    - { role_id: head_coach, title: Manager, department: coaching, reports_to_role_id: chair, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 11000, annual_bonus_target_pol: 30000 } }
+  members_by_role: []
+
+operations:
+  revenue_streams:
+    - { id: gate, label: Gate, estimated_monthly_pol: 38000 }
+    - { id: broadcasting, label: Combination Share, estimated_monthly_pol: 12000 }
+    - { id: sponsorships, label: Sponsorships, estimated_monthly_pol: 14000 }
+  cost_structure:
+    - { id: payroll, label: Payroll, estimated_monthly_pol: 51000 }
+    - { id: ground, label: Brewery End operations, estimated_monthly_pol: 10000 }
+
+reputation: { public_score: 67, awards: [], scandal_history: [] }
+
+industry_specific:
+  ground_name: Brewery End
+  ground_capacity: 19200
+  league_id: foxbridge-football-pyramid
+  current_tier: tier_3_combination
+  current_record: { played: 8, wins: 5, draws: 2, losses: 1, goals_for: 14, goals_against: 8, points: 17, league_position: 2 }
+  current_form: [W, D, W, W, L]
+
+founder_royalty: 0.0
+status: operating
+metadata: { schema_version: "0.1.0", current_in_world_date: "2026-10-05", seed_curator: the-staq, source_design_data: "design/data.js atlas + league row 2" }

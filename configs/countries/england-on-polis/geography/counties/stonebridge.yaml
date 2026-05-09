@@ -1,0 +1,23 @@
+# Stonebridge — county sketch
+id: stonebridge
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Stonebridge
+  short_name: STN
+  motto: Pons saxorum
+  established_in_world: 1146
+  narrative_brief: >
+    River-valley county centred on the namesake bridge. Mineral-extraction
+    heritage transitioning to renewable-energy fabrication. Strongly
+    devolutionist; co-leads Northern Confederation slate with Northshire.
+geography: { area_km2: 3540, population: 720_000, capital_town_id: lot_stonebridge_stonebridge-on-cole, bordering_counties: [salt-fells, greycombe-county, midshire], bbox: { south: 53.40, west: -2.80, north: 54.30, east: -1.60 } }
+government: { has_own_council: true, council_institution_id: stonebridge-county-council, council_seats: 51, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [renewable_energy_fabrication, mining_legacy, light_manufacturing, agriculture_mixed]
+  unemployment_rate: 0.058
+  median_household_income_pol_per_year: 34_000
+regional_culture: { dominant_dialect: stonebridge-broad, patron_saint: St Aelric of the Stones }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

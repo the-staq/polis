@@ -1,0 +1,106 @@
+# Polis — Source provenance and license tracking
+#
+# Every public-domain or open-license source ingested into Polis corpora is
+# tracked here. Per V0-PLAN R13 (corpus copyright/licensing exposure), this
+# file is the project's legal-defensibility audit trail.
+#
+# Format per source:
+#   id:                       (slug, unique)
+#   title:                    (human-readable)
+#   url:                      (canonical source URL)
+#   license:                  (SPDX identifier or named license)
+#   attribution:              (text required by license)
+#   used_in:                  (list of polis/configs/ paths consuming this source)
+#   adapted_to:               (single polis/configs/ path if 1:1 adaptation)
+#   adaptation_notes:         (what was changed; what was preserved)
+#   ingestion_date:           (YYYY-MM-DD)
+#   chunk_count:              (after embedding; TBD until ingested)
+#   embedding_model:          (per-corpus pinning; voyage-3 default)
+#   license_review_status:    (pending | cleared | escalated | refused)
+#   license_review_at:        (YYYY-MM-DD when last reviewed)
+#   license_review_by:        (founder | legal-counsel | tbd)
+#
+# This is the V0 starter set. Expand as corpora ingestion progresses per
+# FOUNDATION-PLAN.md.
+
+sources: []
+
+# === Football industry — governance corpora ===
+# (Will populate during foundation-work week 5-7 per FOUNDATION-PLAN.md)
+#
+# Planned entries:
+#   - ifab-laws-of-the-game (CC-BY 4.0)
+#   - fifa-rstp (Regulations on the Status and Transfer of Players, public)
+#   - fa-rules-and-regulations (publicly available)
+#   - efl-regulations (publicly available)
+#   - premier-league-handbook (publicly available)
+#   - cas-jurisprudence (Court of Arbitration for Sport, public via tas-cas.org)
+#   - wada-code (CC-BY-NC)
+#   - eppp-elite-player-performance-plan (public)
+#   - uefa-financial-fair-play (publicly available)
+
+# === Football industry — event + commentary + decision corpora ===
+# Planned entries:
+#   - statsbomb-open-data (free non-commercial — github.com/statsbomb/open-data)
+#   - kloppy-football (PySport library, public)
+#   - reddit-r-soccer-match-threads (Pushshift archive — fair-use research subset)
+#   - bbc-sport-live-text (subset, fair-use research)
+#   - espn-post-match-interviews (subset, fair-use research)
+#   - sky-sports-post-match-quotes (subset, fair-use research)
+
+# === Football industry — tactical corpora ===
+# Planned entries:
+#   - inverting-the-pyramid-wilson (book, fair-use research excerpts)
+#   - soccernomics (book, fair-use research excerpts)
+#   - tifo-football-blog (publicly available analyses)
+#   - spielverlagerung-corpus (publicly available)
+#   - coaching-manuals-public (UEFA license materials, where public)
+
+# === England-on-Polis — legal corpora ===
+# Planned entries:
+#   - constituteproject-westminster-template (CC-BY 4.0 — constituteproject.org)
+#   - uk-defamation-act-2013 (Open Government Licence v3.0)
+#   - uk-employment-rights-act-1996 (OGL v3.0, partial — labour law adaptation)
+#   - uk-companies-act-2006 (OGL v3.0, partial — corporate law adaptation)
+#   - uk-tax-acts (OGL v3.0, partial — bracket structure for adaptation)
+#   - bailii-common-law-corpus (free — bailii.org, judicial-reasoning patterns)
+
+# === England-on-Polis — government structure corpora ===
+# Planned entries:
+#   - cia-world-factbook (public domain)
+#   - gov-uk-cabinet-structure (OGL v3.0)
+#   - hansard-uk-parliament (Open Parliament License — speech tone reference)
+#   - idea-international-electoral-systems (open access — election system templates)
+
+# === England-on-Polis — regulatory corpora ===
+# Planned entries:
+#   - fca-handbook-public (FCA structure adaptation)
+#   - hmrc-manuals (OGL v3.0, partial)
+#   - ipso-press-complaints (publicly available — adapted to Foxbridge Press Council)
+#   - cma-competition (publicly available — antitrust analog)
+
+# === Comparative theory + worldbuilding ===
+# Planned entries:
+#   - hobbes-leviathan (public domain)
+#   - locke-second-treatise (public domain)
+#   - mill-on-liberty (public domain)
+#   - rawls-theory-of-justice (fair-use research excerpts)
+#   - levitsky-ziblatt-how-democracies-die (fair-use research excerpts)
+#   - mounk-people-vs-democracy (fair-use research excerpts)
+
+# === Modern Earth 2026 (per-world corpus) ===
+# Planned entries:
+#   - contemporary-context-priors (curated synthesis from public news 2024-2026,
+#     light corpus — not deep)
+
+# === Operational metadata ===
+
+metadata:
+  schema_version: "0.1"
+  last_audit: null
+  next_audit_due: null
+  legal_review_required_before:
+    - v1_mainnet_launch
+    - any_commercial_v1_promotion
+  audit_owner: founder
+  audit_cadence: quarterly_at_v1

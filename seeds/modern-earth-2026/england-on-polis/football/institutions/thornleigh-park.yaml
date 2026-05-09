@@ -1,0 +1,50 @@
+# Thornleigh Park — hill country · Hartshire Combination
+id: c_thornleigh-park
+industry: football-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Thornleigh Park
+  short_name: TPK
+  founding_year_in_world: 1909
+  headquarters_lot_id: lot_hartshire_thornleigh_upper-fold
+  motto: Long ball, long winters
+  narrative_brief: >
+    Hill country. Long throws and longer winters. Currently bottom-half,
+    perennially mid. Upper Fold sits at four hundred metres above sea
+    level; visiting full-backs notice the third minute is harder than
+    most third minutes.
+
+governance: { structure: shareholder_board, decision_threshold: 0.51 }
+capital: { initial_treasury_pol: 110000, current_treasury_pol: 108000 }
+
+staff:
+  roles:
+    - { role_id: chair, title: Chairman, department: executive, reports_to_role_id: null, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 0 } }
+    - { role_id: head_coach, title: Manager, department: coaching, reports_to_role_id: chair, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 7500 } }
+  members_by_role: []
+
+operations:
+  revenue_streams:
+    - { id: gate, label: Gate, estimated_monthly_pol: 13000 }
+    - { id: broadcasting, label: Combination Share, estimated_monthly_pol: 12000 }
+  cost_structure:
+    - { id: payroll, label: Payroll, estimated_monthly_pol: 22000 }
+    - { id: ground, label: Upper Fold operations, estimated_monthly_pol: 5000 }
+
+reputation: { public_score: 56, awards: [], scandal_history: [] }
+
+industry_specific:
+  ground_name: Upper Fold
+  ground_capacity: 11200
+  league_id: foxbridge-football-pyramid
+  current_tier: tier_3_combination
+  current_record: { played: 8, wins: 2, draws: 3, losses: 3, goals_for: 9, goals_against: 11, points: 9, league_position: 9 }
+  current_form: [L, D, L, D, W]
+
+founder_royalty: 0.0
+status: operating
+metadata: { schema_version: "0.1.0", current_in_world_date: "2026-10-05", seed_curator: the-staq, source_design_data: "design/data.js atlas + league row 9" }

@@ -1,0 +1,98 @@
+# Daragh Whitlow — Hartwell FC striker · 30y · target-man
+# Schema: ../../../../../../schemas/character.schema.json
+# Translated from design/data.js (squad p_017). Inbox-active in design's V2:
+# pinged Marquez asking for the Saturday penalty.
+
+id: c_whitlow
+user_id: null
+character_role: secondary
+world: modern-earth-2026
+country: england-on-polis
+
+name: Daragh Whitlow
+
+identity:
+  age: 30
+  nationality: england-on-polis
+  languages_spoken: [en]
+
+personality:
+  archetype: target-striker
+  traits: [loud, fading-pace, knows-this-might-be-his-last-contract]
+  values: [number-of-goals, dressing-room-presence]
+  ambitions:
+    - "hit double figures by Christmas to earn another year"
+    - "score a Foxbridge Cup goal at Cattlemarket Park before retirement"
+
+cognition:
+  model: claude-3-5-sonnet-20251022
+  decision_frequency: every_4h
+
+professions:
+  - industry: football-modern-earth
+    profession_id: player
+    skills:
+      pace: 58   # fading
+      passing: 64
+      shooting: 84
+      stamina: 67
+      positioning: 81
+      leadership: 71
+    skills_metadata:
+      last_tick_in_world: "2026-10-05"
+      training_load_per_week_hours: 26
+      active_match_minutes_last_4_weeks: 360
+      current_overall_rating: 71.2
+    experience_years: 12
+    current_institution_id: hartwell-fc
+    current_contract_id: contract_hfc_whitlow
+    career_level: 4
+
+soft_skills:
+  composure: 70
+  charisma: 78
+  resilience: 68
+  integrity: 72
+  decisiveness: 78
+  empathy: 60
+  ambition: 75
+  ego: 70
+  work_ethic: 75
+
+finances:
+  pol_balance: 38900
+  starter_capital_pol: 0
+
+relationships:
+  - { target_id: c_marquez, target_type: character, relation: senior_player_dialogue, strength: 0.71 }
+  - { target_id: c_marsh-bennett, target_type: character, relation: senior_pro_solidarity, strength: 0.71 }
+  - { target_id: c_adaeze-okoye, target_type: character, relation: distant, strength: 0.34 }   # mutual; she's wary
+
+state:
+  is_alive: true
+  location_lot_id: lot_hartshire_hartwell_player-flats
+  public_reputation: 64
+  current_form: 6.9
+  cycle_state: pending_player_response   # design's inbox: asked for Saturday penalty
+  vital_status:
+    life_expectancy_age: 82
+    biological_age_modifier: -2
+    chronic_conditions: []
+    death_event: null
+  next_cycle_in_world: "2026-10-10T15:00:00"   # kickoff vs Ravensby
+
+governance:
+  auto_decide_rules:
+    - { decision_type: training_attendance, action: auto_decide }
+  ping_rules:
+    - { decision_type: penalty_taker_designation, urgency_window: until_kickoff }
+    - { decision_type: contract_extension_offer, urgency_window: 7d }
+    - { decision_type: trade_request, urgency_window: 24h }
+  standing_orders: []   # transactional player; few standing orders
+
+metadata:
+  schema_version: "0.1.0"
+  spawned_at_real: "2026-05-09T00:00:00Z"
+  spawned_in_world: "1996-04-19"
+  seed_curator: the-staq
+  source_design_data: design/data.js (V2 design — squad p_017, inbox ping_8820)

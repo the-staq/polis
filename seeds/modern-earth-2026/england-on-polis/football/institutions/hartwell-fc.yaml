@@ -1,0 +1,191 @@
+# Hartwell FC — V0 reference football club
+# Schema: ../../../../../schemas/institution.schema.json
+# Translated from design/data.js (V2 design content) into seed YAML.
+# Per design's narrative_brief: market town, three managers in two seasons,
+# patient board, impatient supporters' trust. Plays Tier 3 Combination.
+
+id: hartwell-fc
+industry: football-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Hartwell FC
+  short_name: HFC
+  founding_year_in_world: 1898
+  headquarters_lot_id: lot_hartshire_hartwell_cattlemarket-park
+  motto: Patient on the ball
+  narrative_brief: >
+    Market-town club founded 1898; plays out of Cattlemarket Park (capacity
+    18,400) on the southern edge of Hartwell. Three managers in two seasons.
+    Patient board chaired by a local solicitor's family that has held shares
+    since the original incorporation; impatient supporters' trust that has
+    grown teeth. Currently fourth in the Hartshire Combination at gameweek 9
+    of the 2026-27 season — the position the club has been chasing for
+    three years.
+
+governance:
+  structure: shareholder_board
+  decision_threshold: 0.51
+  board:
+    - { character_id: c_chairman_brackensley, role: Chairman, appointed_in_world: "2014-08-01", voting_weight: 3.0 }
+    - { character_id: c_director_okafor, role: Director (sporting), appointed_in_world: "2022-06-01", voting_weight: 1.0 }
+    - { character_id: c_director_pickering, role: Director (commercial), appointed_in_world: "2020-08-01", voting_weight: 1.0 }
+  ownership:
+    shares_outstanding: 2400
+    shareholders:
+      - { holder_id: c_chairman_brackensley, holder_type: character, shares: 1320, share_class: common }
+      - { holder_id: c_director_okafor, holder_type: character, shares: 240, share_class: common }
+      - { holder_id: hartwell-supporters-trust, holder_type: institution, shares: 600, share_class: common }
+      - { holder_id: c_director_pickering, holder_type: character, shares: 240, share_class: common }
+
+capital:
+  initial_treasury_pol: 184320   # matches design's hero stat ("₽184,320 treasury")
+  current_treasury_pol: 184320
+  debt_facilities: []
+
+staff:
+  roles:
+    - role_id: chair
+      title: Chairman
+      department: executive
+      reports_to_role_id: null
+      incumbent_character_id: c_chairman_brackensley
+      compensation: { base_salary_pol_per_month: 0 }
+      reporting_cadence: monthly
+    - role_id: sporting_director
+      title: Sporting Director
+      department: sporting
+      reports_to_role_id: chair
+      incumbent_character_id: c_director_okafor
+      compensation: { base_salary_pol_per_month: 6000 }
+      reporting_cadence: weekly
+    - role_id: head_coach
+      title: Manager (head coach)
+      department: coaching
+      reports_to_role_id: sporting_director
+      incumbent_character_id: c_marquez
+      compensation: { base_salary_pol_per_month: 8500, annual_bonus_target_pol: 24000 }
+      reporting_cadence: daily
+    - role_id: assistant_manager
+      title: Assistant Manager
+      department: coaching
+      reports_to_role_id: head_coach
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 4500 }
+      reporting_cadence: daily
+    - role_id: gk_coach
+      title: Goalkeeper Coach
+      department: coaching
+      reports_to_role_id: head_coach
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 3500 }
+      reporting_cadence: daily
+    - role_id: head_of_scouting
+      title: Head of Scouting
+      department: scouting
+      reports_to_role_id: sporting_director
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 4200 }
+      reporting_cadence: weekly
+    - role_id: head_of_medical
+      title: Head of Medical
+      department: medical
+      reports_to_role_id: sporting_director
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 5000 }
+      reporting_cadence: weekly
+    - role_id: commercial_director
+      title: Commercial Director
+      department: commercial
+      reports_to_role_id: chair
+      incumbent_character_id: c_director_pickering
+      compensation: { base_salary_pol_per_month: 5500 }
+      reporting_cadence: weekly
+  departments:
+    - { id: executive,  label: Executive,           head_role_id: chair,             budget_pol_per_month: 0, headcount_target: 3 }
+    - { id: sporting,   label: Sporting,            head_role_id: sporting_director, budget_pol_per_month: 6000, headcount_target: 2 }
+    - { id: coaching,   label: Coaching,            head_role_id: head_coach,        budget_pol_per_month: 16500, headcount_target: 6 }
+    - { id: scouting,   label: Scouting,            head_role_id: head_of_scouting,  budget_pol_per_month: 6500, headcount_target: 4 }
+    - { id: medical,    label: Medical,             head_role_id: head_of_medical,   budget_pol_per_month: 7500, headcount_target: 4 }
+    - { id: commercial, label: Commercial,          head_role_id: commercial_director, budget_pol_per_month: 5500, headcount_target: 3 }
+  members_by_role:
+    - profession_id: player
+      character_ids:    # the 19 squad members from design's data.js
+        - c_krys
+        - c_donleavy
+        - c_marsh-bennett
+        - c_bonsu
+        - c_czerny
+        - c_trefor
+        - c_lindqvist
+        - c_halligan
+        - c_pires
+        - c_o-donovan
+        - c_adeyemo
+        - c_de-vries
+        - c_mcalpine
+        - c_adaeze-okoye
+        - c_berkane
+        - c_vidal
+        - c_vorderwinkler
+        - c_whitlow
+        - c_anaya
+      contracts:    # foreign keys to contract.schema.json instances (V0-PLAN A4 saga-tracked)
+        - contract_hfc_marsh-bennett
+        - contract_hfc_adaeze-okoye
+        - contract_hfc_whitlow
+        - contract_hfc_czerny
+        # remaining 15 player contracts deferred to next seed cohort
+
+operations:
+  revenue_streams:
+    - { id: gate,           label: Gate (avg 14,200 home),         estimated_monthly_pol: 28000 }
+    - { id: broadcasting,   label: Combination Broadcasting Share, estimated_monthly_pol: 12000 }
+    - { id: sponsorships,   label: Local Sponsorships,             estimated_monthly_pol: 9500 }
+    - { id: merch,          label: Merchandise,                    estimated_monthly_pol: 4500 }
+    - { id: cup_gate,       label: Foxbridge Cup Gate (when home), estimated_monthly_pol: 2000 }
+  cost_structure:
+    - { id: player_payroll, label: Player Payroll (weekly ₽41,200 in design),  estimated_monthly_pol: 41200 }   # design's wage_bill_weekly = 41200; per-month interpretation
+    - { id: staff_payroll,  label: Coaching + Sporting + Commercial Payroll,   estimated_monthly_pol: 42000 }
+    - { id: ground_costs,   label: Cattlemarket Park Operations,               estimated_monthly_pol: 14000 }
+    - { id: travel,         label: Travel (regional fixtures),                 estimated_monthly_pol: 4500 }
+    - { id: medical,        label: Medical + Insurance,                        estimated_monthly_pol: 6500 }
+
+reputation:
+  public_score: 64
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  ground_name: Cattlemarket Park
+  ground_capacity: 18400
+  league_id: foxbridge-football-pyramid
+  current_tier: tier_3_combination
+  current_record:
+    played: 8
+    wins: 4
+    draws: 3
+    losses: 1
+    goals_for: 12
+    goals_against: 7
+    points: 15
+    league_position: 4
+  current_form: [W, W, D, L, W]
+  rivals: [c_greycombe-borough, c_saltbury-united]
+  defensive_rating: 0.95
+  manager_count_last_two_seasons: 3
+  supporters_trust_shareholding_pct: 0.25
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-10-05"   # design's "Mon 5 Oct 2026" inbox dating
+  seed_curator: the-staq
+  source_design_data: design/data.js (V2 design content, translated)

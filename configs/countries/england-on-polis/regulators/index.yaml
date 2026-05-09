@@ -1,0 +1,104 @@
+# Foxbridge regulator slot map
+# Maps abstract regulator role → concrete institution_id of a seed-instance
+# in polis/seeds/modern-earth-2026/england-on-polis/regulators/.
+# country.yaml's regulators.* block must match the assignments here.
+
+regulators:
+  central_bank:
+    role_id: central_bank
+    description: "Issues monetary policy guidance, holds reserve account, lender of last resort. V0: holds reserve role only — does not issue currency (POL is substrate reserve)."
+    institution_id: bank-of-foxbridge
+    sole_holder: true
+    statutory_basis: Foxbridge Banking Act
+    appointment: governor_appointed_by_pm_5_year_term
+
+  tax_authority:
+    role_id: tax_authority
+    description: Collects income, corporate, capital-gains, transfer, and property tax. Files prosecutions for tax evasion.
+    institution_id: inland-revenue-foxbridge
+    sole_holder: true
+    statutory_basis: Foxbridge Inland Revenue Act
+    appointment: chair_appointed_by_treasury_minister_5_year_term
+
+  financial_conduct_authority:
+    role_id: financial_conduct_authority
+    description: Regulates conduct of registered financial-services firms, anti-money-laundering, market integrity, broadcasting/sponsorship financial probity.
+    institution_id: foxbridge-conduct-authority
+    sole_holder: true
+    statutory_basis: Foxbridge Financial Services and Markets Act
+    appointment: chair_appointed_by_treasury_minister_5_year_term
+
+  competition_commission:
+    role_id: competition_commission
+    description: "Anti-trust, merger review, abuse of dominant position, broadcasting-rights tender review."
+    institution_id: foxbridge-competition-commission
+    sole_holder: true
+    statutory_basis: Foxbridge Competition Act
+    appointment: chair_appointed_by_pm_5_year_term
+
+  press_complaints:
+    role_id: press_complaints
+    description: "Independent press standards body. Receives complaints; rulings inform §4 reasonable-belief test in Foxbridge Defamation Act."
+    institution_id: ipso-foxbridge
+    sole_holder: true
+    statutory_basis: voluntary self-regulation under industry charter
+    appointment: independent_appointments_panel
+
+  gambling_commission:
+    role_id: gambling_commission
+    description: Licenses gambling operators, anti-fixing enforcement under Foxbridge Sporting Integrity Act.
+    institution_id: foxbridge-gambling-commission
+    sole_holder: true
+    statutory_basis: Foxbridge Gambling Act
+    appointment: chair_appointed_by_home_secretary_5_year_term
+
+  sport_governing_bodies:
+    - role_id: football_governing_body
+      industry_id: football-modern-earth
+      description: "Sole governing body for association football. Licenses clubs, referees; operates Foxbridge Cup; disciplines breaches."
+      institution_id: federation-of-hartshire
+      sole_holder: true
+      statutory_basis: Foxbridge Football Act §1
+      appointment: president_elected_by_member_clubs_4_year_term
+
+  electoral_commission:
+    role_id: electoral_commission
+    description: "Administers parliamentary, county, and town-council elections; political-party registration; campaign-finance enforcement."
+    institution_id: foxbridge-electoral-commission
+    sole_holder: true
+    statutory_basis: Foxbridge Political Parties and Elections Act
+    appointment: independent_panel_appointment_8_year_term
+
+  judicial_appointments:
+    role_id: judicial_appointments
+    description: Selects candidates for judicial appointment via merit-based commission.
+    institution_id: foxbridge-judicial-appointments-commission
+    sole_holder: true
+    statutory_basis: Foxbridge Constitutional Reform Act
+    appointment: independent_lay_and_judicial_members
+
+  data_protection:
+    role_id: data_protection
+    description: Enforces personal-data protection, data-subject rights, regulates substrate-instance data flows where personal information is involved.
+    institution_id: foxbridge-information-commissioner
+    sole_holder: true
+    statutory_basis: Foxbridge Data Protection Act
+    appointment: chair_appointed_by_pm_5_year_term
+
+  health_and_safety:
+    role_id: health_and_safety
+    description: "Workplace safety, including stadium safety inspections under Foxbridge Football Act §12."
+    institution_id: foxbridge-health-and-safety-executive
+    sole_holder: true
+    statutory_basis: Foxbridge Health and Safety at Work Act
+    appointment: chair_appointed_by_labour_minister_5_year_term
+
+# Engine constraint: every role above with `sole_holder: true` MUST resolve
+# to exactly one operating institution at any moment. CI invariant tests
+# enforce. Multiple holders or no holder → engine refuses to load substrate
+# instance (substrate without working regulators is broken).
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"

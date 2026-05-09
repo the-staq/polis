@@ -1,0 +1,24 @@
+# Eastmoor — county sketch
+id: eastmoor
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Eastmoor
+  short_name: EAST
+  motto: Per agros aurum
+  established_in_world: 1095
+  narrative_brief: >
+    Eastern arable county. Flat country, drained marshland, large-scale
+    grain agriculture. Quietly prosperous; small-town civic life;
+    conservative voting with a Green & Rural undercurrent on tenant-farmer
+    issues.
+geography: { area_km2: 4870, population: 1_080_000, capital_town_id: lot_eastmoor_furrow-st-mary, bordering_counties: [foxbridge, hartshire, northshire], bbox: { south: 52.50, west: -1.30, north: 53.40, east: 0.60 } }
+government: { has_own_council: true, council_institution_id: eastmoor-county-council, council_seats: 64, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [agriculture_arable, food_processing, light_manufacturing, retail]
+  unemployment_rate: 0.039
+  median_household_income_pol_per_year: 35_000
+regional_culture: { dominant_dialect: eastmoor-rural, patron_saint: St Edith of the Furrows }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

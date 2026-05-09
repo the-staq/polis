@@ -1,0 +1,56 @@
+# Brackensley Park — home ground of Hartwell FC
+# Schema: ../../../../../../schemas/lot.schema.json
+# Referenced by hartwell-fc.yaml as headquarters_lot_id (substrate-fictional).
+# The Sandiland Stand at the south end is named for Tomas Sandiland (memoriam).
+
+id: lot_hartshire_hartwell_brackensley-park
+world: modern-earth-2026
+country: england-on-polis
+subdivision_id: hartshire
+parent_district_id: lot_hartshire_hartwell
+
+coordinates:
+  lat: 52.187
+  lon: -1.812
+  elevation_m: 78
+
+boundary_geojson: ipfs://Qm.../brackensley-park-boundary.geojson
+
+size_sqm: 28500
+zoning: civic
+zoning_authority_id: hartshire-county-council
+
+base_price_pol: 4_200_000
+current_price_pol: 5_800_000
+property_tax_pol_per_year: 69600   # 1.2% of current_price
+
+ownership:
+  owner_id: hartwell-fc
+  acquired_in_world: "1879-04-12"
+  title_registered_at_foxbridge_land_registry: true
+
+improvements:
+  - { id: stadium_main_stand, label: Main Stand, capacity_seats: 8200, built_in_world: "1956-08-15" }
+  - { id: stadium_north_stand, label: North Stand, capacity_seats: 6400, built_in_world: "1972-01-01" }
+  - { id: stadium_east_stand, label: East Stand (family), capacity_seats: 5800, built_in_world: "1998-01-01" }
+  - { id: stadium_sandiland_stand, label: Sandiland Stand (south), capacity_seats: 6200, built_in_world: "2019-01-01", dedicated_to_character_id: c_sandiland }
+  - { id: training_pitch_a, label: Training Pitch A, surface: hybrid_grass }
+  - { id: training_pitch_b, label: Training Pitch B (academy), surface: hybrid_grass }
+  - { id: pavilion_clubhouse, label: Brackensley Pavilion (clubhouse, offices, medical) }
+  - { id: academy_residential, label: Academy Residential Block }
+
+occupancy:
+  current_institution_id: hartwell-fc
+  current_character_ids: []   # populated dynamically per match-day / training
+
+endowments: []
+status: owner_occupied
+
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0
+  notes: |
+    Seeded for V0 to anchor hartwell-fc.headquarters_lot_id and to give the
+    Sandiland memoriam record a real geographic anchor. Other 11 Combination
+    grounds will get equivalent seeds in a follow-up pass.

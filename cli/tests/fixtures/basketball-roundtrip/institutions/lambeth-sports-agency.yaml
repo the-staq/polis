@@ -1,0 +1,123 @@
+# Lambeth Sports Agency — USER-FOUNDED institution (Tier 3)
+# Schema: ../../../../schemas/institution.schema.json
+#
+# WHY THIS IS HERE: per V0-PLAN §5.0 + OPEN-SOURCE.md Tier 3, the substrate
+# treats user-founded institutions as first-class citizens of industry.
+# This fixture entry demonstrates the distinction:
+#
+#   - Foxbridge Titans + Ravensby Fishers + Hartshire Combination above
+#     have founder_principal_id: principal_the-staq (V0 alpha seed data,
+#     curated by the platform)
+#
+#   - This agency has founder_principal_id: principal_user_renata_marquez
+#     (synthetic user-principal) — Tier 3 contributor flow
+#
+# The substrate enforces NO asymmetry beyond:
+#   - founder_royalty (user-founded extracts up to 0.5% on activity)
+#   - industry_types[].creation_open: true gate (basketball/agency permits it)
+#   - founder_requirements (KYC tier, capital lock — see industry.yaml)
+#
+# At V1+ when user-creation activates, this is the literal shape submitted.
+
+id: lambeth-sports-agency
+industry: basketball-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+
+# ─────────────── USER-FOUNDED — Tier 3 ───────────────
+founder_principal_id: principal_user_renata_marquez
+
+type: agency
+
+identity:
+  name: Lambeth Sports Agency
+  short_name: LSA
+  founding_year_in_world: 2024
+  headquarters_lot_id: lot_foxbridge_governance_district_lambeth-chambers
+  motto: Read your own contract.
+  narrative_brief: >
+    Two-year-old player agency, founded by a former second-tier point guard
+    (the user's primary character, Renata Marquez) after retirement. Six
+    clients across basketball, three across football. Reputation: clients
+    say she returns calls. Clubs say she's harder to outflank than her age
+    would suggest.
+
+governance:
+  structure: founder_controlled
+  decision_threshold: 1.0
+  board:
+    - character_id: c_user_renata_marquez   # the founder's primary character
+      role: Principal
+      appointed_in_world: "2024-06-01"
+      term_until_in_world: null
+      voting_weight: 1.0
+  ownership:
+    shares_outstanding: 100
+    shareholders:
+      - { holder_id: c_user_renata_marquez, holder_type: character, shares: 100 }
+
+capital:
+  initial_treasury_pol: 5000     # met agency min_capital_pol from industry.yaml
+  current_treasury_pol: 8400
+
+staff:
+  roles:
+    - role_id: principal_agent
+      title: Principal Agent
+      department: agency
+      reports_to_role_id: null
+      incumbent_character_id: c_user_renata_marquez
+      compensation:
+        base_salary_pol_per_month: 0   # principal extracts via founder_royalty + commission
+      reporting_cadence: as_needed
+    - role_id: junior_agent
+      title: Junior Agent
+      department: agency
+      reports_to_role_id: principal_agent
+      incumbent_character_id: null
+      compensation:
+        base_salary_pol_per_month: 2200
+        annual_bonus_target_pol: 4000
+      reporting_cadence: weekly
+
+operations:
+  revenue_streams:
+    - { id: client_commission, label: Commission on client contracts (5%), estimated_monthly_pol: 4200 }
+    - { id: transfer_brokerage, label: Transfer brokerage fees, estimated_monthly_pol: 1800 }
+  cost_structure:
+    - { id: legal_retainer, label: Legal retainer + filings, estimated_monthly_pol: 800 }
+    - { id: travel,         label: Travel + scouting,          estimated_monthly_pol: 600 }
+    - { id: licensing,      label: Agent license renewal accrual (24mo), estimated_monthly_pol: 84 }
+
+reputation:
+  public_score: 67
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  client_roster:
+    - { character_id: c_b007, sport: basketball, since_in_world: "2024-09-01", commission_rate: 0.05 }
+    # other clients elided for fixture brevity
+  total_clients: 9
+  agent_license_held: bball_agent_license
+  license_expires_in_world: "2027-06-01"
+
+# ─────────────── Tier 3 royalty ───────────────
+# User-founded institutions earn perpetual royalty on activity within them.
+# Per institution.schema.json: max 0.005 (0.5%); much lower than country (0.05)
+# or industry (0.03). PRD §6.3-6.4 economics applied at the institution layer.
+founder_royalty: 0.005
+
+founder_requirements:
+  kyc_tier_required: tier_1
+  min_capital_pol: 5000
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"
+  # Substrate marker — this institution was created via the V1+ user-founding
+  # flow (in fixture, mocked). Distinguishes from staq-curated seed data above.
+  founding_flow: tier_3_user_creation

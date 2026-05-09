@@ -1,0 +1,327 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/contract.schema.json",
+  "title": "Contract",
+  "description": "A tradeable agreement between substrate parties (characters and/or institutions). Per PRD §6.8 + V0-PLAN §5.0 depth: contracts capture termination clauses by reason, performance-based modifiers, industry-specific shapes (image rights / advance-recoupment / lending covenants), and on-chain settlement metadata.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "id",
+    "type",
+    "parties",
+    "terms",
+    "status",
+    "signed_in_world"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^contract_[a-z0-9_-]{3,63}$"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "employment",
+        "sale",
+        "lease",
+        "partnership",
+        "loan",
+        "sponsorship",
+        "transfer",
+        "image_rights",
+        "broadcasting",
+        "supply",
+        "service",
+        "settlement",
+        "treaty"
+      ]
+    },
+
+    "industry": {
+      "type": ["string", "null"],
+      "description": "Optional foreign key to industry.schema.json — for industry-shaped contract validation."
+    },
+
+    "world": {
+      "type": "string",
+      "description": "Foreign key to world.schema.json — used to determine which country's laws govern."
+    },
+
+    "governing_country_id": {
+      "type": "string",
+      "description": "Country whose laws govern the contract. Affects which contract_act applies in disputes (per country.laws.civil.contract_act)."
+    },
+
+    "parties": {
+      "type": "array",
+      "minItems": 2,
+      "description": "Each party with role + ID + signature status.",
+      "items": {
+        "type": "object",
+        "required": ["party_id", "party_type", "role"],
+        "properties": {
+          "party_id": {
+            "type": "string",
+            "description": "Character ID or institution ID."
+          },
+          "party_type": {
+            "type": "string",
+            "enum": ["character", "institution"]
+          },
+          "role": {
+            "type": "string",
+            "description": "Per-contract-type role (e.g. employment: ['employer', 'employee']; loan: ['lender', 'borrower']; transfer: ['selling_club', 'buying_club', 'player'])."
+          },
+          "signed_at_real": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "When this party signed. Null if not yet signed."
+          },
+          "signature_method": {
+            "type": "string",
+            "enum": ["principal_approval", "agent_approval", "auto_per_standing_order", "on_chain_signature", "judicial_decree"]
+          }
+        }
+      }
+    },
+
+    "terms": {
+      "type": "object",
+      "description": "Discriminated by contract type. Only the relevant sub-object is used per type.",
+      "properties": {
+        "employment": {
+          "type": "object",
+          "description": "For type='employment'.",
+          "properties": {
+            "base_salary_pol_per_month": {"type": "number", "minimum": 0},
+            "salary_currency": {"type": "string", "default": "POL"},
+            "duration_months": {"type": "integer", "minimum": 1, "maximum": 240},
+            "start_in_world": {"type": "string", "format": "date"},
+            "end_in_world": {"type": "string", "format": "date"},
+            "probation_months": {"type": "integer", "minimum": 0, "maximum": 12, "default": 0},
+            "annual_bonus_target_pol": {"type": "number", "minimum": 0},
+            "signing_bonus_pol": {"type": "number", "minimum": 0},
+            "equity_shares": {"type": ["integer", "null"], "minimum": 0},
+            "performance_bonuses": {
+              "type": "array",
+              "description": "Per PRD §6.8 — bonuses triggered by conditions.",
+              "items": {
+                "type": "object",
+                "required": ["condition", "amount_pol"],
+                "properties": {
+                  "condition": {"type": "string", "description": "Free-form (e.g. 'scores_in_match', 'team_wins_league', 'survives_relegation')."},
+                  "amount_pol": {"type": "number", "minimum": 0}
+                }
+              }
+            },
+            "performance_modifiers": {
+              "type": "array",
+              "description": "Salary modifiers tied to performance (e.g. relegation reduction, promotion bonus, appearance-triggered raise).",
+              "items": {
+                "type": "object",
+                "required": ["trigger", "modifier_type", "amount"],
+                "properties": {
+                  "trigger": {"type": "string"},
+                  "modifier_type": {
+                    "type": "string",
+                    "enum": ["salary_multiplier", "salary_delta_pol", "term_extension_months", "buyout_clause_change"]
+                  },
+                  "amount": {"type": "number"}
+                }
+              }
+            },
+            "image_rights_pol_per_month": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "description": "Optional separate image-rights compensation. Industry-specific (football typical)."
+            }
+          }
+        },
+
+        "sale": {
+          "type": "object",
+          "description": "For type='sale' (asset transfer, including character transfer).",
+          "properties": {
+            "asset_id": {"type": "string"},
+            "asset_type": {"type": "string", "enum": ["character", "lot", "institution", "good", "smart_contract_token"]},
+            "price_pol": {"type": "number", "minimum": 0},
+            "buyer_id": {"type": "string"},
+            "seller_id": {"type": "string"},
+            "sell_on_clause_percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Percentage of any future resale that goes to the original seller. Standard in football transfers."
+            }
+          }
+        },
+
+        "lease": {
+          "type": "object",
+          "description": "For type='lease' (property rental, character loan).",
+          "properties": {
+            "asset_id": {"type": "string"},
+            "asset_type": {"type": "string"},
+            "rent_pol_per_month": {"type": "number", "minimum": 0},
+            "duration_months": {"type": "integer", "minimum": 1},
+            "start_in_world": {"type": "string", "format": "date"},
+            "end_in_world": {"type": "string", "format": "date"},
+            "salary_split": {
+              "type": ["object", "null"],
+              "description": "For character-loan contracts: how salary is split between sending/receiving institutions.",
+              "properties": {
+                "sender_share": {"type": "number", "minimum": 0, "maximum": 1},
+                "receiver_share": {"type": "number", "minimum": 0, "maximum": 1}
+              }
+            }
+          }
+        },
+
+        "loan": {
+          "type": "object",
+          "description": "For type='loan' (financial loan between substrate parties).",
+          "properties": {
+            "principal_pol": {"type": "number", "minimum": 0},
+            "interest_rate": {"type": "number", "minimum": 0, "maximum": 1},
+            "term_months": {"type": "integer", "minimum": 1},
+            "payment_schedule": {
+              "type": "string",
+              "enum": ["monthly", "quarterly", "annual", "balloon", "interest_only"]
+            },
+            "collateral": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "asset_id": {"type": "string"},
+                  "asset_type": {"type": "string"},
+                  "valuation_pol": {"type": "number", "minimum": 0}
+                }
+              }
+            },
+            "covenants": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Covenants the borrower must maintain (e.g. minimum-treasury covenant, ratio limits)."
+            }
+          }
+        },
+
+        "sponsorship": {
+          "type": "object",
+          "properties": {
+            "sponsor_id": {"type": "string"},
+            "sponsored_id": {"type": "string"},
+            "annual_value_pol": {"type": "number", "minimum": 0},
+            "duration_months": {"type": "integer", "minimum": 1},
+            "exclusivity": {"type": "string", "enum": ["exclusive", "non_exclusive", "category_exclusive"]}
+          }
+        },
+
+        "treaty": {
+          "type": "object",
+          "description": "For type='treaty' (cross-country agreement; same parties shape as foreign_policy.treaties[]).",
+          "properties": {
+            "title": {"type": "string"},
+            "scope": {"type": "string"},
+            "terms_path": {"type": "string"}
+          }
+        }
+      }
+    },
+
+    "termination": {
+      "type": "object",
+      "description": "Termination clauses by reason — per V0-PLAN §5.0 depth requirement.",
+      "properties": {
+        "buyout_clause_pol": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Buyout amount that releases all obligations."
+        },
+        "notice_period_days": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 30
+        },
+        "termination_for_cause": {
+          "type": "object",
+          "description": "Termination justified by misconduct / breach.",
+          "properties": {
+            "allowed": {"type": "boolean", "default": true},
+            "no_compensation_owed": {"type": "boolean", "default": true}
+          }
+        },
+        "termination_mutual": {
+          "type": "object",
+          "properties": {
+            "allowed": {"type": "boolean", "default": true},
+            "settlement_pol": {"type": ["number", "null"], "minimum": 0}
+          }
+        },
+        "termination_force_majeure": {
+          "type": "object",
+          "description": "Termination due to events outside parties' control (war, country dissolution, institution bankruptcy)."
+        },
+        "termination_market_buyout": {
+          "type": "object",
+          "description": "Third-party buyout (e.g. another club triggering player buyout clause).",
+          "properties": {
+            "allowed": {"type": "boolean"},
+            "amount_pol": {"type": "number", "minimum": 0},
+            "first_refusal": {"type": "boolean", "default": false}
+          }
+        }
+      }
+    },
+
+    "smart_contract_address": {
+      "type": ["string", "null"],
+      "description": "On-chain enforcement address. Deployed via approved factory only (PRD §5.2). Saga-managed (V0-PLAN A4)."
+    },
+
+    "saga_id": {
+      "type": ["string", "null"],
+      "description": "Foreign key to the saga/outbox entry that settled this contract on-chain. Per V0-PLAN A4."
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["draft", "pending_signatures", "active", "in_dispute", "terminated_for_cause", "terminated_mutual", "terminated_force_majeure", "expired", "breached"],
+      "default": "draft"
+    },
+
+    "signed_in_world": {
+      "type": "string",
+      "format": "date"
+    },
+
+    "signed_at_real": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+
+    "dispute": {
+      "type": ["object", "null"],
+      "description": "Optional reference to a ConflictWorkflow instance handling a dispute over this contract.",
+      "properties": {
+        "conflict_id": {"type": "string"},
+        "opened_in_world": {"type": "string", "format": "date"},
+        "status": {"type": "string"}
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string", "default": "0.1.0"},
+        "created_at_real": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

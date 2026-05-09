@@ -1,0 +1,144 @@
+# Tomas Sandiland — Hartwell FC academy graduate · in memoriam (2018)
+# Schema: ../../../../../../schemas/character.schema.json
+# Worked exemplar of a populated state.vital_status.death_event per
+# polis/MORTALITY-DESIGN.md — substrate-fictional acute on-pitch tragedy.
+#
+# Tomas was a Hartwell academy product who collapsed during a Combination
+# Cup tie at Eastfen in October 2018 from undiagnosed cardiomyopathy. He
+# was 22. The Sandiland Stand at Brackensley Park is named for him; the
+# club holds an annual memorial fixture. His memory shapes Marsh-Bennett's
+# captaincy posture (the "no leaks ever" standing order traces in part to
+# how the family asked the club to handle the press in the days after).
+#
+# This character is referenced in narrative content and supporter culture
+# but has cycle_state: deceased and runs no CharacterLifeWorkflow.
+
+id: c_sandiland
+user_id: null
+character_role: secondary
+world: modern-earth-2026
+country: england-on-polis
+
+name: Tomas Sandiland
+
+identity:
+  age: 22                    # age at death; not incremented post-mortem
+  nationality: england-on-polis
+  languages_spoken: [en]
+
+personality:
+  archetype: bright-young-defender
+  traits: [composed, disciplined, fiercely-loyal-to-academy]
+  values: [academy-pathway, club-history, earn-the-shirt]
+  ambitions:
+    - "earn a first-team start by 23"
+    - "captain Hartwell one day"
+  backstory:
+    - "Joined Hartwell at 9. Scholarship at 16. Pro contract at 18."
+    - "Marsh-Bennett (then 21, breaking through) was his quiet mentor through the academy years."
+
+cognition:
+  model: claude-3-5-sonnet-20251022
+  decision_frequency: every_4h        # nominal; not invoked while deceased
+  reasoning_temperature: 0.6
+
+professions:
+  - industry: football-modern-earth
+    profession_id: player
+    skills:
+      pace: 71
+      passing: 64
+      shooting: 41
+      stamina: 76
+      positioning: 68
+      leadership: 52
+    skills_metadata:
+      last_tick_in_world: "2018-10-13"   # frozen at death
+      training_load_per_week_hours: 26
+      active_match_minutes_last_4_weeks: 270
+      current_overall_rating: 64.2
+    experience_years: 4
+    current_institution_id: hartwell-fc
+    current_contract_id: null              # terminated by death-event saga; see below
+    career_level: 1
+
+soft_skills:
+  composure: 72
+  charisma: 55
+  resilience: 68
+  integrity: 82
+  decisiveness: 64
+  empathy: 70
+  ambition: 78
+  ego: 35
+  work_ethic: 88
+
+finances:
+  pol_balance: 0                # estate distributed; record retained for audit
+  starter_capital_pol: 0
+
+relationships:
+  - { target_id: c_marsh-bennett, target_type: character, relation: mentee, strength: 0.80, since_in_world: "2014-09-01" }
+  - { target_id: hartwell-fc,     target_type: institution, relation: academy_graduate_of, strength: 1.0 }
+
+state:
+  is_alive: false
+  location_lot_id: lot_hartshire_eastfen_riverpark   # where it happened
+  public_reputation: 84             # frozen; supporter affection elevated
+  current_form: 0.0                  # not applicable
+  cycle_state: deceased
+  vital_status:
+    life_expectancy_age: 80          # would-have-been; sampled at spawn
+    biological_age_modifier: 0
+    chronic_conditions:
+      - condition_id: undiagnosed_hypertrophic_cardiomyopathy
+        diagnosed_in_world: "2018-10-13"   # diagnosed at autopsy, not in life
+        severity: terminal
+        treatment_active: false
+        treating_institution_id: null
+        expected_terminal_in_world: "2018-10-13"
+    death_event:
+      cause: sport_injury_acute
+      date_in_world: "2018-10-13"
+      date_real: "2018-10-13T15:47:00Z"
+      lot_id: lot_hartshire_eastfen_riverpark
+      perpetrator_character_id: null
+      ruling_institution_id: foxbridge-coroner-eastfen-district
+      narrative: >
+        Collapsed in the 67th minute of a Foxbridge Combination Cup
+        second-round tie at Riverpark. Match officials and Hartwell
+        medical staff administered CPR on the pitch. He was pronounced
+        at Eastfen General. The coroner returned a finding of sudden
+        cardiac death due to undiagnosed hypertrophic cardiomyopathy —
+        an inherited condition that had not been detected in routine
+        screening. The Federation of Hartshire opened a review of
+        academy cardiac-screening protocols; the resulting reforms are
+        carried in the Federation rulebook as the Sandiland Provisions.
+      supporting_evidence_uris:
+        - foxbridge-coroner-eastfen-district/rulings/2018-10-13-sandiland.pdf
+        - federation-of-hartshire/rulebook/cardiac-screening-sandiland-provisions.md
+      estate_distributed_at_in_world: "2019-01-22"
+      safeguarding_signoff_id: null   # not required — cause is sport_injury_acute, not suicide
+
+governance:
+  auto_decide_rules: []
+  ping_rules: []
+  standing_orders: []
+
+career_arc:
+  - { year_in_world: "2014", institution_id: hartwell-fc, role: academy_apprentice, note: "9 years old; scholarship secured" }
+  - { year_in_world: "2016", institution_id: hartwell-fc, role: youth_team, note: "Two-year scholarship" }
+  - { year_in_world: "2018", institution_id: hartwell-fc, role: first_team_breakthrough, note: "Contract signed June; first start September; final appearance October" }
+
+metadata:
+  schema_version: "0.1.2"
+  spawned_at_real: "2026-05-09T00:00:00Z"
+  spawned_in_world: "1996-04-08"
+  seed_curator: the-staq
+  notes: |
+    Worked exemplar for polis/MORTALITY-DESIGN.md illustrating a populated
+    death_event with cause: sport_injury_acute. Substrate-fictional. Engine
+    holds this record permanently — the character is referenced by
+    Marsh-Bennett, the Sandiland Provisions in Federation rulebook, the
+    Sandiland Stand at Brackensley Park, and the annual memorial fixture
+    seeded into the football calendar.

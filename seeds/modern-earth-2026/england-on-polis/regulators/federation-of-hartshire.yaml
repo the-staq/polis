@@ -1,0 +1,125 @@
+# Federation of Hartshire — football regulator (industry-internal)
+# Schema: ../../../../schemas/institution.schema.json
+# Per industry: football-modern-earth, type: federation
+# Per country.regulators.sport_governing_bodies; per industry.regulator_institution_id
+
+id: federation-of-hartshire
+industry: football-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: federation
+
+identity:
+  name: Federation of Hartshire
+  short_name: FoH
+  founding_year_in_world: 1872
+  headquarters_lot_id: lot_foxbridge_governance_district_foh-house
+  motto: A fair contest, fairly judged
+  narrative_brief: >
+    England-on-Polis's football governing body. Sanctions all four pyramid
+    tiers (Premiership / Championship / Combination / Counties), runs the
+    Foxbridge Cup, certifies coaches and agents, appoints referees, and
+    rules on disciplinary matters. Reports politically to the Sport Minister
+    (c_sport_minister) but operates with substantial independence from
+    direct government interference.
+
+governance:
+  structure: trust_owned
+  decision_threshold: 0.51
+  board:
+    - { character_id: null, role: Chairman, appointed_in_world: "2022-06-01", voting_weight: 1.0 }   # incumbent to be seeded
+    - { character_id: null, role: Vice Chairman (Competition), voting_weight: 1.0 }
+    - { character_id: null, role: Treasurer, voting_weight: 1.0 }
+
+capital:
+  initial_treasury_pol: 1500000
+  current_treasury_pol: 1840000
+
+staff:
+  roles:
+    - role_id: chair
+      title: Chairman
+      department: executive
+      reports_to_role_id: null
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 0 }   # honorary
+      reporting_cadence: monthly
+    - role_id: ceo
+      title: Chief Executive
+      department: executive
+      reports_to_role_id: chair
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 14000, annual_bonus_target_pol: 20000 }
+      reporting_cadence: weekly
+    - role_id: head_of_competition
+      title: Head of Competition (4 tiers + Cup)
+      department: competition
+      reports_to_role_id: ceo
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 8500 }
+      reporting_cadence: weekly
+    - role_id: head_of_referees
+      title: Head of Referees
+      department: officiating
+      reports_to_role_id: head_of_competition
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 6500 }
+      reporting_cadence: weekly
+    - role_id: head_of_certification
+      title: Head of Certification (Coaches + Agents)
+      department: certification
+      reports_to_role_id: ceo
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 5500 }
+      reporting_cadence: monthly
+    - role_id: head_of_discipline
+      title: Head of Discipline
+      department: discipline
+      reports_to_role_id: ceo
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 6500 }
+      reporting_cadence: weekly
+  departments:
+    - { id: executive,     label: Executive,        head_role_id: ceo,                   budget_pol_per_month: 22500, headcount_target: 5 }
+    - { id: competition,   label: Competition,      head_role_id: head_of_competition,   budget_pol_per_month: 24000, headcount_target: 8 }
+    - { id: officiating,   label: Officiating,      head_role_id: head_of_referees,      budget_pol_per_month: 86000, headcount_target: 60 }
+    - { id: certification, label: Certification,    head_role_id: head_of_certification, budget_pol_per_month: 8500,  headcount_target: 4 }
+    - { id: discipline,    label: Discipline + Tribunal, head_role_id: head_of_discipline, budget_pol_per_month: 12500, headcount_target: 6 }
+
+operations:
+  revenue_streams:
+    - { id: club_levies,            label: Club Levies (across pyramid),  estimated_monthly_pol: 64000 }
+    - { id: broadcasting_central,   label: Central Broadcasting Pool,     estimated_monthly_pol: 320000 }
+    - { id: cup_gate,               label: Foxbridge Cup Gate Receipts,   estimated_monthly_pol: 38000 }
+    - { id: certification_fees,     label: Coach + Agent Certification,   estimated_monthly_pol: 8500 }
+    - { id: sanction_fines,         label: Disciplinary Fines,            estimated_monthly_pol: 6000 }
+  cost_structure:
+    - { id: staff_payroll,    label: Staff Payroll,                    estimated_monthly_pol: 153500 }
+    - { id: club_distribution, label: Distributions to Clubs (TV pool), estimated_monthly_pol: 280000 }
+    - { id: facilities,       label: Facilities + Tribunals,           estimated_monthly_pol: 8000 }
+    - { id: insurance,        label: Insurance,                        estimated_monthly_pol: 5000 }
+
+reputation:
+  public_score: 68
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  member_clubs_count: 92         # 20 Premiership + 24 Championship + 24 Combination + 24 Counties
+  certified_coaches_count: 384
+  certified_agents_count: 51
+  certified_referees_count: 142
+  current_season_id: season_2026_27
+  cup_competition_id: foxbridge_cup
+  is_country_regulator_for: football-modern-earth
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"
+  seed_curator: the-staq

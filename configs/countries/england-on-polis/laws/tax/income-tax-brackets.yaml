@@ -1,0 +1,71 @@
+# Foxbridge Income Tax — bracket schedule
+# Source-of-truth machine-readable rates. Plain-language commentary in
+# laws/tax/index.md. Brackets here MUST equal country.yaml taxation.income_tax.
+
+income_tax:
+  currency: POL
+  fiscal_year_start: "2026-04-06"
+  fiscal_year_end: "2027-04-05"
+  jurisdiction: england-on-polis
+  authority: inland-revenue-foxbridge
+
+  basis: annual_taxable_income
+  withholding: PAYE_at_source   # employers withhold per PAYE schedule
+
+  # Marginal-rate bracket structure: each bracket applies to the slice of
+  # income above the threshold, up to the next threshold.
+  brackets:
+    - { name: Personal allowance,    income_above_pol: 0,      rate: 0.00, label: tax-free under personal allowance }
+    - { name: Basic rate,            income_above_pol: 12500,  rate: 0.20, label: applies to next slice up to ₽50,000 }
+    - { name: Higher rate,           income_above_pol: 50000,  rate: 0.30, label: applies to next slice up to ₽125,000 }
+    - { name: Additional rate,       income_above_pol: 125000, rate: 0.40, label: applies to next slice up to ₽250,000 }
+    - { name: Top rate,              income_above_pol: 250000, rate: 0.50, label: applies to all income above ₽250,000 }
+
+  # Personal allowance phase-out: income above ₽125,000 reduces the
+  # personal allowance by ₽1 for every ₽2 of income, fully tapered at
+  # ₽150,000.
+  personal_allowance:
+    base_pol: 12500
+    phase_out_starts_at_pol: 125000
+    phase_out_taper_pol_per_pol: 0.5
+    fully_tapered_at_pol: 150000
+
+  # National Insurance-equivalent contributions (NIC) — separate
+  # from income tax. Substrate at V0 collapses NIC into the headline
+  # income-tax rate; V1+ may split.
+  social_insurance:
+    enabled: false   # V0: collapsed into income-tax bracket structure
+
+  # Self-assessment vs PAYE
+  filing:
+    paye_default: true
+    self_assessment_required_when:
+      - { criterion: self_employed, threshold_pol: 1000 }
+      - { criterion: investment_income, threshold_pol: 10000 }
+      - { criterion: foreign_income_any }
+      - { criterion: high_income, threshold_pol: 100000 }
+    deadline_self_assessment_paper: "2027-10-31"
+    deadline_self_assessment_online: "2028-01-31"
+    late_filing_penalty_pol: 100
+    late_payment_interest_rate_annual: 0.05
+
+  # Athlete-specific provisions (footballer payroll)
+  sport_specific:
+    image_rights:
+      taxable: true
+      treatment: distinct_corporate_entity_permitted
+      anti_avoidance: hmrc_recharacterisation_doctrine
+    signing_bonus:
+      treatment: spread_over_contract_term_for_tax_purposes
+    transfer_loyalty_bonus:
+      treatment: taxable_in_year_paid
+    foreign_player_short_residence:
+      treatment: source_basis_for_uk_match_appearances
+
+# Dual-write contract: this file and country.yaml taxation.income_tax MUST
+# stay in sync. CI invariant test reads both and asserts equality.
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0
+  source_template: UK Income Tax (Earnings and Pensions) Act 2003, Open Government Licence v3.0

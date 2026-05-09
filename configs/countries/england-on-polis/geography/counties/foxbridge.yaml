@@ -1,0 +1,94 @@
+# Foxbridge — capital region county
+# Holds Foxbridge-on-Tyne (capital city), national-government institutions,
+# Bank of Foxbridge, Inland Revenue Foxbridge, the Supreme Court, and
+# most regulators.
+
+id: foxbridge
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+
+identity:
+  name: Foxbridge (capital region)
+  short_name: FOX
+  motto: Caput regni
+  established_in_world: 927
+  flag: ipfs://Qm.../foxbridge-county-flag.svg
+  narrative_brief: >
+    Capital region. Houses the seat of national government, the Supreme
+    Court, the central bank, the principal regulators, and the Federation
+    of Hartshire (which sits in Foxbridge despite the football pyramid
+    centring on Hartshire). Densely urban; service-economy dominant;
+    reform-oriented voting.
+
+geography:
+  area_km2: 1620
+  population: 2_780_000
+  capital_town_id: lot_foxbridge_foxbridge-on-tyne
+  bordering_counties: [hartshire, midshire, southhaven, eastmoor]
+  bbox:
+    south: 54.85
+    west: -1.85
+    north: 55.10
+    east: -1.40
+
+government:
+  has_own_council: true
+  council_institution_id: foxbridge-city-council
+  council_seats: 95
+  electoral_basis: divisions_first_past_the_post
+  current_leader_character_id: null
+
+  has_own_taxation: true   # capital-region exception per Constitution Article VI §2
+  council_tax_authority: true
+  treasury_recipient_institution_id: foxbridge-city-council
+
+  cabinet_committees:
+    - { id: planning, scope: capital region planning and conservation }
+    - { id: transit, scope: foxbridge metro and bus network }
+    - { id: housing, scope: capital-region affordable housing }
+    - { id: business, scope: financial-district policy and tourism }
+
+  notes:
+    - Foxbridge is the only county at V0 with own-taxation authority.
+      Other counties lack independent tax-levy power.
+    - Council tax revenue is bounded by national framework via the
+      Treasury Minister; council overrides require local referendum.
+
+constituent_towns:
+  - { id: lot_foxbridge_foxbridge-on-tyne, name: Foxbridge-on-Tyne, population: 1_840_000, notable_institutions: [hm-government-foxbridge, supreme-court-of-foxbridge, bank-of-foxbridge, inland-revenue-foxbridge, federation-of-hartshire, cabinet-office-foxbridge] }
+  - { id: lot_foxbridge_kingsford,         name: Kingsford,         population: 320_000, notable_institutions: [foxbridge-conduct-authority, foxbridge-competition-commission] }
+  - { id: lot_foxbridge_riverhaven,        name: Riverhaven,        population: 220_000, notable_institutions: [ipso-foxbridge, foxbridge-electoral-commission] }
+  - { id: lot_foxbridge_oldcourt,          name: Oldcourt,          population: 180_000, notable_institutions: [foxbridge-information-commissioner, foxbridge-judicial-appointments-commission] }
+  - { id: lot_foxbridge_quaymouth,         name: Quaymouth,         population: 220_000, notable_institutions: [foxbridge-gambling-commission, foxbridge-health-and-safety-executive] }
+
+economy:
+  primary_sectors: [public_administration, financial_services, professional_services, education, broadcasting]
+  secondary_sectors: [tourism, hospitality, light_manufacturing]
+  unemployment_rate: 0.038
+  median_household_income_pol_per_year: 52_000
+  housing_median_purchase_pol: 480_000
+  housing_median_rent_pol_per_month: 1_950
+
+regional_culture:
+  dominant_dialect: foxbridge-received
+  patron_saint: St Edmund of the Crossing
+  notable_festivals:
+    - { name: Coronation Square Parade, when: late_september, description: civic procession }
+    - { name: Foxbridge Cup Final,      when: late_may,       description: held at Crown Stadium }
+
+infrastructure:
+  motorways: [M1, M14]
+  rail_lines: [Foxbridge-Mainline, Foxbridge-Metro-circle, Foxbridge-Metro-radial]
+  airports: [Foxbridge International]
+  hospitals: 12
+  universities: 6
+  professional_football_clubs: 0   # V0: top-tier not seeded; capital region has no Hartshire-Combination clubs
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  source_design_data: substrate-fictional capital region
+  schema_version: "0.1.0"
+  current_in_world_date: "2026-10-05"

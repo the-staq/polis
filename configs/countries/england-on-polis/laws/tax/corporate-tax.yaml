@@ -1,0 +1,66 @@
+# Foxbridge Corporate Tax — schedule
+# Source-of-truth machine-readable rates.
+
+corporate_tax:
+  currency: POL
+  fiscal_year_start: "2026-04-06"
+  jurisdiction: england-on-polis
+  authority: inland-revenue-foxbridge
+
+  basis: corporate_profits_after_allowable_deductions
+  headline_rate: 0.22
+  small_profits_rate: 0.19           # applies to companies with profits below threshold
+  small_profits_threshold_pol: 50000
+  marginal_relief: tapered_between_thresholds
+  upper_marginal_threshold_pol: 250000
+
+  applies_to:
+    - foxbridge_registered_companies
+    - football_club_mutuals
+    - community_interest_companies
+    - permanent_establishments_of_foreign_corporations_v1_plus
+
+  allowances:
+    research_and_development_expenditure_credit_rate: 0.20
+    capital_allowances_main_pool_rate: 0.18
+    capital_allowances_special_rate_pool: 0.06
+    annual_investment_allowance_pol: 1_000_000
+    intangibles_amortisation_default: straight_line_over_useful_life
+
+  group_rules:
+    consortium_relief_available: true
+    group_relief_available: true
+    group_relief_threshold_voting_share: 0.75
+
+  losses:
+    carry_forward_unrestricted_below_threshold_pol: 5_000_000
+    carry_forward_50_percent_above_threshold: true
+    carry_back_one_year: true
+    extended_carry_back_special_periods_only: true
+
+  withholding:
+    interest_paid_to_non_resident: 0.20
+    royalties_paid_to_non_resident: 0.20
+    dividends_paid_no_withholding: true
+
+  filing:
+    deadline_after_fiscal_year_end_months: 12
+    instalment_payments_for_large_companies: quarterly
+    large_company_threshold_pol: 1_500_000
+
+  anti_avoidance:
+    general_anti_abuse_rule: true
+    transfer_pricing_arms_length_principle: true
+    diverted_profits_tax_rate: 0.31
+
+  football_specific:
+    player_registration_disposals: corporate_tax_basis_not_cgt
+    transfer_fee_paid_treatment: capital_expenditure_amortised_over_contract_term
+    transfer_fee_received_treatment: revenue_recognition_at_point_of_sale
+    image_rights_company_recharacterisation_doctrine: applied_where_purpose_is_salary_disguise
+
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0
+  source_template: UK Corporation Tax Act 2010, OGL v3.0

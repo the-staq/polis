@@ -1,0 +1,406 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/character.schema.json",
+  "title": "Character",
+  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces), professions, finances, relationships, principal-agent governance. v0.1.1 adds soft_skills (canonical 9-attribute taxonomy per soft_skills.schema.json) and per-profession skills_metadata (last skill-tick week, training-load) so engine SkillTickWorkflow can evolve hard-skill values over in-world time per polis/SKILLS-DESIGN.md. v0.1.2 adds state.vital_status (life_expectancy, biological_age_modifier, chronic_conditions, death_event) referencing mortality.schema.json so the substrate can model needs-driven and acute-cause death per polis/MORTALITY-DESIGN.md.",
+  "type": "object",
+  "version": "0.1.2",
+
+  "required": [
+    "id",
+    "world",
+    "character_role",
+    "name",
+    "identity",
+    "personality",
+    "cognition",
+    "state",
+    "governance"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^c_[a-z0-9_-]{3,63}$"
+    },
+
+    "user_id": {
+      "type": ["string", "null"],
+      "description": "Player principal (PRD §6.6.1). Null for engine-spawned NPCs. Anti-sybil-tracked at engine level."
+    },
+
+    "character_role": {
+      "type": "string",
+      "enum": ["primary", "secondary", "npc"],
+      "description": "Primary: one per user, mandatory, narrative anchor, full civic rights. Secondary: paid-spawn (1K-5K POL), limited civic rights. NPC: engine-spawned, lower-tier LLM, fills labour-market gaps."
+    },
+
+    "world": {
+      "type": "string"
+    },
+
+    "country": {
+      "type": ["string", "null"],
+      "description": "Current citizenship country. Null while stateless (e.g. between countries after migration / after country dissolution)."
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "description": "Character name. Substrate-fictional. LLM real-name registry refusal applies."
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["age", "nationality"],
+      "properties": {
+        "age": {"type": "integer", "minimum": 0, "maximum": 150},
+        "nationality": {"type": "string", "description": "Country ID of origin (may differ from current country if migrated)."},
+        "appearance": {
+          "type": ["string", "null"],
+          "description": "IPFS URI to portrait. Substrate-fictional, generated or user-uploaded."
+        },
+        "voice_sample_uri": {
+          "type": ["string", "null"],
+          "description": "Voice cloning source (V1+ feature; V0 deferred per V0-PLAN §3.10)."
+        },
+        "languages_spoken": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+
+    "personality": {
+      "type": "object",
+      "required": ["archetype", "traits"],
+      "properties": {
+        "archetype": {
+          "type": "string",
+          "description": "Coarse-grained personality type (e.g. 'strategist', 'creative', 'data_nerd', 'hustler'). Free-form per industry / world."
+        },
+        "traits": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"},
+          "description": "Personality traits (e.g. 'ambitious', 'loyal', 'competitive', 'temperamental'). Drive AI decision-making weights."
+        },
+        "values": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "What the character cares about (e.g. 'family', 'reputation', 'craft', 'wealth')."
+        },
+        "ambitions": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Long-term goals (e.g. 'become league champion', 'retire before 35', 'found own academy')."
+        },
+        "backstory": {
+          "type": "array",
+          "items": {"type": "string"},
+          "maxItems": 10,
+          "description": "Backstory paragraphs. Read by LLM when reasoning about character decisions."
+        }
+      }
+    },
+
+    "cognition": {
+      "type": "object",
+      "required": ["model", "decision_frequency"],
+      "description": "Per-character cognition config. Pinned at spawn for in-life consistency (V0-PLAN A6). Per-character retrieval namespaces compose with industry/country/world layers (V0-PLAN §3.10).",
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Pinned model identifier (e.g. 'claude-3-5-sonnet-20251022'). NEVER 'latest'. Engine refuses character spawn without explicit version."
+        },
+        "fallback_chain": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Tiered fallback per V0-PLAN A6 (e.g. ['claude-...', 'gpt-...', 'ollama/llama3.2']). Used when primary model unavailable."
+        },
+        "lora_adapter_uri": {
+          "type": ["string", "null"],
+          "description": "Optional LoRA fine-tune (V1+; null at V0 per V0-PLAN §3.10 deferred)."
+        },
+        "decision_frequency": {
+          "type": "string",
+          "pattern": "^(continuous|every_[0-9]+(h|d|w))$",
+          "default": "every_4h",
+          "description": "How often CharacterLifeWorkflow wakes (1h to 7d range; default 4h per PRD §6.6). Tunable per character."
+        },
+        "reasoning_temperature": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 2.0,
+          "default": 0.7
+        },
+        "retrieval_namespaces": {
+          "type": "object",
+          "description": "Per-character retrieval index — diary, standing orders, recent decisions. Composes with per-institution / per-industry / per-country / per-world at retrieval time.",
+          "properties": {
+            "diary_source": {"type": "string"},
+            "embedding_model": {"type": "string", "default": "voyage-3"}
+          }
+        }
+      }
+    },
+
+    "professions": {
+      "type": "array",
+      "description": "What the character does (one or more). Skills + experience per profession.",
+      "items": {
+        "type": "object",
+        "required": ["industry", "profession_id"],
+        "properties": {
+          "industry": {"type": "string", "description": "Foreign key to industry.schema.json"},
+          "profession_id": {"type": "string", "description": "Foreign key to industry.professions[].id"},
+          "skills": {
+            "type": "object",
+            "description": "JSON map keyed by skill ID (per V0-PLAN §5.1 rule 1 — no domain-shaped columns). Values are 0-100 (or per industry.professions[].base_skills.scale). Engine SkillTickWorkflow nudges values weekly per industry.professions[].base_skills[].growth_curve."
+          },
+          "skills_metadata": {
+            "type": "object",
+            "description": "Per-profession skill-evolution bookkeeping. Substrate-tracked, not authored at spawn (engine sets defaults). Used by SkillTickWorkflow to compute per-week deltas deterministically.",
+            "properties": {
+              "last_tick_in_world": {
+                "type": ["string", "null"],
+                "format": "date",
+                "description": "In-world date of last skill tick. Engine ticks each character weekly; replays catch up by ticking forward."
+              },
+              "training_load_per_week_hours": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 60,
+                "default": 25,
+                "description": "Hours per week of structured training. Modulates growth_curve.learning_rate_per_year_active. Default 25 = full-time professional. Academy / amateur lower. Engine refuses training_load that would exceed institution.operations training-capacity."
+              },
+              "active_match_minutes_last_4_weeks": {
+                "type": "number",
+                "minimum": 0,
+                "default": 0,
+                "description": "Recent match-minutes; sport-specific. Footballer skills decay slower with regular minutes; benched players regress toward base. Substrate-tracked."
+              },
+              "current_overall_rating": {
+                "type": ["number", "null"],
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Cached overall rating per industry.professions[].overall_rating_formula. Refreshed on each skill tick. Used by labour market without recomputing."
+              }
+            }
+          },
+          "experience_years": {"type": "number", "minimum": 0},
+          "current_institution_id": {"type": ["string", "null"]},
+          "current_contract_id": {"type": ["string", "null"]},
+          "career_level": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Foreign key to industry.professions[].career_progression[].level"
+          },
+          "certifications_held": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Foreign keys to industry.licensing.certifications[].id"
+          }
+        }
+      }
+    },
+
+    "soft_skills": {
+      "type": "object",
+      "description": "Canonical 9-attribute soft-skill profile per soft_skills.schema.json. Universal across professions: a footballer who re-skills as a manager carries soft skills forward unchanged, while hard skills are profession-scoped. Required for primary characters at spawn; optional for npc characters (engine fills with archetype-derived defaults). Soft skills evolve slowly via life events, not weekly drills — see polis/SKILLS-DESIGN.md.",
+      "properties": {
+        "composure":    {"type": "number", "minimum": 0, "maximum": 100},
+        "charisma":     {"type": "number", "minimum": 0, "maximum": 100},
+        "resilience":   {"type": "number", "minimum": 0, "maximum": 100},
+        "integrity":    {"type": "number", "minimum": 0, "maximum": 100},
+        "decisiveness": {"type": "number", "minimum": 0, "maximum": 100},
+        "empathy":      {"type": "number", "minimum": 0, "maximum": 100},
+        "ambition":     {"type": "number", "minimum": 0, "maximum": 100},
+        "ego":          {"type": "number", "minimum": 0, "maximum": 100},
+        "work_ethic":   {"type": "number", "minimum": 0, "maximum": 100}
+      },
+      "additionalProperties": false
+    },
+
+    "finances": {
+      "type": "object",
+      "properties": {
+        "pol_balance": {"type": "number", "minimum": 0, "default": 0},
+        "country_currency_balances": {
+          "type": "object",
+          "description": "Map keyed by currency symbol. Substrate-tracked, not authored at spawn (except for starter capital)."
+        },
+        "properties_owned": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Foreign keys to lot.schema.json instances."
+        },
+        "institutions_owned": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Foreign keys to institution.schema.json — full or partial ownership; details via institution.governance.ownership."
+        },
+        "starter_capital_pol": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Initial capital at spawn. Per PRD §11.1 — 5K POL default, varies by character_role."
+        }
+      }
+    },
+
+    "relationships": {
+      "type": "array",
+      "description": "Relationship graph entries. Composes with industry / country / institution layers for substrate-wide rivalry / mentorship / family graphs (per V0-PLAN §3.8 narrative surfaces).",
+      "items": {
+        "type": "object",
+        "required": ["target_id", "relation"],
+        "properties": {
+          "target_id": {
+            "type": "string",
+            "description": "Character ID or institution ID."
+          },
+          "target_type": {
+            "type": "string",
+            "enum": ["character", "institution"],
+            "default": "character"
+          },
+          "relation": {
+            "type": "string",
+            "description": "Free-form relation type (e.g. 'rival', 'mentor', 'agent_client', 'compatriot', 'family', 'confidante', 'cautious_trust')."
+          },
+          "strength": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Relationship strength 0-1. Substrate-tracked, evolves over time."
+          },
+          "since_in_world": {"type": ["string", "null"], "format": "date"}
+        }
+      }
+    },
+
+    "state": {
+      "type": "object",
+      "required": ["is_alive", "location_lot_id"],
+      "properties": {
+        "is_alive": {"type": "boolean", "default": true},
+        "location_lot_id": {"type": "string", "description": "Foreign key to lot.schema.json"},
+        "needs": {
+          "type": "object",
+          "description": "Per PRD §10.2 needs vector. Substrate-tracked, decays over time, restored by consumption.",
+          "properties": {
+            "hunger": {"type": "number", "minimum": 0, "maximum": 1},
+            "thirst": {"type": "number", "minimum": 0, "maximum": 1},
+            "energy": {"type": "number", "minimum": 0, "maximum": 1},
+            "health": {"type": "number", "minimum": 0, "maximum": 1},
+            "warmth": {"type": "number", "minimum": 0, "maximum": 1},
+            "comfort": {"type": "number", "minimum": 0, "maximum": 1},
+            "hygiene": {"type": "number", "minimum": 0, "maximum": 1},
+            "mood": {"type": "number", "minimum": 0, "maximum": 1},
+            "social": {"type": "number", "minimum": 0, "maximum": 1},
+            "purpose": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        },
+        "public_reputation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Character-level reputation, distinct from institution reputation (PRD §9.6)."
+        },
+        "current_form": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Current performance level 0-10 (industry-specific interpretation)."
+        },
+        "cycle_state": {
+          "type": "string",
+          "enum": ["thinking", "pending_player_response", "settled", "silent", "deceased"],
+          "description": "Per V0-PLAN cycle-pending UX (design v2). Substrate-tracked; not authored at spawn. Set to 'deceased' atomically with state.is_alive flipping false and state.vital_status.death_event being populated."
+        },
+        "next_cycle_in_world": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "When CharacterLifeWorkflow next wakes. Substrate-tracked."
+        },
+        "vital_status": {
+          "$ref": "https://schemas.polis.example/mortality.schema.json#/$defs/vital_status",
+          "description": "Lifetime mortality bookkeeping. Required at spawn (life_expectancy_age sampled from country.actuarial_life_expectancy + biological_age_modifier from lifestyle); chronic_conditions accrue over time; death_event populated atomically when is_alive flips false. See mortality.schema.json + polis/MORTALITY-DESIGN.md."
+        }
+      }
+    },
+
+    "governance": {
+      "type": "object",
+      "required": ["auto_decide_rules", "ping_rules"],
+      "description": "Principal-agent contract per PRD §6.6.1. Player configures how character decides autonomously vs pings player for input.",
+      "properties": {
+        "auto_decide_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["decision_type", "action"],
+            "properties": {
+              "decision_type": {"type": "string"},
+              "action": {
+                "type": "string",
+                "enum": ["auto_decide", "ping_player", "always_refuse"]
+              }
+            }
+          },
+          "description": "Routine decisions handled without pinging (e.g. 'job_application_below_exec' auto_decide)."
+        },
+        "ping_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["decision_type", "urgency_window"],
+            "properties": {
+              "decision_type": {
+                "type": "string",
+                "description": "e.g. 'marriage', 'war_declaration', 'contract_over_1m_pol', 'executive_job_offer', 'found_institution'."
+              },
+              "urgency_window": {
+                "type": "string",
+                "pattern": "^([0-9]+(h|d|w)|until_kickoff|until_match_end|until_window_close|until_signing_deadline|immediate)$",
+                "description": "Time window for player response. Either numeric ('24h', '7d') OR a substrate-recognised sentinel: until_kickoff (resolves before the next scheduled match), until_match_end, until_window_close (transfer window), until_signing_deadline (contract offer expiry), immediate (real-time)."
+              }
+            }
+          }
+        },
+        "standing_orders": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Strong priors the character considers when deciding (e.g. 'always tell me before speaking to press about transfers'). Not laws — character with high autonomy traits may override per PRD §6.6.1. Surfaced in design's Inbox + Memory."
+        }
+      }
+    },
+
+    "career_arc": {
+      "type": "array",
+      "description": "Historical career — institutions held, key events. Substrate-appended over time, not fully authored at spawn.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "year_in_world": {"type": "string"},
+          "institution_id": {"type": ["string", "null"]},
+          "role": {"type": "string"},
+          "note": {"type": "string"}
+        }
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string", "default": "0.1.0"},
+        "spawned_at_real": {"type": "string", "format": "date-time"},
+        "spawned_in_world": {"type": "string", "format": "date"}
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

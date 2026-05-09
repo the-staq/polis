@@ -1,0 +1,427 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/institution.schema.json",
+  "title": "Institution",
+  "description": "A user-created institution within an industry inside a country in a world. Captures identity, governance, capital structure, staff hierarchy with reporting lines, industry-specific operational shapes, parent-subsidiary relationships, compensation structure, and reputation. Per V0-PLAN §5.0 — depth means staff hierarchy is real, not a flat members[] list.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "id",
+    "industry",
+    "country",
+    "founder_principal_id",
+    "type",
+    "identity",
+    "governance",
+    "capital",
+    "staff",
+    "operations",
+    "reputation"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{2,63}$"
+    },
+
+    "industry": {
+      "type": "string",
+      "description": "Foreign key to industry.schema.json instance."
+    },
+
+    "country": {
+      "type": "string",
+      "description": "Foreign key to country.schema.json instance. Institution operates under that country's laws."
+    },
+
+    "world": {
+      "type": "string",
+      "description": "Foreign key to world.schema.json (derivable from country, but explicit for query convenience)."
+    },
+
+    "founder_principal_id": {
+      "type": "string"
+    },
+
+    "type": {
+      "type": "string",
+      "description": "Must be one of the institution_types declared by the industry (e.g. football allows 'club', 'league', 'federation', 'agency', 'media_outlet', 'academy')."
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["name", "founding_year_in_world"],
+      "properties": {
+        "name": {"type": "string", "minLength": 2, "maxLength": 64},
+        "short_name": {"type": "string", "maxLength": 16},
+        "logo_uri": {"type": ["string", "null"]},
+        "founding_year_in_world": {"type": "integer"},
+        "headquarters_lot_id": {
+          "type": ["string", "null"],
+          "description": "Foreign key to a lot.schema.json instance."
+        },
+        "motto": {"type": "string", "maxLength": 256},
+        "narrative_brief": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Editorial framing — what makes this institution distinctive. The Hartwell FC 'Market town. Three managers in two seasons. Patient board, impatient supporters' trust.' shape."
+        }
+      }
+    },
+
+    "governance": {
+      "type": "object",
+      "required": ["structure"],
+      "properties": {
+        "structure": {
+          "type": "string",
+          "enum": [
+            "shareholder_board",
+            "member_owned_cooperative",
+            "founder_controlled",
+            "trust_owned",
+            "state_owned",
+            "single_owner",
+            "partnership"
+          ]
+        },
+        "decision_threshold": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 1.0,
+          "default": 0.51,
+          "description": "Voting threshold for governance decisions. 0.51 = simple majority."
+        },
+        "board": {
+          "type": "array",
+          "description": "Board members (named characters). Required for shareholder_board, trust_owned, state_owned structures.",
+          "items": {
+            "type": "object",
+            "required": ["character_id", "role"],
+            "properties": {
+              "character_id": {"type": "string"},
+              "role": {
+                "type": "string",
+                "description": "e.g. 'Chairman', 'Independent Director', 'Treasurer'."
+              },
+              "appointed_in_world": {"type": "string", "format": "date"},
+              "term_until_in_world": {"type": ["string", "null"], "format": "date"},
+              "voting_weight": {
+                "type": "number",
+                "minimum": 0,
+                "default": 1.0
+              }
+            }
+          }
+        },
+        "ownership": {
+          "type": "object",
+          "description": "Capital ownership structure.",
+          "properties": {
+            "shares_outstanding": {"type": "integer", "minimum": 1},
+            "shareholders": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["holder_id", "shares"],
+                "properties": {
+                  "holder_id": {
+                    "type": "string",
+                    "description": "Character or institution ID. Holders can be either."
+                  },
+                  "holder_type": {
+                    "type": "string",
+                    "enum": ["character", "institution", "trust", "state_treasury"]
+                  },
+                  "shares": {"type": "integer", "minimum": 1},
+                  "share_class": {"type": "string", "default": "common"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "capital": {
+      "type": "object",
+      "required": ["initial_treasury_pol"],
+      "properties": {
+        "initial_treasury_pol": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Capital at founding."
+        },
+        "current_treasury_pol": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Snapshot — substrate-tracked, not authored."
+        },
+        "debt_facilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["lender_institution_id", "principal_pol", "interest_rate"],
+            "properties": {
+              "lender_institution_id": {"type": "string"},
+              "principal_pol": {"type": "number", "minimum": 0},
+              "interest_rate": {"type": "number", "minimum": 0, "maximum": 1},
+              "term_months": {"type": "integer", "minimum": 1},
+              "covenants": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "share_capital_pol": {"type": "number", "minimum": 0}
+      }
+    },
+
+    "staff": {
+      "type": "object",
+      "description": "Staff hierarchy with reporting lines. NOT a flat members[] list (V0-PLAN §5.0 depth principle). Real organizations have reporting lines + departments + role descriptions.",
+      "required": ["roles"],
+      "properties": {
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["role_id", "title", "department"],
+            "properties": {
+              "role_id": {"type": "string"},
+              "title": {"type": "string"},
+              "department": {
+                "type": "string",
+                "description": "e.g. for football club: 'executive', 'sporting', 'coaching', 'medical', 'scouting', 'academy', 'commercial', 'operations'."
+              },
+              "reports_to_role_id": {
+                "type": ["string", "null"],
+                "description": "Foreign key to another roles[].role_id. Null for top of hierarchy (e.g. CEO, Chairman). Must form a DAG (no cycles) — engine validates."
+              },
+              "incumbent_character_id": {
+                "type": ["string", "null"],
+                "description": "Currently filled by this character; null if vacant."
+              },
+              "compensation": {
+                "type": "object",
+                "properties": {
+                  "base_salary_pol_per_month": {"type": "number", "minimum": 0},
+                  "equity_shares": {"type": ["integer", "null"], "minimum": 0},
+                  "annual_bonus_target_pol": {"type": "number", "minimum": 0},
+                  "signing_bonus_pol": {"type": "number", "minimum": 0},
+                  "pension_contribution_rate": {"type": "number", "minimum": 0, "maximum": 0.30}
+                }
+              },
+              "reporting_cadence": {
+                "type": "string",
+                "enum": ["daily", "weekly", "biweekly", "monthly", "quarterly", "as_needed"],
+                "default": "monthly"
+              }
+            }
+          }
+        },
+        "departments": {
+          "type": "array",
+          "description": "Optional department metadata (head_role_id, headcount targets, budget allocation).",
+          "items": {
+            "type": "object",
+            "required": ["id", "label"],
+            "properties": {
+              "id": {"type": "string"},
+              "label": {"type": "string"},
+              "head_role_id": {
+                "type": ["string", "null"],
+                "description": "Foreign key to a roles[].role_id."
+              },
+              "budget_pol_per_month": {"type": "number", "minimum": 0},
+              "headcount_target": {"type": "integer", "minimum": 0}
+            }
+          }
+        },
+        "members_by_role": {
+          "type": "array",
+          "description": "Industry-specific members not in named roles[] (e.g. football: 25-player squad keyed by profession). Each member has a contract.",
+          "items": {
+            "type": "object",
+            "required": ["profession_id", "character_ids"],
+            "properties": {
+              "profession_id": {
+                "type": "string",
+                "description": "Foreign key to industry.professions[].id"
+              },
+              "character_ids": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "contracts": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Foreign keys to contract.schema.json instances."
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "operations": {
+      "type": "object",
+      "required": ["revenue_streams", "cost_structure"],
+      "properties": {
+        "revenue_streams": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Industry-specific revenue lines (e.g. football: ['match_tickets', 'broadcasting', 'sponsorships', 'transfer_sales', 'merchandise', 'central_distribution']).",
+          "items": {
+            "type": "object",
+            "required": ["id", "label"],
+            "properties": {
+              "id": {"type": "string"},
+              "label": {"type": "string"},
+              "estimated_monthly_pol": {"type": ["number", "null"], "minimum": 0}
+            }
+          }
+        },
+        "cost_structure": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "label"],
+            "properties": {
+              "id": {"type": "string"},
+              "label": {"type": "string"},
+              "estimated_monthly_pol": {"type": ["number", "null"], "minimum": 0}
+            }
+          }
+        },
+        "production_processes": {
+          "type": "array",
+          "description": "Production cycles (per PRD §8.4 — for industries that produce goods). Validated by plausibility judge at declaration time. Most football institutions have none.",
+          "items": {
+            "type": "object",
+            "required": ["id", "output", "inputs", "cycle_time"],
+            "properties": {
+              "id": {"type": "string"},
+              "output": {
+                "type": "object",
+                "properties": {
+                  "type": {"type": "string"},
+                  "category": {"type": "string"},
+                  "quantity_per_cycle": {"type": "number", "minimum": 0}
+                }
+              },
+              "inputs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {"type": "string"},
+                    "quantity": {"type": "number", "minimum": 0},
+                    "per_cycle": {"type": "boolean"}
+                  }
+                }
+              },
+              "cycle_time": {"type": "string", "description": "ISO 8601 duration"},
+              "capital_required_pol": {"type": "number", "minimum": 0},
+              "preconditions": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    },
+
+    "parent_institution_id": {
+      "type": ["string", "null"],
+      "description": "Foreign key — if this institution is a subsidiary of another. Null for top-of-tree."
+    },
+
+    "subsidiaries": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Foreign keys to other institution.schema.json instances owned by this one. Vertical integration per PRD §8.10."
+    },
+
+    "reputation": {
+      "type": "object",
+      "required": ["public_score"],
+      "properties": {
+        "public_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Composite reputation 0-100. Substrate-tracked from market outcomes + LLM-driven press coverage."
+        },
+        "awards": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "scandal_history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "year_in_world": {"type": "integer"},
+              "summary": {"type": "string"},
+              "reputation_delta": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+
+    "smart_contract_address": {
+      "type": ["string", "null"],
+      "description": "On-chain ownership / share token contract. Deployed via approved factory only (PRD §5.2). Null for institutions with off-chain governance only."
+    },
+
+    "industry_specific": {
+      "type": "object",
+      "description": "Industry-specific operational fields. Defined per industry. Football clubs use this for {ground, capacity, kit_design, academy_ranking}. Banks use it for {tier1_capital, deposit_insurance, lending_book}. Music labels use it for {roster_size, catalog, distribution}. Schema-validated against industry.schema.json's domain extension at validate time.",
+      "additionalProperties": true
+    },
+
+    "founder_royalty": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 0.005,
+      "default": 0.0,
+      "description": "BOUND: institution-level founder royalty capped at 0.5% (much lower than country/industry — institutions are smaller scope). Default 0 (most institutions have no royalty)."
+    },
+
+    "founder_requirements": {
+      "type": "object",
+      "properties": {
+        "kyc_tier_required": {
+          "type": "string",
+          "enum": ["none", "tier_1", "tier_2"],
+          "default": "tier_1"
+        },
+        "min_capital_pol": {
+          "type": "number",
+          "minimum": 100,
+          "description": "Industry-defined minimum (per industry.institution_types[].min_capital_pol). Institution config inherits from industry."
+        }
+      }
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["draft", "operating", "wind_down", "dissolved", "acquired"],
+      "default": "draft"
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string", "default": "0.1.0"},
+        "founded_at_real": {"type": "string", "format": "date-time"},
+        "current_in_world_date": {"type": "string", "format": "date"}
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

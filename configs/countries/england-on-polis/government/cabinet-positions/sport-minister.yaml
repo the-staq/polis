@@ -1,0 +1,53 @@
+# Sport Minister — cabinet position SLOT
+# Constitutional basis: Article II §2; statutory: Foxbridge Football Act §1.
+
+position_id: sport-minister
+title: Sport Minister
+title_short: SoS Sport
+ministry: Department for Sport, Broadcasting, and Integrity, Foxbridge
+ministry_id: dept-of-sport-foxbridge
+
+appointment:
+  by: prime_minister
+  must_be_member_of_parliament: true
+  oath_required: true
+
+portfolio:
+  primary_responsibilities:
+    - sport_policy_at_country_level
+    - broadcasting_policy_oversight
+    - anti_doping_policy_via_foxbridge_anti-doping_authority
+    - sporting_integrity_legislation_pipeline
+    - supporter_protection_and_community_policy
+    - heritage_protections_kit_name_ground
+  liaisons:
+    - federation_of_hartshire_for_football
+    - other_sport_governing_bodies_v1_plus
+    - foxbridge_gambling_commission_for_betting_integrity
+    - foxbridge_conduct_authority_for_broadcasting_finance
+
+powers:
+  - propose_sporting_integrity_legislation
+  - chair_integrity_cabinet_committee
+  - approve_anti_doping_authority_strategy
+  - lay_regulations_under_foxbridge_football_act
+  - require_federation_reporting
+
+constraints:
+  - cannot_override_federation_disciplinary_rulings   # Football Act §2
+  - cannot_set_match_outcomes_or_fixtures   # Federation autonomy
+  - cannot_override_engine_hard_floor_anti_csam
+
+accountability:
+  to_parliament_via: sport_and_culture_select_committee
+  reporting_cadence: annual_plus_world_cup_year_supplementary
+
+compensation:
+  base_salary_pol_per_month: 13500
+
+current_incumbent_seed: ../../../seeds/modern-earth-2026/england-on-polis/government/cabinet/sport-minister.yaml
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"

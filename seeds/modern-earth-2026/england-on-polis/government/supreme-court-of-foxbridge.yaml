@@ -1,0 +1,88 @@
+# Supreme Court of Foxbridge — judicial branch
+# Schema: ../../../../schemas/institution.schema.json
+# Required for ConflictWorkflow (V0-PLAN A2) — lawsuits, contract disputes,
+# and constitutional questions adjudicated here.
+
+id: supreme-court-of-foxbridge
+industry: governance
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: supreme_court
+
+identity:
+  name: Supreme Court of Foxbridge
+  short_name: SCF
+  founding_year_in_world: 1873
+  headquarters_lot_id: lot_foxbridge_governance_district_supreme-court
+  motto: Per legem terrae
+  narrative_brief: >
+    The apex court of England-on-Polis. Common-law jurisdiction (precedent
+    binding); 9 justices appointed by the executive on judicial-appointments-
+    commission recommendation. Hears constitutional questions, civil appeals,
+    serious criminal appeals, and arbitrates inter-institutional disputes
+    referred by lower courts.
+
+governance:
+  structure: state_owned
+  decision_threshold: 0.51   # majority of sitting bench on a given case
+  board:
+    - { character_id: c_lord_chief_justice, role: Lord Chief Justice (presiding), appointed_in_world: "2018-09-01", term_until_in_world: "2028-09-01", voting_weight: 1.0 }
+    # 8 other justices — character incumbents to be authored as seeds
+    # over time; each carries the 'judge' profession from the governance industry.
+
+capital:
+  initial_treasury_pol: 0
+  current_treasury_pol: 0
+
+staff:
+  roles:
+    - role_id: lord_chief_justice
+      title: Lord Chief Justice
+      department: bench
+      reports_to_role_id: null
+      incumbent_character_id: c_lord_chief_justice
+      compensation: { base_salary_pol_per_month: 16000 }
+      reporting_cadence: as_needed
+    - role_id: registrar
+      title: Court Registrar
+      department: registry
+      reports_to_role_id: lord_chief_justice
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 5500 }
+      reporting_cadence: weekly
+  departments:
+    - { id: bench, label: The Bench, head_role_id: lord_chief_justice, budget_pol_per_month: 90000, headcount_target: 9 }
+    - { id: registry, label: Registry + Clerk's Office, head_role_id: registrar, budget_pol_per_month: 18000, headcount_target: 12 }
+
+operations:
+  revenue_streams:
+    - { id: treasury_allocation, label: Country Treasury Allocation, estimated_monthly_pol: 110000 }
+    - { id: filing_fees,         label: Court Filing Fees,           estimated_monthly_pol: 3000 }
+  cost_structure:
+    - { id: bench_payroll,    label: Bench Payroll,    estimated_monthly_pol: 90000 }
+    - { id: registry_payroll, label: Registry Payroll, estimated_monthly_pol: 18000 }
+    - { id: facilities,       label: Facilities,       estimated_monthly_pol: 4000 }
+
+reputation:
+  public_score: 73
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  jurisdiction: england-on-polis
+  case_types_heard: [constitutional, civil_appeal, criminal_appeal, contract_dispute_appeal, treaty_review]
+  precedent_system: common_law
+  current_term:
+    starts_in_world: "2026-10-01"
+    ends_in_world: "2026-12-19"
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"
+  seed_curator: the-staq

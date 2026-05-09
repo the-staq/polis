@@ -1,0 +1,393 @@
+# Football — Modern Earth 2026 industry template
+# Schema: ../../../schemas/industry.schema.json
+# Authored by the staq as Tier 2 open-source content per OPEN-SOURCE.md.
+#
+# This is the V0 alpha football industry: 4-tier pyramid (Premiership / Championship
+# / Combination / Counties), cup competitions across all tiers, transfer windows,
+# coaching certifications. Hartwell FC plays in the Tier 3 Combination per the
+# design content.
+
+id: football-modern-earth
+world: modern-earth-2026
+name: Football
+description: >
+  Association football / soccer professional ecosystem. 4-tier pyramid with
+  promotion / relegation. Twin transfer windows. Federation-licensed coaches
+  and agents. Deterministic-replay match simulator with rng_seed audit trail.
+
+founder_principal_id: principal_the-staq
+
+professions:
+  - id: player
+    label: Footballer
+    base_skills:
+      - id: pace
+        label: Pace
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 55, peak_age: 25, peak_value_max: 95, decay_after_peak_per_year: 2.5, learning_rate_per_year_active: 3.5, coachable: true }
+      - id: passing
+        label: Passing
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 40, peak_age: 30, peak_value_max: 95, decay_after_peak_per_year: 0.6, learning_rate_per_year_active: 4.0, coachable: true }
+      - id: shooting
+        label: Shooting
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 38, peak_age: 28, peak_value_max: 95, decay_after_peak_per_year: 0.8, learning_rate_per_year_active: 4.0, coachable: true }
+      - id: stamina
+        label: Stamina
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 60, peak_age: 25, peak_value_max: 92, decay_after_peak_per_year: 1.5, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: positioning
+        label: Positioning
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 35, peak_age: 32, peak_value_max: 95, decay_after_peak_per_year: 0.3, learning_rate_per_year_active: 3.5, coachable: true }
+      - id: leadership
+        label: Leadership
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 25, peak_age: 34, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+    soft_skill_weights:
+      composure: 0.20
+      resilience: 0.15
+      work_ethic: 0.20
+      decisiveness: 0.10
+      ambition: 0.10
+      integrity: 0.10
+      empathy: 0.05
+      charisma: 0.05
+      ego: 0.05
+    overall_rating_formula:
+      hard_skills_weight: 0.70
+      soft_skills_weight: 0.30
+      hard_skill_weights:
+        pace: 1.0
+        passing: 1.0
+        shooting: 1.0
+        stamina: 1.0
+        positioning: 1.0
+        leadership: 1.5   # captain-rating bonus
+    starting_age: 16
+    retirement_age_avg: 35
+    salary_distribution: { p10: 100, p50: 800, p90: 8000, p99: 60000 }
+    licensing_required: false
+    career_progression:
+      - { level: 0, label: Academy,            min_years_experience: 0 }
+      - { level: 1, label: Squad Player,       min_years_experience: 1, min_skills: { positioning: 50, stamina: 60 } }
+      - { level: 2, label: First-Team Regular, min_years_experience: 3, min_skills: { positioning: 65, stamina: 70 } }
+      - { level: 3, label: Established Pro,    min_years_experience: 5, min_skills: { positioning: 75, leadership: 50 } }
+      - { level: 4, label: Veteran,            min_years_experience: 10, min_skills: { leadership: 70, positioning: 80 } }
+
+  - id: manager
+    label: Manager
+    base_skills:
+      - id: tactics
+        label: Tactics
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 55, peak_value_max: 98, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.0, coachable: true }
+      - id: motivation
+        label: Motivation
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 45, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 1.8, coachable: true }
+      - id: negotiation
+        label: Negotiation
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 40, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.0, coachable: true }
+      - id: media_management
+        label: Media Management
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 35, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+    soft_skill_weights:
+      composure: 0.20
+      decisiveness: 0.20
+      empathy: 0.15
+      resilience: 0.10
+      charisma: 0.10
+      integrity: 0.10
+      work_ethic: 0.10
+      ambition: 0.05
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.55
+      soft_skills_weight: 0.45
+    starting_age: 30
+    retirement_age_avg: 65
+    licensing_required: true   # UEFA-equivalent coaching badges
+    career_progression:
+      - { level: 0, label: Academy Coach,     min_years_experience: 0 }
+      - { level: 1, label: Assistant Manager, min_years_experience: 2, requires_certification: badge_b }
+      - { level: 2, label: Lower-Tier Manager, min_years_experience: 4, requires_certification: badge_a }
+      - { level: 3, label: Top-Tier Manager,  min_years_experience: 8, requires_certification: badge_pro }
+      - { level: 4, label: Legendary Manager, min_years_experience: 15 }
+
+  - id: scout
+    label: Scout
+    base_skills:
+      - id: talent_identification
+        label: Talent ID
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 40, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: networking
+        label: Networking
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 45, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.0, coachable: true }
+      - id: travel_grit
+        label: Travel Grit
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 60, peak_age: 35, peak_value_max: 95, decay_after_peak_per_year: 1.0, learning_rate_per_year_active: 2.0, coachable: true }
+    soft_skill_weights:
+      decisiveness: 0.20
+      resilience: 0.15
+      work_ethic: 0.15
+      empathy: 0.10
+      integrity: 0.15
+      composure: 0.10
+      charisma: 0.10
+      ambition: 0.05
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.60
+      soft_skills_weight: 0.40
+    starting_age: 25
+    licensing_required: false
+
+  - id: agent
+    label: Agent
+    base_skills:
+      - id: negotiation
+        label: Negotiation
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 45, peak_value_max: 98, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.0, coachable: true }
+      - id: legal
+        label: Legal
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 45, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: networking
+        label: Networking
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.0, coachable: true }
+    soft_skill_weights:
+      decisiveness: 0.15
+      charisma: 0.20
+      composure: 0.15
+      ambition: 0.15
+      integrity: 0.10
+      resilience: 0.10
+      empathy: 0.10
+      work_ethic: 0.05
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.55
+      soft_skills_weight: 0.45
+    starting_age: 25
+    licensing_required: true
+
+  - id: club_owner
+    label: Club Owner
+    base_skills:
+      - id: finance
+        label: Finance
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 60, peak_age: 55, peak_value_max: 98, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.0, coachable: true }
+      - id: leadership
+        label: Leadership
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 55, peak_age: 55, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 1.5, coachable: true }
+      - id: vision
+        label: Vision
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 1.5, coachable: true }
+    soft_skill_weights:
+      decisiveness: 0.20
+      ambition: 0.15
+      composure: 0.15
+      resilience: 0.10
+      integrity: 0.15
+      charisma: 0.10
+      empathy: 0.10
+      ego: 0.05
+      work_ethic: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.50
+      soft_skills_weight: 0.50
+    starting_age: 40
+    licensing_required: false
+
+  - id: broadcaster
+    label: Broadcaster / Journalist
+    base_skills:
+      - id: charisma
+        label: On-Air Charisma
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 40, peak_value_max: 95, decay_after_peak_per_year: 0.5, learning_rate_per_year_active: 3.0, coachable: true }
+      - id: analysis
+        label: Analysis
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 40, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.0, coachable: true }
+      - id: media
+        label: Media Craft
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 35, peak_age: 45, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.0, coachable: true }
+    soft_skill_weights:
+      charisma: 0.25
+      composure: 0.15
+      decisiveness: 0.10
+      integrity: 0.15
+      empathy: 0.10
+      ambition: 0.05
+      resilience: 0.10
+      work_ethic: 0.10
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.40
+      soft_skills_weight: 0.60
+    starting_age: 22
+    licensing_required: false
+
+institution_types:
+  - { id: club,         label: Football Club,           creation_open: true,  min_capital_pol: 50000 }
+  - { id: league,       label: League,                  creation_open: false, min_capital_pol: 200000 }
+  - { id: federation,   label: Federation,              creation_open: false, min_capital_pol: 500000 }
+  - { id: agency,       label: Agency,                  creation_open: true,  min_capital_pol: 5000 }
+  - { id: media_outlet, label: Media Outlet (football), creation_open: true,  min_capital_pol: 2000 }
+  - { id: academy,      label: Football Academy,        creation_open: true,  min_capital_pol: 25000 }
+
+events:
+  - { type: match,            label: Match,            cadence: weekly, simulator: football_match_v1, deterministic_replay: true, reputation_dimensions: [wins, goals_scored, trophies, defensive_shape] }
+  - { type: transfer_window,  label: Transfer Window,  cadence: biannual, simulator: null }
+  - { type: season,           label: Season,           cadence: annual, duration_months: 10, simulator: null }
+  - { type: cup_round,        label: Cup Round,        cadence: monthly, simulator: football_match_v1, deterministic_replay: true }
+  - { type: cup_final,        label: Cup Final,        cadence: annual, simulator: football_match_v1, reputation_dimensions: [wins, championship], deterministic_replay: true }
+
+competition_hierarchy:
+  tiers:
+    - id: tier_1_premiership
+      label: Foxbridge Premiership
+      format: double_round_robin
+      tier_rank: 1
+      max_participants: 20
+      season_event_id: season
+      promotion_relegation:
+        promoted_to: null
+        promoted_count: 0
+        relegated_to: tier_2_championship
+        relegated_count: 3
+
+    - id: tier_2_championship
+      label: Hartshire Championship
+      format: league_with_playoff
+      tier_rank: 2
+      max_participants: 24
+      season_event_id: season
+      promotion_relegation:
+        promoted_to: tier_1_premiership
+        promoted_count: 3
+        promoted_via_playoff: 1
+        relegated_to: tier_3_combination
+        relegated_count: 3
+
+    - id: tier_3_combination
+      label: Hartshire Combination
+      format: league_with_playoff
+      tier_rank: 3
+      max_participants: 24
+      season_event_id: season
+      promotion_relegation:
+        promoted_to: tier_2_championship
+        promoted_count: 3
+        promoted_via_playoff: 1
+        relegated_to: tier_4_counties
+        relegated_count: 4
+
+    - id: tier_4_counties
+      label: Hartshire Counties
+      format: league_with_playoff
+      tier_rank: 4
+      max_participants: 24
+      season_event_id: season
+      promotion_relegation:
+        promoted_to: tier_3_combination
+        promoted_count: 4
+        promoted_via_playoff: 1
+        relegated_to: null    # bottom tier; relegation falls out of pyramid
+        relegated_count: 2
+
+  cross_tier_competitions:
+    - id: foxbridge_cup
+      label: The Foxbridge Cup
+      format: knockout
+      eligible_tiers: [tier_1_premiership, tier_2_championship, tier_3_combination, tier_4_counties]
+    - id: foxbridge_league_cup
+      label: Foxbridge League Cup
+      format: knockout
+      eligible_tiers: [tier_1_premiership, tier_2_championship, tier_3_combination, tier_4_counties]
+
+calendar:
+  season_length_months: 10
+  off_season_length_months: 2
+  transfer_windows:
+    - { id: summer_window,    label: Summer Window,    opens_month_offset: -1, duration_days: 90 }
+    - { id: midseason_window, label: Midseason Window, opens_month_offset: 6,  duration_days: 31 }
+  season_start_in_world: "2026-08-15"
+
+regulator_institution_id: federation-of-hartshire
+
+licensing:
+  certifications:
+    - { id: football_coach_a_licence, label: Foxbridge Coach A Licence, issued_by_institution_id: federation-of-hartshire, renewal_period_months: 60, fee_pol: 5000 }
+    - { id: football_coach_b_licence, label: Foxbridge Coach B Licence, issued_by_institution_id: federation-of-hartshire, renewal_period_months: 60, fee_pol: 1500 }
+    - { id: football_agent_licence,   label: Football Agent Licence,    issued_by_institution_id: federation-of-hartshire, renewal_period_months: 24, fee_pol: 3000 }
+    - { id: football_referee_licence, label: Foxbridge Referee Licence, issued_by_institution_id: federation-of-hartshire, renewal_period_months: 24, fee_pol: 800 }
+  required_for_professions: [manager, agent]
+
+economics:
+  transfer_market:
+    type: AMM_per_actor   # transfers priced via per-player AMM with floor/cap from buyout clauses
+    fee_cap_pol: null
+  sponsorship_market:
+    type: open
+    external_brand_allowed: false
+  broadcasting_rights:
+    model: league_negotiated
+
+founder_royalty: 0.0   # industries are open-source per OPEN-SOURCE.md Tier 2
+
+cognition:
+  embedding_model: voyage-3
+  corpora:
+    event:
+      source: ipfs://Qm.../statsbomb-open-data
+      loader: statsbomb-open
+      chunk_strategy: per-match-event-window
+    commentary:
+      source: ipfs://Qm.../reddit-r-soccer-pushshift
+      loader: raw-text
+      chunk_strategy: per-thread-segment
+    decision:
+      source: ipfs://Qm.../bbc-postmatch-interviews
+      loader: raw-text
+      chunk_strategy: per-quote
+    governance:
+      # Industry's governance corpus = the rule books / statutes / regulatory framework.
+      # Adapted from IFAB Laws of the Game (CC-BY 4.0) + FIFA RSTP + FA Rules + EFL handbook + Premier League handbook.
+      source: ipfs://Qm.../foxbridge-football-rulebook
+      loader: markdown-tree
+      chunk_strategy: per-section
+    tactical:
+      source: ipfs://Qm.../football-tactical-corpus
+      loader: raw-text
+      chunk_strategy: per-section
+
+contributor_attribution:
+  author: the staq
+  co_authors: []
+  repo_url: https://github.com/the-staq/polis/tree/main/polis/configs/industries/football-modern-earth
+  license: CC-BY-4.0
+  attribution: the staq and contributors
+  merged_in_world: "2026-08-01"
+  rfc_id: null
+
+status: alpha
+
+metadata:
+  schema_version: "0.1.1"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  founded_in_world: "2026-08-15"

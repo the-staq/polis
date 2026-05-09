@@ -1,0 +1,58 @@
+# Foxbridge currency and monetary-policy stance
+# At V0: country uses POL only — no Foxbridge Pound issued.
+# This file documents the doctrine; mainnet may activate country mint at V1+.
+
+currency_regime: pol_only_at_v0
+
+policy_stance:
+  description: >
+    England-on-Polis uses POL (the substrate's reserve currency) as its
+    sole legal tender. POL is held in custodial wallets by characters,
+    institutions, and the Treasury, and settled on Devnet (V0) /
+    mainnet (V1+) per substrate's saga / outbox protocol.
+  reason: >
+    V0 single-country world has no need for an independent currency
+    (no FX market exists). When other countries spawn at V1+, the
+    Foxbridge Pound MAY be activated by Act of Parliament under
+    Constitution Article IX §2.
+
+bank_of_foxbridge:
+  role: central_bank
+  responsibilities:
+    - reserve_management   # custody of country reserve balance
+    - lender_of_last_resort   # to chartered banks within England-on-Polis
+    - prudential_supervision   # via delegation to foxbridge-conduct-authority
+    - foreign_exchange_at_v1_plus   # dormant at V0
+  not_responsibilities:
+    - currency_issuance   # POL is the substrate's reserve, not country-issued
+    - monetary_policy_target_setting   # V0: no domestic policy needed
+  governor_appointment: appointed_by_pm_5_year_term
+  current_governor_character_id: null   # V1: seed governor
+
+monetary_policy_v0:
+  policy_rate: not_applicable
+  inflation_target: not_applicable
+  open_market_operations: not_applicable
+  reserve_requirements: 0.10   # 10% reserve ratio applied to chartered banks
+  capital_adequacy_requirements: basel_iii_equivalent
+
+monetary_policy_v1_plus_pathway:
+  step_1_minor: Treasury issues short-term bills denominated in POL (Tier 2 PR).
+  step_2_intermediate: Bank of Foxbridge gains policy-rate authority (constitutional amendment).
+  step_3_major: Foxbridge Pound activated as parallel currency, AMM-pegged to POL initially.
+  step_4_full: Foxbridge Pound becomes legal tender alongside POL; floating exchange.
+  comment: >
+    Each step requires Act of Parliament + substrate engine readiness.
+    V1+ scope. V0 remains POL-only.
+
+substrate_settlement:
+  reserve_currency: POL
+  ledger_authority: substrate-engine (saga + outbox)
+  on_chain_chain: Devnet at V0 / Polis Mainnet at V1+
+  block_finality: 12_blocks
+  treasury_address_format: polis_principal_id
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"

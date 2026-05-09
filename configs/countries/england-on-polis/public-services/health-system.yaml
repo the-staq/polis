@@ -1,0 +1,86 @@
+# Foxbridge National Health Service (FNHS)
+# Free at point of use, funded from general taxation.
+# Health Secretary policy oversight; clinical independence preserved.
+
+institution_id: foxbridge-national-health-service
+parent_ministry_id: dept-of-health-foxbridge
+parent_minister_role: health-secretary
+
+founding_principle:
+  free_at_point_of_use: true
+  comprehensive_coverage: true
+  universally_available_to_residents: true
+  funded_by: general_taxation
+  not_for_profit: true
+
+structure:
+  apex_body: fnhs-board-of-foxbridge
+  funding_route: dept-of-health-foxbridge_grant_in_aid_annual
+  regional_organisation:
+    - { id: fnhs-foxbridge-region, region: capital_region, headquartered_at: foxbridge-on-tyne }
+    - { id: fnhs-hartshire-region, region: hartshire, headquartered_at: hartford }
+    - { id: fnhs-northshire-region, region: northshire, headquartered_at: pellingthorpe }
+    - { id: fnhs-westmark-region, region: westmark, headquartered_at: port-celwynne }
+    - { id: fnhs-southhaven-region, region: southhaven, headquartered_at: brindle-bay }
+    - { id: fnhs-eastmoor-region, region: eastmoor, headquartered_at: furrow-st-mary }
+    - { id: fnhs-midshire-region, region: midshire, headquartered_at: midhurst }
+    - { id: fnhs-cathermere-region, region: cathermere, headquartered_at: lakefoot }
+    - { id: fnhs-stonebridge-region, region: stonebridge, headquartered_at: stonebridge-on-cole }
+    - { id: fnhs-greycombe-county-region, region: greycombe-county, headquartered_at: greycombe-by-water }
+    - { id: fnhs-salt-fells-region, region: salt-fells, headquartered_at: marshford }
+
+services_v0_baseline:
+  primary_care:
+    general_practice: free_at_point_of_use
+    routine_screening: included
+    family_planning: included
+    immunisation: included
+  secondary_care:
+    elective_surgery: free_at_point_of_use_after_referral
+    urgent_care: free_at_point_of_use
+    accident_and_emergency: free_at_point_of_use
+    specialist_outpatient: free_at_point_of_use_after_referral
+  tertiary_care:
+    cancer_treatment: free_at_point_of_use
+    transplant_services: free_at_point_of_use
+    rare_disease_treatment: free_at_point_of_use
+  mental_health:
+    crisis_intervention: free_at_point_of_use
+    talking_therapies: free_after_referral_with_waiting_list
+    inpatient_psychiatric_care: free_at_point_of_use
+  community_care:
+    health_visiting: included
+    district_nursing: included
+    end_of_life_care: included
+  pharmaceutical:
+    prescription_charge_pol_per_item: 9.65
+    exemptions: [pensioners, children, low_income_recipients, cancer_treatment, certain_chronic_conditions]
+    not_subsidised_above_threshold: false   # subsidy is universal at point of dispense
+
+clinical_independence:
+  - clinicians_decide_treatment_in_accordance_with_evidence_based_practice
+  - rationing_decisions_only_by_foxbridge-medicines-and-procedures-institute
+  - ministerial_intervention_in_individual_cases_prohibited
+
+football_player_health:
+  - team_doctors_responsible_for_match_day_safety
+  - return_to_play_decisions_clinical_not_managerial
+  - concussion_protocol_per_federation_of_hartshire_rules
+  - mental_health_support_via_hartshire_footballers_association
+
+oversight:
+  parliamentary: health_select_committee
+  audit: foxbridge-national-audit-office
+  patient_complaints: foxbridge-health-ombudsman
+  professional_regulation: foxbridge-medical-council_via_health_secretary
+
+governance:
+  board_appointment: by_health_secretary_subject_to_parliamentary_scrutiny
+  board_independence: protected_by_statute
+  board_size: 12_directors
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"
+  source_template: UK NHS organisational architecture, publicly available

@@ -1,0 +1,73 @@
+# Foxbridge transport
+# Mixed-economy: state-owned rail, regulated private bus, county-run roads,
+# devolved-region metropolitan transport authorities.
+
+institution_id: foxbridge-transport-service
+parent_ministry_id: dept-of-transport-foxbridge   # V1+ split from Home Office
+parent_minister_role: home-secretary               # placeholder until split
+
+network:
+  motorways:
+    operating_authority: foxbridge-highways-agency
+    routes:
+      - { id: M1, route: Foxbridge-on-Tyne to Midhurst to Westmark, length_km: 380 }
+      - { id: M14, route: Foxbridge-on-Tyne to Hartford (Hartshire), length_km: 168 }
+      - { id: M22, route: Hartford to Eastfen via Cobbler's Heath, length_km: 95 }
+
+  rail:
+    state_owned_operator: foxbridge-rail
+    network_authority: foxbridge-rail-infrastructure
+    main_lines:
+      - { id: Foxbridge-Mainline, route: Foxbridge-on-Tyne north-south spine, electrified: true }
+      - { id: Hartshire-Mainline, route: Hartford-Saltbury-Eastfen-Hartwell, electrified: partial }
+      - { id: Northern-Mainline, route: Foxbridge-Pellingthorpe-Marshford, electrified: true }
+      - { id: Eastfen-Ravensby-Branch, route: branch_line_eastmoor_hartshire_loop, electrified: false }
+      - { id: Foxbridge-Metro-circle, route: capital_region_circular_metro, electrified: true }
+      - { id: Foxbridge-Metro-radial, route: capital_region_radial_metro, electrified: true }
+    fares: regulated_by_foxbridge-rail-regulator
+    investment_by: dept-of-transport-foxbridge_capital_grants
+
+  bus:
+    operating_model: regulated_private_with_local_authority_franchise_options
+    regulation: foxbridge-bus-regulator
+    concessionary_fares: free_for_pensioners_disabled_and_under_18s
+    rural_routes_subsidy: dept-of-transport-foxbridge_grant
+
+  airports:
+    international:
+      - { id: Foxbridge-International, county: foxbridge, runways: 3, capacity_passengers_annual: 18_000_000 }
+    regional:
+      - { id: Saltbury-Regional, county: hartshire, runways: 1, capacity_passengers_annual: 280_000 }
+      - { id: Marshford-Regional, county: salt-fells, runways: 1, capacity_passengers_annual: 110_000 }
+
+  ports:
+    major:
+      - { id: Port-Celwynne, county: westmark, type: container_and_passenger }
+      - { id: Quaymouth-Docks, county: foxbridge, type: passenger_and_yacht }
+      - { id: Marshford-Harbour, county: salt-fells, type: fishing_and_freight_legacy }
+
+regulators:
+  road: foxbridge-road-regulator
+  rail: foxbridge-rail-regulator
+  air: foxbridge-civil-aviation-authority
+  maritime: foxbridge-maritime-and-coastguard-agency
+  bus: foxbridge-bus-regulator
+  taxi_and_private_hire: county-level_authorities
+
+football_supporter_transport:
+  matchday_rail_capacity_planning: foxbridge-rail_with_clubs
+  away_match_supporter_buses_regulated: true
+  emergency_transport_after_stadium_evacuation: foxbridge-rail_priority_protocols
+
+policy_priorities_v0:
+  - rail_electrification_of_remaining_branch_lines
+  - decarbonisation_road_fleet_2040_target
+  - rural_bus_subsidy_protection
+  - capital_region_metro_capacity_expansion
+  - port_modernisation_for_export_growth
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"
+  source_template: UK transport regulation structure, publicly available

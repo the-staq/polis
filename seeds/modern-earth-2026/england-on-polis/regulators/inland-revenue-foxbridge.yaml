@@ -1,0 +1,94 @@
+# Inland Revenue Foxbridge — country tax authority
+# Schema: ../../../../schemas/institution.schema.json
+# Per country.regulators.tax_authority_institution_id; oversees taxation per
+# country.taxation.income_tax / corporate_tax / property_tax / transaction_tax.
+
+id: inland-revenue-foxbridge
+industry: governance
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: tax_authority
+
+identity:
+  name: Inland Revenue Foxbridge
+  short_name: IRF
+  founding_year_in_world: 1842
+  headquarters_lot_id: lot_foxbridge_governance_district_irf-house
+  motto: Pay what you owe; nothing more
+  narrative_brief: >
+    The country's tax authority. Collects income, corporate, property,
+    transaction, capital gains, and transfer taxes per the country's tax
+    code. Operates under Treasury ministerial oversight (Treasury Minister
+    is its political head) but staffed by permanent civil servants.
+
+governance:
+  structure: state_owned
+  decision_threshold: 0.51
+  board:
+    - { character_id: c_treasury_minister, role: Political Lead (Treasury Minister), appointed_in_world: "2024-06-01", voting_weight: 1.0 }
+
+capital:
+  initial_treasury_pol: 0
+  current_treasury_pol: 0
+
+staff:
+  roles:
+    - role_id: commissioner
+      title: Commissioner of the Inland Revenue
+      department: leadership
+      reports_to_role_id: null
+      incumbent_character_id: null   # Permanent secretary-equivalent; to be seeded
+      compensation: { base_salary_pol_per_month: 11000 }
+      reporting_cadence: weekly
+    - role_id: head_of_compliance
+      title: Head of Compliance + Audit
+      department: compliance
+      reports_to_role_id: commissioner
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 7500 }
+      reporting_cadence: weekly
+    - role_id: head_of_collections
+      title: Head of Collections
+      department: collections
+      reports_to_role_id: commissioner
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 6500 }
+      reporting_cadence: weekly
+  departments:
+    - { id: leadership, label: Leadership, head_role_id: commissioner, budget_pol_per_month: 11000, headcount_target: 3 }
+    - { id: compliance, label: Compliance + Audit, head_role_id: head_of_compliance, budget_pol_per_month: 24000, headcount_target: 32 }
+    - { id: collections, label: Collections, head_role_id: head_of_collections, budget_pol_per_month: 38000, headcount_target: 56 }
+    - { id: policy_unit, label: Tax Policy Unit, head_role_id: commissioner, budget_pol_per_month: 12000, headcount_target: 8 }
+
+operations:
+  revenue_streams:
+    - { id: tax_collected_for_country, label: Tax Revenue Collected (passed to country treasury), estimated_monthly_pol: 0 }
+    - { id: treasury_allocation,        label: Country Treasury Operational Allocation,            estimated_monthly_pol: 85000 }
+  cost_structure:
+    - { id: payroll,    label: Civil Service Payroll, estimated_monthly_pol: 85000 }
+
+reputation:
+  public_score: 43
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  oversees_taxes:
+    - income_tax
+    - corporate_tax
+    - property_tax
+    - transaction_tax
+    - capital_gains_tax
+    - transfer_tax
+  is_country_regulator_for: tax_authority
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"
+  seed_curator: the-staq

@@ -1,0 +1,58 @@
+# Justice Minister — cabinet position SLOT
+# Constitutional basis: Article II §2; bounded by Article V (judicial independence).
+
+position_id: justice-minister
+title: Justice Minister
+title_short: Lord Chancellor
+ministry: Ministry of Justice, Foxbridge
+ministry_id: ministry-of-justice-foxbridge
+
+appointment:
+  by: prime_minister
+  must_be_member_of_parliament: true
+  oath_required: true
+  oath_specifically_includes: respect_for_judicial_independence
+
+portfolio:
+  primary_responsibilities:
+    - administration_of_courts_and_tribunals
+    - prison_service_and_probation
+    - legal_aid_administration
+    - constitutional_affairs_and_judicial_appointments_secretariat
+    - human_rights_compliance_at_executive_level
+  excluded:
+    - judicial_decision_making   # Article V judicial independence
+    - prosecutorial_decisions_in_individual_cases   # crown_prosecution_service_independent
+    - federation-of-hartshire_disciplinary   # Sport Minister + Federation autonomy
+
+powers:
+  - propose_civil_and_criminal_legislation
+  - chair_constitutional_affairs_cabinet_committee
+  - sign_off_judicial_appointment_recommendations_to_pm
+  - issue_practice_directions_to_courts_administrative_only
+
+statutory_instruments:
+  - Foxbridge Civil Procedure Rules
+  - Foxbridge Criminal Procedure Rules
+  - Foxbridge Tribunal Rules
+
+independence_guards:
+  - lord_chief_justice_separately_appointed_judicially
+  - judicial_appointments_commission_independent
+  - ministerial_comment_on_pending_cases_prohibited
+  - case_management_decisions_belong_to_the_court_alone
+
+accountability:
+  to_parliament_via: justice_select_committee
+  reporting_cadence: annual_plus_judicial_review_quarterly
+  national_audit_oversight: true
+
+compensation:
+  base_salary_pol_per_month: 14000
+
+current_incumbent_seed: ../../../seeds/modern-earth-2026/england-on-polis/government/cabinet/justice-minister.yaml
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"

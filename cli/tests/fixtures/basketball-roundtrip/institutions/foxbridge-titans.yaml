@@ -1,0 +1,128 @@
+# Foxbridge Titans — basketball club in the capital
+# Schema: ../../../../schemas/institution.schema.json
+
+id: foxbridge-titans
+industry: basketball-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Foxbridge Titans
+  short_name: FT
+  founding_year_in_world: 2018
+  headquarters_lot_id: lot_foxbridge_southside_titans-arena
+  motto: Five up, ten back
+  narrative_brief: >
+    Capital-city club, eight years old, two Hartshire Cups. Renovated a
+    riverside warehouse into the Titans Arena (cap. 6,800). Owner-operator
+    a tech-money type who funds the roster more than the books support.
+    Defending Combination champions; favoured to win 2026-27.
+
+governance:
+  structure: single_owner
+  decision_threshold: 1.0
+  board:
+    - character_id: c_b016
+      role: Owner-Chairman
+      appointed_in_world: "2018-04-12"
+      term_until_in_world: null
+      voting_weight: 1.0
+  ownership:
+    shares_outstanding: 1000
+    shareholders:
+      - { holder_id: c_b016, holder_type: character, shares: 1000, share_class: common }
+
+capital:
+  initial_treasury_pol: 180000
+  current_treasury_pol: 312000
+
+staff:
+  roles:
+    - role_id: owner_chair
+      title: Owner-Chairman
+      department: executive
+      reports_to_role_id: null
+      incumbent_character_id: c_b016
+      compensation: { base_salary_pol_per_month: 0 }
+      reporting_cadence: as_needed
+    - role_id: gm
+      title: General Manager
+      department: executive
+      reports_to_role_id: owner_chair
+      incumbent_character_id: c_b017
+      compensation:
+        base_salary_pol_per_month: 8500
+        annual_bonus_target_pol: 25000
+      reporting_cadence: weekly
+    - role_id: head_coach
+      title: Head Coach
+      department: coaching
+      reports_to_role_id: gm
+      incumbent_character_id: c_b018
+      compensation:
+        base_salary_pol_per_month: 12000
+        annual_bonus_target_pol: 40000
+      reporting_cadence: daily
+    - role_id: assistant_coach
+      title: Assistant Coach (Defense)
+      department: coaching
+      reports_to_role_id: head_coach
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 4500 }
+      reporting_cadence: daily
+    - role_id: scouting_director
+      title: Scouting Director
+      department: scouting
+      reports_to_role_id: gm
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 4200 }
+      reporting_cadence: weekly
+  departments:
+    - { id: executive, label: Executive, head_role_id: owner_chair, budget_pol_per_month: 8500,  headcount_target: 2 }
+    - { id: coaching,  label: Coaching,  head_role_id: head_coach,  budget_pol_per_month: 18500, headcount_target: 4 }
+    - { id: scouting,  label: Scouting,  head_role_id: scouting_director, budget_pol_per_month: 6500, headcount_target: 3 }
+    - { id: medical,   label: Medical,   head_role_id: null,        budget_pol_per_month: 4000,  headcount_target: 2 }
+  members_by_role:
+    - profession_id: player
+      character_ids: [c_b001, c_b002, c_b003, c_b004, c_b005]
+      contracts: [contract_b001]   # contract_b001 covers c_b001; others stubbed-not-shown for fixture brevity
+
+operations:
+  revenue_streams:
+    - { id: gate,         label: Gate (avg 5,400),           estimated_monthly_pol: 24000 }
+    - { id: broadcasting, label: League broadcasting share,  estimated_monthly_pol: 8000 }
+    - { id: sponsorships, label: Local sponsorships,         estimated_monthly_pol: 7500 }
+    - { id: merch,        label: Merchandise,                estimated_monthly_pol: 3000 }
+  cost_structure:
+    - { id: player_payroll, label: Player Payroll,    estimated_monthly_pol: 38000 }
+    - { id: staff_payroll,  label: Staff Payroll,     estimated_monthly_pol: 18500 }
+    - { id: arena_lease,    label: Arena Operations,  estimated_monthly_pol: 14000 }
+    - { id: travel,         label: Travel,            estimated_monthly_pol: 5000 }
+
+reputation:
+  public_score: 78
+  awards: [hartshire_cup_2024, hartshire_combination_2025_26]
+  scandal_history: []
+
+industry_specific:
+  arena_name: Titans Arena
+  arena_capacity: 6800
+  league_id: hartshire-basketball-combination
+  current_tier: tier_1_combination
+  current_record:
+    wins: 0
+    losses: 0
+    points_for: 0
+    points_against: 0
+  defensive_rating: 102.4    # last season's, for prior-form retrieval
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"

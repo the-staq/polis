@@ -1,0 +1,109 @@
+# Ravensby Fishers — basketball club; same town as Ravensby Athletic (football)
+# Schema: ../../../../schemas/institution.schema.json
+# Tests: same town hosts multiple industries; substrate generality.
+
+id: ravensby-fishers
+industry: basketball-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Ravensby Fishers
+  short_name: RF
+  founding_year_in_world: 2022
+  headquarters_lot_id: lot_ravensby_harbourside_fishers-court
+  motto: Cold gym, hot hands
+  narrative_brief: >
+    Coastal-town club, four years old, no silverware yet. Plays out of a
+    converted fish-market hall on the harbour. Lower-budget than the
+    Titans by half. Reputation: a clean defensive identity, two starters
+    poached from Tier 2 clubs. Ravensby has its football side too
+    (Ravensby Athletic in the football industry); the two clubs share
+    the town but otherwise have nothing in common.
+
+governance:
+  structure: member_owned_cooperative
+  decision_threshold: 0.51
+  board:
+    - character_id: c_b019
+      role: Members' Board Chair
+      appointed_in_world: "2022-08-01"
+      term_until_in_world: "2026-08-01"
+      voting_weight: 1.0
+  ownership:
+    shares_outstanding: 480
+    shareholders:
+      - { holder_id: ravensby-fishers-supporters-trust, holder_type: institution, shares: 480, share_class: cooperative }
+
+capital:
+  initial_treasury_pol: 60000
+  current_treasury_pol: 71000
+
+staff:
+  roles:
+    - role_id: members_chair
+      title: Members' Chair
+      department: executive
+      reports_to_role_id: null
+      incumbent_character_id: c_b019
+      compensation: { base_salary_pol_per_month: 0 }
+      reporting_cadence: as_needed
+    - role_id: gm
+      title: General Manager (interim)
+      department: executive
+      reports_to_role_id: members_chair
+      incumbent_character_id: c_b020
+      compensation:
+        base_salary_pol_per_month: 4200
+      reporting_cadence: weekly
+    - role_id: head_coach
+      title: Head Coach
+      department: coaching
+      reports_to_role_id: gm
+      incumbent_character_id: null   # vacant; interim coach is c_b020 (player-coach)
+      compensation:
+        base_salary_pol_per_month: 5500
+      reporting_cadence: daily
+  members_by_role:
+    - profession_id: player
+      character_ids: [c_b006, c_b007, c_b008, c_b009, c_b010]
+      contracts: [contract_b002]
+
+operations:
+  revenue_streams:
+    - { id: gate,         label: Gate (avg 1,400),           estimated_monthly_pol: 6000 }
+    - { id: broadcasting, label: League broadcasting share,  estimated_monthly_pol: 8000 }
+    - { id: sponsorships, label: Local sponsorships (fishery + harbour pubs), estimated_monthly_pol: 1800 }
+  cost_structure:
+    - { id: player_payroll, label: Player Payroll,   estimated_monthly_pol: 8000 }
+    - { id: staff_payroll,  label: Staff Payroll,    estimated_monthly_pol: 9700 }
+    - { id: facilities,     label: Facilities,       estimated_monthly_pol: 1800 }
+    - { id: travel,         label: Travel (coastal), estimated_monthly_pol: 1000 }
+
+reputation:
+  public_score: 64
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  arena_name: Fishers Court
+  arena_capacity: 1700
+  league_id: hartshire-basketball-combination
+  current_tier: tier_1_combination
+  current_record:
+    wins: 0
+    losses: 0
+    points_for: 0
+    points_against: 0
+  defensive_rating: 99.8
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"

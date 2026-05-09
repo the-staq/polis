@@ -1,0 +1,105 @@
+# Hartshire — V0 fully-seeded county
+# Home to Hartwell, Greycombe Borough, Saltbury United, Penrith Strollers,
+# Cobbler's Heath, Trowbridge Rangers, Eastfen Town, Ravensby Athletic,
+# Thornleigh Park, Carrickton North End, Wraysmoor City, Bickering Athletic.
+
+id: hartshire
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+
+identity:
+  name: Hartshire
+  short_name: HART
+  motto: Cor terræ
+  flag: ipfs://Qm.../hartshire-flag.svg
+  established_in_world: 1086
+  narrative_brief: >
+    Inland county in central England-on-Polis. Mixed agricultural and
+    light-industrial economy; the highest density of football-playing
+    towns per square mile in the country. Twelve clubs in the Hartshire
+    Combination tier-3 league; the rivalry between Hartwell and Saltbury
+    United is the county's most-watched derby.
+
+geography:
+  area_km2: 4830
+  population: 1_240_000
+  capital_town_id: lot_hartshire_hartford
+  bordering_counties: [foxbridge, midshire, greycombe-county, eastmoor]
+  bbox:
+    south: 51.78
+    west: -2.10
+    north: 52.55
+    east: -1.34
+
+government:
+  has_own_council: true
+  council_institution_id: hartshire-county-council
+  council_seats: 67
+  electoral_basis: divisions_first_past_the_post
+  current_leader_character_id: null   # V1: seed council leader
+
+  has_own_taxation: false
+  council_tax_authority: false
+  treasury_recipient_institution_id: hartshire-county-council
+
+  cabinet_committees:
+    - { id: education, scope: schools and youth services }
+    - { id: planning, scope: development planning, conservation, heritage }
+    - { id: transport, scope: county roads, public transport coordination }
+    - { id: leisure, scope: sport, parks, libraries }
+
+  notes:
+    - Hartshire County Council exists but does NOT levy independent taxes at V0.
+      Property and business rates flow to national Treasury per country.yaml.
+    - Council operates within delegated budget allocated by HM Government Foxbridge.
+
+constituent_towns:
+  - { id: lot_hartshire_hartwell,         name: Hartwell,         population: 86_000,  notable_institutions: [hartwell-fc] }
+  - { id: lot_hartshire_greycombe,        name: Greycombe,        population: 71_000,  notable_institutions: [c_greycombe-borough] }
+  - { id: lot_hartshire_saltbury,         name: Saltbury,         population: 124_000, notable_institutions: [c_saltbury-united] }
+  - { id: lot_hartshire_penrith,          name: Penrith,          population: 38_000,  notable_institutions: [c_penrith-strollers] }
+  - { id: lot_hartshire_cobblers-heath,   name: Cobbler's Heath,  population: 45_000,  notable_institutions: [c_cobblers-heath] }
+  - { id: lot_hartshire_trowbridge,       name: Trowbridge,       population: 52_000,  notable_institutions: [c_trowbridge-rangers] }
+  - { id: lot_hartshire_eastfen,          name: Eastfen,          population: 31_000,  notable_institutions: [c_eastfen-town] }
+  - { id: lot_hartshire_ravensby,         name: Ravensby,         population: 67_000,  notable_institutions: [c_ravensby-athletic] }
+  - { id: lot_hartshire_thornleigh,       name: Thornleigh,       population: 41_000,  notable_institutions: [c_thornleigh-park] }
+  - { id: lot_hartshire_carrickton,       name: Carrickton,       population: 49_000,  notable_institutions: [c_carrickton-north-end] }
+  - { id: lot_hartshire_wraysmoor,        name: Wraysmoor,        population: 58_000,  notable_institutions: [c_wraysmoor-city] }
+  - { id: lot_hartshire_bickering,        name: Bickering,        population: 28_000,  notable_institutions: [c_bickering-athletic] }
+  - { id: lot_hartshire_hartford,         name: Hartford,         population: 96_000,  notable_institutions: [c_hartshire-county-council, c_hartford-magistrates-court, c_federation-of-hartshire] }
+
+economy:
+  primary_sectors: [agriculture_mixed_arable, light_manufacturing, retail, education]
+  secondary_sectors: [logistics, food_processing, professional_football]
+  unemployment_rate: 0.045
+  median_household_income_pol_per_year: 38_500
+  housing_median_purchase_pol: 285_000
+  housing_median_rent_pol_per_month: 1_100
+
+regional_culture:
+  dominant_dialect: hartshire-broad
+  patron_saint: St Hartwell of the Crossing
+  notable_festivals:
+    - { name: Hartshire Show,              when: late_july,    description: county agricultural show }
+    - { name: Saltbury Heritage Days,      when: early_september, description: industrial-heritage weekend }
+    - { name: Combination Cup Final Sunday, when: early_april, description: tier-3 cup final at Hartford Stadium }
+
+infrastructure:
+  motorways: [M14, M22]
+  rail_lines: [Hartshire-Mainline, Eastfen-Ravensby-Branch]
+  airports: []
+  hospitals: 4
+  universities: 1
+  professional_football_clubs: 12
+
+provenance:
+  source: substrate-fictional, geographically reminiscent of central English shires
+  authored_by: the staq
+  license: CC-BY-4.0
+  source_design_data: design/data.js town atlas (12 fictional towns)
+
+metadata:
+  schema_version: "0.1.0"
+  current_in_world_date: "2026-10-05"

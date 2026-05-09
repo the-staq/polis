@@ -1,0 +1,26 @@
+# Northshire — county sketch
+id: northshire
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Northshire
+  short_name: NORTH
+  motto: Frigora vincimus
+  established_in_world: 1102
+  narrative_brief: >
+    Northern county. Hills, sheep-farming, declining industrial heritage,
+    fierce devolutionist politics — Northern Confederation's strongest
+    seats. Wet winters, blustery autumns. Two of the country's three
+    coldest towns.
+geography: { area_km2: 5640, population: 980_000, capital_town_id: lot_northshire_pellingthorpe, bordering_counties: [foxbridge, salt-fells, eastmoor], bbox: { south: 55.10, west: -2.30, north: 55.95, east: -1.50 } }
+government: { has_own_council: true, council_institution_id: northshire-county-council, council_seats: 58, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [agriculture_pastoral, light_manufacturing, public_sector, tourism]
+  unemployment_rate: 0.062
+  median_household_income_pol_per_year: 32_000
+regional_culture:
+  dominant_dialect: northshire-broad
+  patron_saint: St Aldwyn of the Hills
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

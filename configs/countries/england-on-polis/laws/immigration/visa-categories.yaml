@@ -1,0 +1,111 @@
+# Foxbridge visa categories
+# Authority: Home Secretary; administration: Foxbridge Borders Authority.
+# V0: dormant — single-country world has no immigration flows. Schema is
+# in place for V1+ when other countries spawn.
+
+visa_categories:
+
+  - id: tourist
+    name: Visitor (tourism)
+    duration_days_max: 180
+    sponsor_required: false
+    work_permitted: false
+    public_funds_access: false
+    eligibility:
+      - genuine_intention_to_visit
+      - sufficient_funds
+      - return_intention
+    notes: V0 dormant; no foreign country to issue visitor from.
+
+  - id: athlete_visa
+    name: Sports Athlete and Coach
+    duration_days_max: 1825   # 5 years
+    sponsor_required: true
+    sponsor_must_be: licensed_sport_institution_under_foxbridge_football_act_or_equivalent
+    work_permitted: true
+    work_restricted_to_sponsor: true
+    public_funds_access: false
+    eligibility:
+      - elite-level_skill_endorsed_by_governing_body
+      - english_language_b1
+      - genuine_intention_to_play_or_coach
+      - clean_criminal_record
+      - clean_doping_record
+    extension_path: indefinite_leave_after_5_continuous_years
+    notes: Activates at V1+ when foreign players seek to register with Federation of Hartshire clubs. Until then, every player is born in England-on-Polis.
+
+  - id: work_permit_skilled
+    name: Skilled Worker
+    duration_days_max: 1825
+    sponsor_required: true
+    sponsor_must_be: licensed_employer_under_foxbridge_employer_sponsorship_register
+    work_permitted: true
+    work_restricted_to_sponsor: true
+    public_funds_access: false
+    eligibility:
+      - graduate_level_role_or_specified_shortage_occupation
+      - minimum_salary_threshold_pol_per_year: 26200
+      - english_language_b1
+      - clean_criminal_record
+    extension_path: indefinite_leave_after_5_continuous_years
+
+  - id: student
+    name: Student
+    duration_days_max: 1460   # 4 years (typical degree + buffer)
+    sponsor_required: true
+    sponsor_must_be: licensed_education_institution
+    work_permitted: limited_20_hours_per_week_during_term
+    public_funds_access: false
+    eligibility:
+      - confirmed_acceptance_of_studies
+      - sufficient_funds_for_tuition_and_living
+      - english_language_b2
+
+  - id: family_reunion
+    name: Family
+    duration_days_max: 1825
+    sponsor_required: true
+    sponsor_must_be: foxbridge_citizen_or_settled_resident
+    work_permitted: true
+    public_funds_access: limited
+    eligibility:
+      - relationship_evidence_genuine_subsisting
+      - financial_threshold_pol_per_year: 18600
+      - english_language_a1_at_entry_b1_at_extension
+      - accommodation_evidence
+
+  - id: settled_status
+    name: Indefinite Leave to Remain
+    duration_days_max: indefinite
+    sponsor_required: false
+    work_permitted: true
+    public_funds_access: true
+    eligibility:
+      - 5_continuous_years_lawful_residence
+      - life_in_england_on_polis_test_pass
+      - english_language_b1
+      - clean_criminal_record
+      - good_character
+
+# Rights and protections (apply to all categories above)
+common_protections:
+  - article_iv_due_process
+  - habeas_corpus
+  - non_refoulement_to_torture_jurisdictions
+  - judicial_review_of_immigration_decisions
+  - right_to_legal_representation
+  - article_iv_freedom_of_movement_within_country
+
+# Engine constraints (non-overridable)
+engine_floors:
+  - cannot_block_emigration   # constitution article iv §6
+  - cannot_strip_citizenship_administratively   # article vii §3 judicial only
+  - cannot_admit_listed_sanctioned_persons   # ofac/un/eu compliance per article xi
+  - csam_offenders_inadmissible
+  - real_world_threats_inadmissible
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"
+  source_template: UK Immigration Rules HC395 structure

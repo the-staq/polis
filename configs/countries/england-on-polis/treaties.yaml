@@ -1,0 +1,27 @@
+# Foxbridge treaties
+# V0: empty — only one country in the world.
+# V1+: as countries spawn, treaty schema activates.
+
+treaties: []
+
+# Foreign-policy posture (informational; substrate uses country.yaml.foreign_policy)
+posture:
+  recognition_threshold: 3   # 3 other countries must mutually recognise before
+                             # cross-country diplomacy unlocks. Bootstrap
+                             # exemption applies at V0.
+  treaty_classes_supported_at_v1_plus:
+    - mutual_recognition
+    - extradition
+    - tax_cooperation
+    - free_trade
+    - investment_protection
+    - sport_cooperation
+    - mutual_legal_assistance
+    - judicial_cooperation
+  treaty_amendment_requires: parliamentary_ratification
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"
+  current_in_world_date: "2026-10-05"

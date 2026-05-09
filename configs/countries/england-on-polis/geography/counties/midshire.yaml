@@ -1,0 +1,24 @@
+# Midshire — county sketch
+id: midshire
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Midshire
+  short_name: MID
+  motto: In medio fortitudo
+  established_in_world: 1080
+  narrative_brief: >
+    Central county. Heavy-industry heartland in transition; automotive
+    plants, machine tools, growing software cluster around Midhurst.
+    Reliable Harvest & Labour territory; politically pivotal at general
+    elections.
+geography: { area_km2: 4250, population: 1_950_000, capital_town_id: lot_midshire_midhurst, bordering_counties: [foxbridge, hartshire, westmark, southhaven, eastmoor], bbox: { south: 52.10, west: -2.40, north: 52.95, east: -1.10 } }
+government: { has_own_council: true, council_institution_id: midshire-county-council, council_seats: 86, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [advanced_manufacturing, automotive, software, education_research]
+  unemployment_rate: 0.046
+  median_household_income_pol_per_year: 41_000
+regional_culture: { dominant_dialect: midshire-flat, patron_saint: St Wulfric of the Forge }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

@@ -1,0 +1,633 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/industry.schema.json",
+  "title": "Industry",
+  "description": "A user-created industry within a Polis world. Captures professions, institution types, events, economics, competition hierarchy, regulator slot, season calendar, career progression, licensing/certification, AND the five-sub-corpora cognition slot (event/commentary/decision/governance/tactical) per V0-PLAN §3.10. v0.1.2 adds the skills-layer doctrine: hard-skill growth_curves per skill, profession-level soft_skill_weights, and overall_rating_formula composing hard + soft skills into character ranking — see polis/SKILLS-DESIGN.md.",
+  "type": "object",
+  "version": "0.1.2",
+
+  "required": [
+    "id",
+    "world",
+    "name",
+    "founder_principal_id",
+    "professions",
+    "institution_types",
+    "events",
+    "economics",
+    "competition_hierarchy",
+    "calendar",
+    "cognition",
+    "founder_royalty"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{2,63}$",
+      "description": "Slug identifier; unique within the world."
+    },
+
+    "world": {
+      "type": "string",
+      "description": "Foreign key to a world.schema.json instance."
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "description": "Human-readable name (e.g. 'Football', 'Music', 'Boxing', 'Banking')."
+    },
+
+    "description": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Editorial framing — what this industry is, what stories belong here."
+    },
+
+    "founder_principal_id": {
+      "type": "string",
+      "description": "Principal who founded this industry. Anti-sybil-tracked at engine level (PRD §6.6.1)."
+    },
+
+    "professions": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Roles that characters can hold within this industry. Each profession is a substrate primitive — characters acquire skills + experience + reputation per profession.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "base_skills"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]{2,31}$"},
+          "label": {"type": "string"},
+          "description": {"type": "string"},
+          "base_skills": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "label", "scale"],
+              "properties": {
+                "id": {"type": "string"},
+                "label": {"type": "string"},
+                "scale": {
+                  "type": "string",
+                  "enum": ["0_to_100", "1_to_10", "qualitative"],
+                  "default": "0_to_100"
+                },
+                "growth_curve": {
+                  "type": "object",
+                  "description": "Skills evolve with age, training, and use. Engine SkillTickWorkflow nudges character.professions[].skills[skill_id] each in-world week toward the age-curve target ± training-load deviation. Curves are deterministic per (character_id, skill_id, week); replayable. Scale 0_to_100 only — qualitative skills omit growth_curve.",
+                  "required": ["base_value_at_starting_age", "peak_age", "peak_value_max", "decay_after_peak_per_year", "learning_rate_per_year_active", "coachable"],
+                  "properties": {
+                    "base_value_at_starting_age": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "description": "Default skill value at profession.starting_age before any training. Engine uses this to seed character.skills when no explicit value is authored."
+                    },
+                    "peak_age": {
+                      "type": "integer",
+                      "minimum": 5,
+                      "maximum": 80,
+                      "description": "Age at which this skill peaks in the typical career arc (e.g. pace peaks 26, leadership peaks 38). Engine grows toward peak then decays."
+                    },
+                    "peak_value_max": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "description": "Maximum value the skill can reach with elite training. Hard ceiling: a character whose innate base + lifetime training cannot push past this. World-class talents start near peak_value_max as base; substrate-fictional ceiling per role."
+                    },
+                    "decay_after_peak_per_year": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 30,
+                      "description": "Points per in-world year the skill drops after peak_age. Pace ~2.0; passing ~0.5; tactics gains rather than decays for managers (set to 0)."
+                    },
+                    "learning_rate_per_year_active": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 30,
+                      "description": "Points per in-world year of growth before peak_age, given normal training and active match-minutes. Modulated by character.soft_skills.work_ethic and current institution training-quality."
+                    },
+                    "coachable": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "If false, skill is innate and cannot be improved by training (e.g. height, raw frame). Engine refuses training-load to push above curve target."
+                    }
+                  }
+                }
+              }
+            },
+            "minItems": 1,
+            "description": "Domain-specific hard skills. Stored as JSON map keyed by skill ID on character.professions[].skills (per V0-PLAN §5.1 rule 1 — no domain-shaped columns). Each skill MAY declare a growth_curve so engine SkillTickWorkflow can evolve the value over in-world time."
+          },
+          "soft_skill_weights": {
+            "type": "object",
+            "description": "How the canonical 9 soft-skills (soft_skills.schema.json) compose into the soft-skills component of overall rating for this profession. Map from soft_skills attribute name to weight (0-1). Weights need not sum to 1 — engine normalises. Profession-specific because composure matters hugely for player penalty-takers but less for scouts; charisma matters for broadcasters far more than for engineers. Used by overall_rating_formula and by labour-market default offer ranges.",
+            "properties": {
+              "composure":    {"type": "number", "minimum": 0, "maximum": 1},
+              "charisma":     {"type": "number", "minimum": 0, "maximum": 1},
+              "resilience":   {"type": "number", "minimum": 0, "maximum": 1},
+              "integrity":    {"type": "number", "minimum": 0, "maximum": 1},
+              "decisiveness": {"type": "number", "minimum": 0, "maximum": 1},
+              "empathy":      {"type": "number", "minimum": 0, "maximum": 1},
+              "ambition":     {"type": "number", "minimum": 0, "maximum": 1},
+              "ego":          {"type": "number", "minimum": 0, "maximum": 1},
+              "work_ethic":   {"type": "number", "minimum": 0, "maximum": 1}
+            },
+            "additionalProperties": false
+          },
+          "overall_rating_formula": {
+            "type": "object",
+            "description": "How hard skills and soft skills compose into a single 0-100 overall rating used for ranking, scouting, contract-offer pricing, and dressing-room hierarchy. Hard-skills component is mean of base_skills values weighted by hard_skill_weights (defaults equal); soft-skills component is mean of soft_skill_weights-weighted soft-skill values. Final = hard_skills_weight * hard + soft_skills_weight * soft. The two weights MUST sum to 1.0; engine refuses configs that don't.",
+            "required": ["hard_skills_weight", "soft_skills_weight"],
+            "properties": {
+              "hard_skills_weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Weight on hard-skills component. Footballers default 0.70 (game is mostly skill); managers default 0.50 (tactics + soft equally); broadcasters default 0.40 (charisma-heavy)."
+              },
+              "soft_skills_weight": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Weight on soft-skills component. Complement of hard_skills_weight."
+              },
+              "hard_skill_weights": {
+                "type": "object",
+                "description": "Optional per-hard-skill weight map. Keys are base_skills[].id values. Missing skills default to equal weight. Use for skills like leadership which carry double weight in captain-rating despite being one of N skills."
+              }
+            }
+          },
+          "starting_age": {"type": "integer", "minimum": 5, "maximum": 80},
+          "retirement_age_avg": {"type": "integer", "minimum": 18, "maximum": 100},
+          "career_progression": {
+            "type": "array",
+            "description": "Levels a character moves through within this profession (apprentice → junior → senior → executive → emeritus). Each level has gate criteria.",
+            "items": {
+              "type": "object",
+              "required": ["level", "label"],
+              "properties": {
+                "level": {"type": "integer", "minimum": 0},
+                "label": {"type": "string"},
+                "min_skills": {
+                  "type": "object",
+                  "description": "Minimum skill values required to enter this level."
+                },
+                "min_years_experience": {"type": "number", "minimum": 0},
+                "requires_certification": {
+                  "type": ["string", "null"],
+                  "description": "Foreign key to a licensing.schema.json certification (if defined)."
+                }
+              }
+            }
+          },
+          "salary_distribution": {
+            "type": "object",
+            "description": "POL/month at percentiles. Used by labour market for default offer ranges.",
+            "properties": {
+              "p10": {"type": "number", "minimum": 0},
+              "p50": {"type": "number", "minimum": 0},
+              "p90": {"type": "number", "minimum": 0},
+              "p99": {"type": "number", "minimum": 0}
+            }
+          },
+          "licensing_required": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, characters need a certification to practice. Certification issued by a licensing institution; engine refuses contract signing without valid cert."
+          }
+        }
+      }
+    },
+
+    "institution_types": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Types of institutions that can spawn in this industry (e.g. football has [club, league, federation, agency, media_outlet, academy]).",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": {"type": "string"},
+          "label": {"type": "string"},
+          "description": {"type": "string"},
+          "creation_open": {
+            "type": "boolean",
+            "default": true,
+            "description": "If true, any user can spin up this institution type within the industry. If false, only the industry founder + delegates can."
+          },
+          "min_capital_pol": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Minimum capital required to found this institution type."
+          },
+          "default_compensation": {
+            "type": "object",
+            "description": "Default compensation structure for executives at this institution type (founder, CEO, board)."
+          }
+        }
+      }
+    },
+
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Recurring events the industry produces (e.g. football has [match, transfer_window, season, cup_final]). Events drive workflow ticks.",
+      "items": {
+        "type": "object",
+        "required": ["type", "cadence"],
+        "properties": {
+          "type": {"type": "string"},
+          "label": {"type": "string"},
+          "cadence": {
+            "type": "string",
+            "enum": ["continuous", "daily", "weekly", "biweekly", "monthly", "quarterly", "biannual", "annual", "irregular"]
+          },
+          "simulator": {
+            "type": ["string", "null"],
+            "description": "Foreign key to a simulator module (e.g. 'football_match_v1'). Null for non-simulated events."
+          },
+          "reputation_dimensions": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "What dimensions of reputation this event contributes to (e.g. match → ['wins', 'goals_scored', 'trophies'])."
+          },
+          "deterministic_replay": {
+            "type": "boolean",
+            "default": true,
+            "description": "If true, events use rng_seed + state hash for replayable outcomes (V0-PLAN match-simulator requirement)."
+          },
+          "duration_months": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "description": "For seasons / windows / multi-event-cycles."
+          }
+        }
+      }
+    },
+
+    "competition_hierarchy": {
+      "type": "object",
+      "description": "Tiered competitions within the industry (e.g. football has Premier League / Championship / League One / cup competitions). Substrate-real, not flat.",
+      "required": ["tiers"],
+      "description": "Tiered competitions within the industry (Premier League / Championship / League One / League Two shape). SUBSTRATE INVARIANTS enforced by engine validator at industry-config load time (NOT expressible in pure JSON Schema): (1) count-balance: tier N's promotion_relegation.promoted_count to tier (N-1) MUST equal tier (N-1)'s promotion_relegation.relegated_count to tier N; (2) tier-graph linearity: the promoted_to / relegated_to links across all tiers form a single linear chain (no branching, no cycles); (3) format-specific required fields enforced via the if/then conditionals on each tier item below.",
+      "properties": {
+        "tiers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "format", "tier_rank"],
+            "properties": {
+              "id": {"type": "string"},
+              "label": {"type": "string"},
+              "format": {
+                "type": "string",
+                "enum": [
+                  "round_robin",
+                  "double_round_robin",
+                  "knockout",
+                  "swiss_system",
+                  "group_then_knockout",
+                  "ladder",
+                  "rating_based",
+                  "league_with_playoff"
+                ]
+              },
+              "tier_rank": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "1 = top tier (Premier League shape); higher numbers = lower tiers."
+              },
+              "promotion_relegation": {
+                "type": "object",
+                "description": "Movement between tiers. Engine invariant (1) requires count-balance with adjacent tiers.",
+                "properties": {
+                  "promoted_to": {
+                    "type": ["string", "null"],
+                    "description": "Foreign key to a sibling tiers[].id with tier_rank = (this_tier.tier_rank - 1). Null only for top tier (tier_rank = 1)."
+                  },
+                  "promoted_count": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Count promoted from this tier upward at season-end. Engine invariant: must equal the upper tier's promotion_relegation.relegated_count."
+                  },
+                  "promoted_via_playoff": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Of promoted_count, how many earned promotion via playoff bracket (vs auto-promotion by table position). Required when format is 'league_with_playoff'; otherwise optional / unused. Engine invariant: must be ≤ promoted_count."
+                  },
+                  "relegated_to": {
+                    "type": ["string", "null"],
+                    "description": "Foreign key to a sibling tiers[].id with tier_rank = (this_tier.tier_rank + 1). Null for the bottom tier of the pyramid (signals 'relegation out of pyramid' — clubs falling out exit substrate-tracked competition)."
+                  },
+                  "relegated_count": {"type": "integer", "minimum": 0}
+                }
+              },
+              "max_participants": {"type": "integer", "minimum": 2, "maximum": 1000},
+              "season_event_id": {
+                "type": ["string", "null"],
+                "description": "Foreign key to events[].type (e.g. 'season') for cadence."
+              },
+              "rounds": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of rounds. Required when format is 'swiss_system'; ignored otherwise."
+              },
+              "groups_count": {
+                "type": "integer",
+                "minimum": 2,
+                "description": "Number of groups in the group stage. Required when format is 'group_then_knockout'."
+              },
+              "qualifiers_per_group": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Top-N per group qualifying for the knockout stage. Required when format is 'group_then_knockout'."
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {"format": {"const": "league_with_playoff"}},
+                  "required": ["format"]
+                },
+                "then": {
+                  "properties": {
+                    "promotion_relegation": {
+                      "required": ["promoted_via_playoff"]
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {"format": {"const": "swiss_system"}},
+                  "required": ["format"]
+                },
+                "then": {
+                  "required": ["rounds"]
+                }
+              },
+              {
+                "if": {
+                  "properties": {"format": {"const": "group_then_knockout"}},
+                  "required": ["format"]
+                },
+                "then": {
+                  "required": ["groups_count", "qualifiers_per_group"]
+                }
+              }
+            ]
+          }
+        },
+        "cross_tier_competitions": {
+          "type": "array",
+          "description": "Cup-style competitions that span tiers (e.g. FA Cup / Champions League shapes).",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "format"],
+            "properties": {
+              "id": {"type": "string"},
+              "label": {"type": "string"},
+              "format": {"type": "string"},
+              "eligible_tiers": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "calendar": {
+      "type": "object",
+      "required": ["season_length_months"],
+      "description": "Industry-specific calendar (transfer windows, season starts, off-season gaps).",
+      "properties": {
+        "season_length_months": {"type": "integer", "minimum": 1, "maximum": 120, "description": "Sport seasons typically 8-12 months; political 'seasons' (parliamentary terms) up to 60-120 months. Cap at 120 admits substrate-industries like governance whose season is the parliamentary term."},
+        "off_season_length_months": {"type": "integer", "minimum": 0, "maximum": 60},
+        "transfer_windows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "opens_month_offset", "duration_days"],
+            "properties": {
+              "id": {"type": "string"},
+              "label": {"type": "string"},
+              "opens_month_offset": {
+                "type": "integer",
+                "description": "Months from season start when this window opens."
+              },
+              "duration_days": {"type": "integer", "minimum": 1, "maximum": 365}
+            }
+          }
+        },
+        "season_start_in_world": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "First season's in-world start date (for calibration)."
+        }
+      }
+    },
+
+    "regulator_institution_id": {
+      "type": ["string", "null"],
+      "description": "Foreign key to the institution governing this industry within a country (e.g. football's Federation of Hartshire). Null if industry has no regulator."
+    },
+
+    "licensing": {
+      "type": "object",
+      "description": "Certification regime for professions in this industry.",
+      "properties": {
+        "certifications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "issued_by_institution_id"],
+            "properties": {
+              "id": {"type": "string"},
+              "label": {"type": "string"},
+              "issued_by_institution_id": {
+                "type": "string",
+                "description": "Institution that issues this certification (e.g. 'Federation of Hartshire' for football coaching badges)."
+              },
+              "renewal_period_months": {"type": ["integer", "null"], "minimum": 0},
+              "fee_pol": {"type": "number", "minimum": 0}
+            }
+          }
+        },
+        "required_for_professions": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Profession IDs that legally require certification (engine refuses contract signing without valid cert)."
+        }
+      }
+    },
+
+    "economics": {
+      "type": "object",
+      "required": ["transfer_market", "sponsorship_market"],
+      "properties": {
+        "transfer_market": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["AMM_per_actor", "auction", "negotiated_only", "free_agency_only", "hybrid"],
+              "description": "How character transfers are priced + executed."
+            },
+            "fee_cap_pol": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "description": "Optional cap on single transfer fee. Null = uncapped."
+            }
+          }
+        },
+        "sponsorship_market": {
+          "type": "object",
+          "properties": {
+            "type": {"type": "string", "enum": ["open", "tiered", "league_brokered"]},
+            "external_brand_allowed": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether substrate-fictional 'brands' (institutions tagged as advertisers) can sponsor — false until V1 marketplace."
+            }
+          }
+        },
+        "broadcasting_rights": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string",
+              "enum": ["central_distribution", "club_owned", "league_negotiated", "no_broadcasting"]
+            }
+          }
+        }
+      }
+    },
+
+    "founder_royalty": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "default": 0.0,
+      "description": "BOUND: industries are open-source contributions per OPEN-SOURCE.md Tier 2; no perpetual royalty accrues at the industry layer. Royalty mechanics live at Tier 3 (institution.schema.json's founder_royalty, capped at 0.5%). Reserved as 0 at the industry layer; the field is retained for symmetry but is structurally bounded to 0."
+    },
+
+    "cognition": {
+      "type": "object",
+      "required": ["embedding_model", "corpora"],
+      "description": "Per-industry retrieval index. Five sub-corpora per V0-PLAN §3.10. AI characters in this industry retrieve from these in addition to per-character / per-institution / per-country / per-world layers.",
+      "properties": {
+        "embedding_model": {
+          "type": "string",
+          "default": "voyage-3"
+        },
+        "corpora": {
+          "type": "object",
+          "required": ["event", "commentary", "decision", "governance", "tactical"],
+          "properties": {
+            "event": {
+              "type": "object",
+              "description": "Structured event/transaction data for the domain (e.g. football → StatsBomb / kloppy match events).",
+              "properties": {
+                "source": {"type": "string"},
+                "loader": {"type": "string", "enum": ["raw-text", "yaml", "json", "kloppy", "statsbomb-open", "custom"]},
+                "chunk_strategy": {"type": "string"}
+              }
+            },
+            "commentary": {
+              "type": "object",
+              "description": "Observer commentary on events (e.g. football → Reddit r/soccer match threads, BBC live text).",
+              "properties": {
+                "source": {"type": "string"},
+                "loader": {"type": "string"},
+                "chunk_strategy": {"type": "string"}
+              }
+            },
+            "decision": {
+              "type": "object",
+              "description": "Quotes/transcripts from people in industry roles (e.g. football → post-match interviews, manager press conferences).",
+              "properties": {
+                "source": {"type": "string"},
+                "loader": {"type": "string"},
+                "chunk_strategy": {"type": "string"}
+              }
+            },
+            "governance": {
+              "type": "object",
+              "description": "Rule books, statutes, regulatory framework — the industry's own laws (e.g. football → IFAB Laws of the Game, FIFA RSTP, FA Rules).",
+              "properties": {
+                "source": {"type": "string"},
+                "loader": {"type": "string"},
+                "chunk_strategy": {"type": "string"}
+              }
+            },
+            "tactical": {
+              "type": "object",
+              "description": "Strategy / tactics / professional literature (e.g. football → Inverting the Pyramid, Soccernomics, tactical-analysis blogs).",
+              "properties": {
+                "source": {"type": "string"},
+                "loader": {"type": "string"},
+                "chunk_strategy": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "contributor_attribution": {
+      "type": "object",
+      "description": "Per OPEN-SOURCE.md Tier 2 + GUARDRAILS Layer 3: industries are open-source contributions to the public repo, not in-app founded. This block records authorship for credit and PR-review provenance. There is no in-app capital lock at the industry layer.",
+      "properties": {
+        "author": {
+          "type": "string",
+          "description": "Primary author display name (or 'the staq' for V0 reference templates)."
+        },
+        "co_authors": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "repo_url": {
+          "type": "string",
+          "description": "URL to the canonical PR / commit in the public repo."
+        },
+        "license": {
+          "type": "string",
+          "default": "CC-BY-4.0"
+        },
+        "attribution": {
+          "type": "string",
+          "default": "the staq and contributors"
+        },
+        "merged_in_world": {"type": ["string", "null"], "format": "date"},
+        "rfc_id": {
+          "type": ["string", "null"],
+          "description": "RFC identifier if the industry lands via RFC process at V1+. Null at V0."
+        }
+      }
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["draft", "founder_locked", "alpha", "live", "wind_down", "dissolved"],
+      "default": "draft"
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string", "default": "0.1.0"},
+        "founded_at_real": {"type": "string", "format": "date-time"},
+        "founded_in_world": {"type": "string", "format": "date"}
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

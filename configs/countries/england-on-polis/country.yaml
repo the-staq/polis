@@ -1,0 +1,213 @@
+# England-on-Polis — top-level country config
+# Schema: ../../../schemas/country.schema.json
+# Tier 2 open-source contribution per OPEN-SOURCE.md.
+
+id: england-on-polis
+world: modern-earth-2026
+name: England-on-Polis
+founded_in_world: "1689-12-16"   # post-revolutionary settlement
+founder_principal_id: principal_the-staq
+
+identity:
+  flag: ipfs://Qm.../england-on-polis-flag.svg   # red cross on white; substrate-fictional
+  motto: Per legem terrae
+  languages: [en]
+  naming_convention: >
+    Substrate-fictional Westminster-shape. Capital: Foxbridge-on-Tyne (not London).
+    Political institutions take fictional names that read as common-law-shaped
+    (Foxbridge Defamation Act; Inland Revenue Foxbridge; Federation of Hartshire).
+    No real-world UK toponyms, real political-party names, or living-person references.
+    LLM-judge enforces against real-name registry at content-load time.
+  narrative_brief: >
+    An island country in the North Atlantic, English-speaking, parliamentary,
+    drizzly. Geographically reminiscent; legally, politically, and biographically
+    its own thing. No real names from our world appear here — Polis refuses
+    them at the model layer.
+
+territory:
+  type: real-earth-bounded
+  bounds_geojson: ipfs://Qm.../england-on-polis-borders.geojson
+  capital:
+    city_id: foxbridge-on-tyne
+    lat: 54.978
+    lon: -1.617
+  subdivisions:
+    - { level: county, id: hartshire,           name: Hartshire,             parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: hartshire-county-council }
+    - { level: county, id: foxbridge,           name: Foxbridge (capital region), parent_subdivision_id: null, has_own_government: true,  has_own_taxation: true,  council_institution_id: foxbridge-city-council }
+    - { level: county, id: northshire,          name: Northshire,            parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: westmark,            name: Westmark,              parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: southhaven,          name: Southhaven,            parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: eastmoor,            name: Eastmoor,              parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: midshire,            name: Midshire,              parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: cathermere,          name: Cathermere,            parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: stonebridge,         name: Stonebridge,           parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: greycombe-county,    name: Greycombe County,      parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+    - { level: county, id: salt-fells,          name: Salt Fells,            parent_subdivision_id: null, has_own_government: true,  has_own_taxation: false, council_institution_id: null }
+
+government:
+  type: constitutional_democracy
+  branches:
+    executive:
+      head_role: Prime Minister
+      head_character_id: c_pm_pell-whitcombe
+      cabinet_positions:
+        - { title: Treasury Minister,     portfolio: Public finance, fiscal policy, tax administration, incumbent_character_id: c_treasury_minister }
+        - { title: Justice Minister,      portfolio: Justice, prisons, judicial administration,         incumbent_character_id: c_justice_minister }
+        - { title: Foreign Secretary,     portfolio: Foreign affairs, treaties, country recognition,    incumbent_character_id: c_foreign_secretary }
+        - { title: Sport Minister,        portfolio: Sport, broadcasting, anti-doping, integrity,       incumbent_character_id: c_sport_minister }
+        - { title: Labour Minister,       portfolio: Employment, minimum wage, industrial relations,    incumbent_character_id: c_labour_minister }
+        - { title: Home Secretary,        portfolio: Internal affairs, policing, immigration,           incumbent_character_id: null }
+        - { title: Health Secretary,      portfolio: Public health, NHS-equivalent oversight,           incumbent_character_id: null }
+    legislative:
+      chambers:
+        - { name: House of Commons-Equivalent, seats: 412, selection: elected,  term_months: 48 }
+        - { name: House of Review,             seats: 180, selection: appointed, term_months: 144 }
+    judiciary:
+      supreme_court_seats: 9
+      judicial_appointment: merit_commission
+      common_law: true
+  head_of_state_role: Prime Minister
+  electoral_system: FPTP
+  term_length_months: 48
+  term_limits: 2
+  civil_service:
+    permanent_secretaries:
+      - { title: Cabinet Secretary,                    ministry: Cabinet Office,  incumbent_character_id: c_cabinet_secretary }
+      - { title: Permanent Secretary to the Treasury,  ministry: HM Treasury,     incumbent_character_id: null }
+      - { title: Permanent Secretary to Justice,       ministry: Ministry of Justice, incumbent_character_id: null }
+
+actuarial_life_expectancy:
+  mean_age_at_natural_death: 81.4
+  stddev_years: 9.5
+  by_sex:
+    female: { mean_age: 83.1, stddev_years: 9.2 }
+    male:   { mean_age: 79.7, stddev_years: 9.6 }
+    other:  { mean_age: 81.4, stddev_years: 9.5 }
+
+civic_rights:
+  voting_eligibility:
+    minimum_age: 18
+    residency_required_months: 0
+    citizenship_required: true
+  candidacy_eligibility:
+    minimum_age: 21
+    residency_required_months: 12
+    citizenship_required: true
+  due_process: true
+  property_rights: true
+  press_freedom: true
+  freedom_of_assembly: true
+  freedom_of_movement: true
+
+citizenship:
+  open_immigration: true
+  naturalization_period_days: 1825   # 5 years
+  dual_citizenship_allowed: true
+  citizenship_fee_pol: 250
+  stripping_requires_judicial_ruling: true
+
+currency:
+  enabled: false   # V0: country uses POL only, no separate country mint
+
+taxation:
+  income_tax:
+    brackets:
+      - { income_above: 0,      rate: 0.00 }    # personal allowance
+      - { income_above: 12500,  rate: 0.20 }
+      - { income_above: 50000,  rate: 0.30 }
+      - { income_above: 125000, rate: 0.40 }
+      - { income_above: 250000, rate: 0.50 }
+  property_tax_rate: 0.012
+  transaction_tax_rate: 0.005
+  corporate_tax_rate: 0.22
+  capital_gains_tax_rate: 0.25
+  transfer_tax_rate: 0.04   # applies to football transfer fees per laws/sport/football-act.md
+  treasury_recipient_institution_id: hm-government-foxbridge
+
+laws:
+  civil:
+    contract_act: laws/civil/contract-act.md
+    property_act: laws/civil/property-act.md
+    tort_act: laws/civil/tort-act.md
+  criminal:
+    code: laws/criminal/code.md
+    procedure: laws/criminal/procedure.md
+  commercial:
+    corporations_act: laws/commercial/corporations-act.md
+    bankruptcy_act: laws/commercial/bankruptcy-act.md
+    securities_regulation: laws/commercial/securities-regulation.md
+  labour:
+    employment_act: laws/labour/employment-act.md
+    minimum_wage_pol_per_week: 480     # ~₽12 / hour @ 40-hour week; ConflictWorkflow enforces
+    union_act: laws/labour/union-act.md
+    pensions_act: laws/labour/pensions-act.md
+  tax: laws/tax/index.md
+  immigration:
+    visa_categories: [tourist, athlete_visa, work_permit_skilled, student, family_reunion, settled_status]
+    sanctions_and_bars: laws/immigration/sanctions-and-bars.yaml
+  press:
+    defamation_standard: laws/press/defamation-and-libel.md
+    libel_actionable_threshold: serious_harm_test
+  sport: laws/sport/football-act.md
+  must_include:
+    - csam_prohibition
+    - real_world_threats_prohibition
+    - ofac_un_eu_sanctions_compliance
+    - anti_csam_imagery_minor_age_verification
+    - anti_doxxing
+
+regulators:
+  central_bank_institution_id: bank-of-foxbridge
+  tax_authority_institution_id: inland-revenue-foxbridge
+  financial_conduct_authority_institution_id: foxbridge-conduct-authority
+  competition_commission_institution_id: foxbridge-competition-commission
+  press_complaints_institution_id: ipso-foxbridge
+  sport_governing_bodies:
+    - { industry_id: football-modern-earth, institution_id: federation-of-hartshire }
+
+foreign_policy:
+  recognized_countries: []   # V0: only country in the world
+  allies: []
+  sanctions: []
+  treaties: []
+  recognition_threshold_required: 3   # bootstrap exemption applies at V0
+
+contributor_attribution:
+  author: the staq
+  co_authors: []
+  repo_url: https://github.com/the-staq/polis/tree/main/polis/configs/countries/england-on-polis
+  license: CC-BY-4.0
+  attribution: the staq and contributors
+  merged_in_world: "2026-08-01"
+  rfc_id: null
+
+founder_royalty: 0.0   # countries are open-source per OPEN-SOURCE.md Tier 2
+
+dissolution:
+  founder_abandonment_days: 180
+  treasury_insolvency_days: 60
+  citizen_migration_threshold: 0.80
+  wind_down_redemption_rate: last_amm_rate
+
+cognition:
+  embedding_model: voyage-3
+  corpora:
+    legal:
+      source: polis/configs/countries/england-on-polis/laws/
+      loader: markdown-tree
+      chunk_strategy: per-section
+    government:
+      source: polis/seeds/modern-earth-2026/england-on-polis/government/
+      loader: yaml
+      chunk_strategy: per-role
+    regulatory:
+      source: polis/seeds/modern-earth-2026/england-on-polis/regulators/
+      loader: yaml
+      chunk_strategy: per-rulebook
+
+status: alpha
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  last_constitutional_change_at: null

@@ -1,0 +1,355 @@
+# Basketball — CI fixture industry config
+# Schema: ../../../schemas/industry.schema.json
+# Round-trips the same schema that hosts football-modern-earth.
+
+id: basketball-modern-earth
+world: modern-earth-2026
+name: Basketball
+description: >
+  Five-on-five hardcourt sport. Indoor, fast-paced, drafted on a 24-second
+  shot clock. Tests substrate's claim that the same industry.schema.json
+  hosts a sport with different rules / professions / cadence than football.
+
+founder_principal_id: principal_the-staq
+
+professions:
+  - id: player
+    label: Basketballer
+    description: >
+      Court player. Five positions historically (PG / SG / SF / PF / C),
+      modern game blurs them.
+    base_skills:
+      - id: shooting
+        label: Shooting
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 45, peak_age: 27, peak_value_max: 95, decay_after_peak_per_year: 0.5, learning_rate_per_year_active: 4.0, coachable: true }
+      - id: rebounding
+        label: Rebounding
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 28, peak_value_max: 95, decay_after_peak_per_year: 1.0, learning_rate_per_year_active: 3.0, coachable: true }
+      - id: playmaking
+        label: Playmaking
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 40, peak_age: 30, peak_value_max: 95, decay_after_peak_per_year: 0.4, learning_rate_per_year_active: 4.0, coachable: true }
+      - id: defense
+        label: Defense
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 27, peak_value_max: 95, decay_after_peak_per_year: 1.5, learning_rate_per_year_active: 3.5, coachable: true }
+      - id: athleticism
+        label: Athleticism
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 65, peak_age: 25, peak_value_max: 95, decay_after_peak_per_year: 2.5, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: bball_iq
+        label: Basketball IQ
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 35, peak_age: 32, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.5, coachable: true }
+    soft_skill_weights:
+      composure: 0.20
+      resilience: 0.15
+      work_ethic: 0.15
+      decisiveness: 0.15
+      ambition: 0.10
+      integrity: 0.10
+      empathy: 0.05
+      charisma: 0.05
+      ego: 0.05
+    overall_rating_formula:
+      hard_skills_weight: 0.70
+      soft_skills_weight: 0.30
+    starting_age: 17
+    retirement_age_avg: 36
+    career_progression:
+      - { level: 0, label: Rookie,     min_years_experience: 0 }
+      - { level: 1, label: Rotation,   min_years_experience: 1 }
+      - { level: 2, label: Starter,    min_years_experience: 3 }
+      - { level: 3, label: All-Star,   min_years_experience: 5 }
+      - { level: 4, label: Franchise,  min_years_experience: 8 }
+      - { level: 5, label: Veteran,    min_years_experience: 12 }
+    salary_distribution:
+      p10: 200
+      p50: 1500
+      p90: 12000
+      p99: 80000
+    licensing_required: false
+
+  - id: head_coach
+    label: Head Coach
+    base_skills:
+      - id: tactics
+        label: Tactics
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 55, peak_value_max: 98, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.0, coachable: true }
+      - id: motivation
+        label: Motivation
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 45, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 1.8, coachable: true }
+      - id: rotations
+        label: Rotation Management
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 40, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: media_savvy
+        label: Media Savvy
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 35, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+    soft_skill_weights:
+      composure: 0.20
+      decisiveness: 0.20
+      empathy: 0.15
+      resilience: 0.10
+      charisma: 0.10
+      integrity: 0.10
+      work_ethic: 0.10
+      ambition: 0.05
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.55
+      soft_skills_weight: 0.45
+    starting_age: 30
+    retirement_age_avg: 65
+    licensing_required: true   # Coaching badge required (per below)
+
+  - id: general_manager
+    label: General Manager
+    description: Roster construction, contract negotiation, draft strategy.
+    base_skills:
+      - id: negotiation
+        label: Negotiation
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: scouting_eye
+        label: Scouting Eye
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 45, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: cap_strategy
+        label: Cap Strategy
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+    soft_skill_weights:
+      decisiveness: 0.20
+      ambition: 0.15
+      composure: 0.15
+      integrity: 0.15
+      empathy: 0.10
+      charisma: 0.10
+      resilience: 0.10
+      work_ethic: 0.05
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.55
+      soft_skills_weight: 0.45
+    starting_age: 28
+    licensing_required: false
+
+  - id: scout
+    label: Scout
+    base_skills:
+      - id: talent_id
+        label: Talent ID
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 40, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: travel_grit
+        label: Travel Grit
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 60, peak_age: 35, peak_value_max: 95, decay_after_peak_per_year: 1.0, learning_rate_per_year_active: 2.0, coachable: true }
+    soft_skill_weights:
+      decisiveness: 0.20
+      resilience: 0.15
+      work_ethic: 0.15
+      empathy: 0.10
+      integrity: 0.15
+      composure: 0.10
+      charisma: 0.10
+      ambition: 0.05
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.60
+      soft_skills_weight: 0.40
+    starting_age: 25
+    licensing_required: false
+
+  - id: agent
+    label: Agent
+    base_skills:
+      - id: negotiation
+        label: Negotiation
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 45, peak_value_max: 98, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.0, coachable: true }
+      - id: legal
+        label: Legal
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 45, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 2.5, coachable: true }
+      - id: networking
+        label: Networking
+        scale: 0_to_100
+        growth_curve: { base_value_at_starting_age: 50, peak_age: 50, peak_value_max: 95, decay_after_peak_per_year: 0.0, learning_rate_per_year_active: 3.0, coachable: true }
+    soft_skill_weights:
+      decisiveness: 0.15
+      charisma: 0.20
+      composure: 0.15
+      ambition: 0.15
+      integrity: 0.10
+      resilience: 0.10
+      empathy: 0.10
+      work_ethic: 0.05
+      ego: 0.00
+    overall_rating_formula:
+      hard_skills_weight: 0.55
+      soft_skills_weight: 0.45
+    starting_age: 25
+    licensing_required: true
+
+institution_types:
+  - id: club
+    label: Basketball Club
+    description: A team that plays in a league.
+    creation_open: true
+    min_capital_pol: 50000
+  - id: league
+    label: League
+    description: Competition organiser; sets schedule, rules-in-detail, broadcasting deals.
+    creation_open: false   # only one league at a time per country at V0
+    min_capital_pol: 200000
+  - id: federation
+    label: Federation
+    description: National governing body; certification, anti-doping, international play.
+    creation_open: false
+    min_capital_pol: 500000
+  - id: agency
+    label: Agency
+    description: Player/coach representation.
+    creation_open: true
+    min_capital_pol: 5000
+
+events:
+  - type: game
+    label: Regular-season game
+    cadence: weekly
+    simulator: basketball_match_v1_stub
+    reputation_dimensions: [wins, points_scored, defensive_rating, on_court_rating]
+    deterministic_replay: true
+  - type: trade_window
+    label: Trade Window
+    cadence: biannual
+    simulator: null
+  - type: season
+    label: Season
+    cadence: annual
+    duration_months: 8
+    simulator: null
+  - type: cup_final
+    label: Hartshire Cup Final
+    cadence: annual
+    simulator: basketball_match_v1_stub
+    reputation_dimensions: [wins, championship]
+
+competition_hierarchy:
+  tiers:
+    - id: tier_1_combination
+      label: Hartshire Basketball Combination (Tier 1)
+      format: double_round_robin
+      tier_rank: 1
+      max_participants: 12
+      season_event_id: season
+    - id: tier_2_division
+      label: Hartshire Division B (Tier 2)
+      format: double_round_robin
+      tier_rank: 2
+      max_participants: 14
+      promotion_relegation:
+        promoted_to: tier_1_combination
+        promoted_count: 2
+        relegated_to: null
+        relegated_count: 0
+      season_event_id: season
+  cross_tier_competitions:
+    - id: hartshire_cup
+      label: Hartshire Cup
+      format: knockout
+      eligible_tiers: [tier_1_combination, tier_2_division]
+
+calendar:
+  season_length_months: 8
+  off_season_length_months: 4
+  transfer_windows:
+    - id: summer_window
+      label: Summer Window
+      opens_month_offset: 0
+      duration_days: 60
+    - id: midseason_window
+      label: Midseason Window
+      opens_month_offset: 4
+      duration_days: 21
+  season_start_in_world: "2026-10-01"
+
+regulator_institution_id: hartshire-basketball-combination
+
+licensing:
+  certifications:
+    - id: bball_coach_level_1
+      label: Hartshire Basketball Coach (Level 1)
+      issued_by_institution_id: hartshire-basketball-combination
+      renewal_period_months: 36
+      fee_pol: 500
+    - id: bball_coach_level_2
+      label: Hartshire Basketball Coach (Level 2)
+      issued_by_institution_id: hartshire-basketball-combination
+      renewal_period_months: 36
+      fee_pol: 1500
+    - id: bball_agent_license
+      label: Player Agent (Hartshire Basketball)
+      issued_by_institution_id: hartshire-basketball-combination
+      renewal_period_months: 24
+      fee_pol: 2000
+  required_for_professions: [head_coach, agent]
+
+economics:
+  transfer_market:
+    type: hybrid
+    fee_cap_pol: null
+  sponsorship_market:
+    type: tiered
+    external_brand_allowed: false
+  broadcasting_rights:
+    model: league_negotiated
+
+founder_royalty: 0.0   # industries are open-source contributions per OPEN-SOURCE.md Tier 2; no royalty at industry layer
+
+cognition:
+  embedding_model: voyage-3
+  corpora:
+    event:
+      source: ipfs://Qm.../basketball-event-stub
+      loader: custom
+      chunk_strategy: per-game-event-window
+    commentary:
+      source: ipfs://Qm.../basketball-commentary-stub
+      loader: raw-text
+      chunk_strategy: per-thread-segment
+    decision:
+      source: ipfs://Qm.../basketball-interview-stub
+      loader: raw-text
+      chunk_strategy: per-quote
+    governance:
+      source: ipfs://Qm.../basketball-rules-stub
+      loader: markdown-tree
+      chunk_strategy: per-section
+    tactical:
+      source: ipfs://Qm.../basketball-tactics-stub
+      loader: raw-text
+      chunk_strategy: per-section
+
+contributor_attribution:
+  author: the staq
+  co_authors: []
+  repo_url: https://github.com/the-staq/polis/tree/main/polis/configs/industries/basketball
+  license: CC-BY-4.0
+  attribution: the staq and contributors
+  merged_in_world: "2026-09-01"
+  rfc_id: null   # V0 — no RFC process yet; founder-only review
+
+status: alpha
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  founded_in_world: "2026-09-15"

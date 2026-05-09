@@ -1,0 +1,60 @@
+# Marcus Hollencourt → Foxbridge Titans · 4-year extension
+# Schema: ../../../../schemas/contract.schema.json
+id: contract_b001
+type: employment
+industry: basketball-modern-earth
+world: modern-earth-2026
+governing_country_id: england-on-polis
+
+parties:
+  - { party_id: foxbridge-titans, party_type: institution, role: employer, signed_at_real: "2025-07-12T15:30:00Z", signature_method: principal_approval }
+  - { party_id: c_b001, party_type: character, role: employee, signed_at_real: "2025-07-12T17:14:00Z", signature_method: agent_approval }
+
+terms:
+  employment:
+    base_salary_pol_per_month: 7600
+    salary_currency: POL
+    duration_months: 48
+    start_in_world: "2025-08-01"
+    end_in_world: "2029-07-31"
+    probation_months: 0
+    annual_bonus_target_pol: 18000
+    signing_bonus_pol: 8000
+    equity_shares: null
+    performance_bonuses:
+      - { condition: "team_wins_hartshire_cup",     amount_pol: 12000 }
+      - { condition: "team_wins_combination",       amount_pol: 18000 }
+      - { condition: "selected_combination_all_star", amount_pol: 6000 }
+      - { condition: "named_team_captain",          amount_pol: 4000 }
+    performance_modifiers:
+      - { trigger: "team_relegated",     modifier_type: salary_multiplier,    amount: 0.85 }
+      - { trigger: "team_wins_back_to_back_cups", modifier_type: term_extension_months, amount: 12 }
+
+termination:
+  buyout_clause_pol: 240000
+  notice_period_days: 60
+  termination_for_cause:
+    allowed: true
+    no_compensation_owed: true
+  termination_mutual:
+    allowed: true
+    settlement_pol: null
+  termination_force_majeure:
+    allowed: true
+  termination_market_buyout:
+    allowed: true
+    amount_pol: 240000
+    first_refusal: false
+
+smart_contract_address: null   # Devnet deploy pending; saga settlement applies
+saga_id: null
+
+status: active
+signed_in_world: "2025-07-12"
+signed_at_real: "2025-07-12T17:14:00Z"
+
+dispute: null
+
+metadata:
+  schema_version: "0.1.0"
+  created_at_real: "2026-05-09T00:00:00Z"

@@ -1,0 +1,59 @@
+# Labour Minister — cabinet position SLOT
+# Constitutional basis: Article II §2; statutory: Foxbridge Employment Act.
+
+position_id: labour-minister
+title: Labour Minister
+title_short: SoS Labour and Employment
+ministry: Department for Labour, Pensions, and Industrial Relations, Foxbridge
+ministry_id: dept-of-labour-foxbridge
+
+appointment:
+  by: prime_minister
+  must_be_member_of_parliament: true
+  oath_required: true
+
+portfolio:
+  primary_responsibilities:
+    - employment_law_pipeline
+    - minimum_wage_administration
+    - industrial_relations_and_trade_union_oversight
+    - pensions_policy
+    - workplace_safety_via_foxbridge_health_and_safety_executive
+    - public_register_of_underpaying_employers
+    - employment_tribunal_funding_with_justice
+  liaisons:
+    - inland_revenue_foxbridge_for_paye_compliance
+    - foxbridge_health_and_safety_executive
+    - employment_tribunal_of_foxbridge
+
+powers:
+  - propose_employment_legislation
+  - revise_minimum_wage_subject_to_parliamentary_notice
+  - publish_underpaying_employers_register
+  - chair_industrial_relations_cabinet_committee
+  - lay_regulations_on_working_time_and_pensions
+
+statutory_instruments:
+  - Foxbridge Working Time Regulations
+  - Foxbridge Statutory Sick Pay Regulations
+  - Foxbridge Pensions Auto-Enrolment Regulations
+  - Foxbridge Tribunal Fees Order
+
+constraints:
+  - cannot_override_employment_tribunal_rulings
+  - cannot_undercut_engine_hard_floor_anti_doxxing
+  - cannot_compel_strike_action_or_no_strike_action
+
+accountability:
+  to_parliament_via: labour_select_committee
+  reporting_cadence: annual_plus_industrial_dispute_supplementary
+
+compensation:
+  base_salary_pol_per_month: 13500
+
+current_incumbent_seed: ../../../seeds/modern-earth-2026/england-on-polis/government/cabinet/labour-minister.yaml
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"

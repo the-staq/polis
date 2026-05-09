@@ -1,0 +1,52 @@
+# Bickering Athletic — bottom of the table · Hartshire Combination
+id: c_bickering-athletic
+industry: football-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Bickering Athletic
+  short_name: BIA
+  founding_year_in_world: 1891
+  headquarters_lot_id: lot_hartshire_bickering_the-stocks
+  motto: Win on Tuesday
+  narrative_brief: >
+    Bottom of the table. Honest, broke, would beat you on a wet Tuesday
+    and not on a dry Saturday. The Stocks is the smallest stadium of
+    the twelve in capacity but not in pies-per-fan. Relegation form;
+    survival would be promotion in the supporters' minds.
+
+governance: { structure: member_owned_cooperative, decision_threshold: 0.51 }
+capital: { initial_treasury_pol: 62000, current_treasury_pol: 48000 }
+
+staff:
+  roles:
+    - { role_id: chair, title: Members' Chair, department: executive, reports_to_role_id: null, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 0 } }
+    - { role_id: head_coach, title: Manager, department: coaching, reports_to_role_id: chair, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 6500 } }
+  members_by_role: []
+
+operations:
+  revenue_streams:
+    - { id: gate, label: Gate, estimated_monthly_pol: 8000 }
+    - { id: broadcasting, label: Combination Share, estimated_monthly_pol: 12000 }
+    - { id: pie_revenue, label: Matchday catering (the pies), estimated_monthly_pol: 1500 }
+  cost_structure:
+    - { id: payroll, label: Payroll, estimated_monthly_pol: 17500 }
+    - { id: ground, label: The Stocks operations, estimated_monthly_pol: 4000 }
+
+reputation: { public_score: 49, awards: [], scandal_history: [] }
+
+industry_specific:
+  ground_name: The Stocks
+  ground_capacity: 10500
+  league_id: foxbridge-football-pyramid
+  current_tier: tier_3_combination
+  current_record: { played: 8, wins: 1, draws: 2, losses: 5, goals_for: 5, goals_against: 14, points: 5, league_position: 12 }
+  current_form: [L, L, D, L, W]
+  relegation_threat: true
+
+founder_royalty: 0.0
+status: operating
+metadata: { schema_version: "0.1.0", current_in_world_date: "2026-10-05", seed_curator: the-staq, source_design_data: "design/data.js atlas + league row 12" }

@@ -1,0 +1,85 @@
+# Prime Minister — cabinet position SLOT
+# Defines the role; the incumbent is seeded in
+# polis/seeds/modern-earth-2026/england-on-polis/government/prime-minister.yaml
+# Constitutional basis: Constitution Article II §1.
+
+position_id: prime-minister
+title: Prime Minister
+title_short: PM
+ministry: Office of the Prime Minister, Foxbridge
+
+constitutional_basis:
+  article: II
+  section: 1
+  text: >
+    The Executive is led by a Prime Minister, the head of government and
+    head of state, who serves at the confidence of Parliament.
+
+appointment:
+  by: head_of_state_role_self_appointing_v0
+  notes: >
+    At V0 the PM IS head of state (combined role). Selection by majority
+    of House of Commons-Equivalent following election or vote of
+    confidence. No separate monarch.
+  term: confidence_of_parliament
+  term_limits_consecutive: 2
+  oath_required: true
+
+portfolio:
+  primary_responsibilities:
+    - chair_cabinet
+    - set_government_strategy
+    - parliamentary_leadership_government_side
+    - appoint_and_dismiss_cabinet_ministers
+    - represent_country_at_state_level
+    - emergency_powers_invocation_per_constitution_article_x
+  cross_cutting_oversight:
+    - civil_service_via_cabinet_secretary
+    - intelligence_and_security
+    - constitutional_questions
+  excluded_from_portfolio:
+    - judicial_function   # Article V independence
+    - federation-of-hartshire_disciplinary   # Football Act §1, Federation autonomy
+    - bank-of-foxbridge_monetary_policy   # central-bank independence
+
+powers:
+  appointment_powers:
+    - cabinet_minister_appointments
+    - permanent_secretary_appointments_via_cabinet_secretary
+    - regulatory_chair_appointments_per_country.yaml.regulators
+    - judicial_appointment_recommendations_via_jac
+  legislative_powers:
+    - propose_government_bills
+    - call_general_election_within_term_limit
+    - propose_dissolution_of_parliament
+  emergency_powers:
+    - declare_state_of_emergency_per_article_x
+    - request_parliamentary_authorisation_for_rights_suspension
+  not_held_by_pm:
+    - judicial_review
+    - constitutional_amendment_alone   # requires 2/3 + referendum for Article IV
+    - override_engine_hard_floors   # Article XI immutable
+
+accountability:
+  to_parliament: true
+  prime_ministers_questions_weekly: true
+  vote_of_no_confidence_threshold: simple_majority_house_of_commons_equivalent
+  dissolution_on_lost_confidence: true
+  cooldown_months_between_confidence_votes: 6
+
+compensation:
+  base_salary_pol_per_month: 18000
+  residence: 10_foxbridge_street_official_residence
+  staff_complement_full_time_equivalent: 65
+
+succession:
+  acting_pm_on_incapacity: deputy_prime_minister_or_senior_cabinet_minister
+  resignation_procedure: notice_to_parliament_plus_party_leadership_election
+  removal_by: vote_of_no_confidence_or_party_leadership_challenge
+
+current_incumbent_seed: ../../../seeds/modern-earth-2026/england-on-polis/government/prime-minister.yaml
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"

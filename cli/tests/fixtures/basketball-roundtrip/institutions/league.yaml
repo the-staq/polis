@@ -1,0 +1,141 @@
+# Hartshire Basketball Combination — league + regulator
+# Schema: ../../../../schemas/institution.schema.json
+# Single institution serving both league + regulator roles at V0 fixture scale.
+
+id: hartshire-basketball-combination
+industry: basketball-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: league
+
+identity:
+  name: Hartshire Basketball Combination
+  short_name: HBC
+  founding_year_in_world: 2024
+  headquarters_lot_id: lot_foxbridge_governance_district_hbc-house
+  motto: Five Cleanly
+  narrative_brief: >
+    Hartshire's only basketball league; founded 2024, three seasons in.
+    Twelve clubs across two tiers. Quietly run from a converted Foxbridge
+    bank building. The county's basketball federation in everything but
+    name (V1 may split the federation function out).
+
+governance:
+  structure: trust_owned
+  decision_threshold: 0.51
+  board:
+    - character_id: c_b011
+      role: Chairman
+      appointed_in_world: "2024-05-01"
+      term_until_in_world: "2028-05-01"
+      voting_weight: 1.0
+    - character_id: c_b012
+      role: Vice Chairman (Competition)
+      appointed_in_world: "2024-05-01"
+      term_until_in_world: "2028-05-01"
+      voting_weight: 1.0
+    - character_id: c_b013
+      role: Treasurer
+      appointed_in_world: "2024-05-01"
+      term_until_in_world: "2028-05-01"
+      voting_weight: 1.0
+  ownership:
+    shares_outstanding: 12
+    shareholders:
+      - { holder_id: foxbridge-titans,  holder_type: institution, shares: 1 }
+      - { holder_id: ravensby-fishers,  holder_type: institution, shares: 1 }
+      # 10 other clubs in real league; CI fixture only seeds 2
+
+capital:
+  initial_treasury_pol: 200000
+  current_treasury_pol: 245000
+
+staff:
+  roles:
+    - role_id: chair
+      title: Chairman
+      department: executive
+      reports_to_role_id: null
+      incumbent_character_id: c_b011
+      compensation:
+        base_salary_pol_per_month: 0   # honorary
+        annual_bonus_target_pol: 0
+      reporting_cadence: monthly
+    - role_id: ceo
+      title: Chief Executive
+      department: executive
+      reports_to_role_id: chair
+      incumbent_character_id: c_b014
+      compensation:
+        base_salary_pol_per_month: 9000
+      reporting_cadence: weekly
+    - role_id: head_of_competition
+      title: Head of Competition
+      department: competition
+      reports_to_role_id: ceo
+      incumbent_character_id: c_b015
+      compensation:
+        base_salary_pol_per_month: 5500
+      reporting_cadence: weekly
+    - role_id: head_of_referees
+      title: Head of Referees
+      department: officiating
+      reports_to_role_id: head_of_competition
+      incumbent_character_id: null
+      compensation:
+        base_salary_pol_per_month: 4500
+      reporting_cadence: weekly
+    - role_id: head_of_certification
+      title: Head of Certification (Coaches + Agents)
+      department: certification
+      reports_to_role_id: ceo
+      incumbent_character_id: null
+      compensation:
+        base_salary_pol_per_month: 3800
+  departments:
+    - { id: executive,     label: Executive,     head_role_id: ceo,                   budget_pol_per_month: 14000, headcount_target: 3 }
+    - { id: competition,   label: Competition,   head_role_id: head_of_competition,   budget_pol_per_month: 11000, headcount_target: 4 }
+    - { id: officiating,   label: Officiating,   head_role_id: head_of_referees,      budget_pol_per_month: 28000, headcount_target: 18 }
+    - { id: certification, label: Certification, head_role_id: head_of_certification, budget_pol_per_month: 4500,  headcount_target: 2 }
+
+operations:
+  revenue_streams:
+    - { id: broadcasting,         label: Broadcasting (regional), estimated_monthly_pol: 38000 }
+    - { id: club_levies,          label: Club Levies,             estimated_monthly_pol: 24000 }
+    - { id: certification_fees,   label: Certification Fees,      estimated_monthly_pol: 2200 }
+    - { id: cup_gate,             label: Hartshire Cup Gate,      estimated_monthly_pol: 6000 }
+  cost_structure:
+    - { id: officiating_payroll,  label: Officiating Payroll,     estimated_monthly_pol: 28000 }
+    - { id: staff_payroll,        label: Staff Payroll,           estimated_monthly_pol: 22000 }
+    - { id: facilities,           label: Facilities,              estimated_monthly_pol: 4000 }
+    - { id: insurance,            label: Insurance,               estimated_monthly_pol: 3000 }
+
+reputation:
+  public_score: 71
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  member_clubs: [foxbridge-titans, ravensby-fishers]
+  total_member_clubs: 12
+  current_season:
+    season_id: season_2026_27
+    in_world_start: "2026-10-01"
+    games_played: 0
+    games_scheduled: 132   # 12 clubs × 22 games (double round robin)
+  cup_competition_id: hartshire_cup
+  current_champions: foxbridge-titans
+
+founder_royalty: 0.0
+
+founder_requirements:
+  kyc_tier_required: tier_1
+  min_capital_pol: 200000
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"

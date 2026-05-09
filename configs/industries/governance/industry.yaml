@@ -1,0 +1,171 @@
+# Governance — substrate-level industry template
+# Schema: ../../../schemas/industry.schema.json
+#
+# The substrate's cross-cutting "industry" hosting government, judiciary,
+# civil-service, regulators (where they aren't industry-specific). Most
+# "industries" in PRD §6.4 are economic-shaped (football, music, banking).
+# Governance is the structural-shaped sibling: institutions that exist at
+# country layer, not at economic-domain layer.
+#
+# Authored by the staq as Tier 2 open-source content per OPEN-SOURCE.md.
+
+id: governance
+world: modern-earth-2026
+name: Governance
+description: >
+  Substrate-level industry hosting country government, judiciary,
+  civil-service, and cross-cutting regulators (tax authority, central
+  bank, antitrust, press complaints, etc.). Industry-specific regulators
+  (e.g. Federation of Hartshire for football) live in their respective
+  industry templates instead.
+
+founder_principal_id: principal_the-staq
+
+professions:
+  - id: head_of_government
+    label: Head of Government (PM / Chancellor / equivalent)
+    base_skills:
+      - { id: parliamentary_management, label: Parliamentary Management, scale: 0_to_100 }
+      - { id: cabinet_discipline,       label: Cabinet Discipline,       scale: 0_to_100 }
+      - { id: foreign_relations,        label: Foreign Relations,        scale: 0_to_100 }
+      - { id: media_savvy,              label: Media Savvy,              scale: 0_to_100 }
+    licensing_required: false
+
+  - id: cabinet_minister
+    label: Cabinet Minister
+    base_skills:
+      - { id: portfolio_expertise,  label: Portfolio Expertise,  scale: 0_to_100 }
+      - { id: cabinet_management,   label: Cabinet Management,   scale: 0_to_100 }
+      - { id: parliamentary_debate, label: Parliamentary Debate, scale: 0_to_100 }
+    licensing_required: false
+
+  - id: judge
+    label: Judge
+    base_skills:
+      - { id: legal_doctrine,    label: Legal Doctrine,        scale: 0_to_100 }
+      - { id: judicial_writing,  label: Judicial Writing,      scale: 0_to_100 }
+      - { id: criminal_procedure, label: Criminal Procedure,   scale: 0_to_100 }
+      - { id: contract_law,      label: Contract Law,          scale: 0_to_100 }
+    licensing_required: true
+
+  - id: permanent_secretary
+    label: Permanent Secretary
+    base_skills:
+      - { id: institutional_memory,     label: Institutional Memory, scale: 0_to_100 }
+      - { id: civil_service_management, label: Civil Service Mgmt,   scale: 0_to_100 }
+      - { id: drafting,                 label: Drafting,             scale: 0_to_100 }
+    licensing_required: false
+
+  - id: backbencher
+    label: Backbencher (Member of Parliament)
+    base_skills:
+      - { id: constituency_work,    label: Constituency Work,   scale: 0_to_100 }
+      - { id: parliamentary_debate, label: Parliamentary Debate, scale: 0_to_100 }
+    licensing_required: false
+
+institution_types:
+  - { id: executive_government, label: Executive Government,  creation_open: false, min_capital_pol: 0 }
+  - { id: legislature_chamber,  label: Legislature Chamber,    creation_open: false, min_capital_pol: 0 }
+  - { id: supreme_court,        label: Supreme Court,          creation_open: false, min_capital_pol: 0 }
+  - { id: civil_service_office, label: Civil Service Office,   creation_open: false, min_capital_pol: 0 }
+  - { id: ministry,             label: Government Ministry,    creation_open: false, min_capital_pol: 0 }
+  - { id: tax_authority,        label: Tax Authority,          creation_open: false, min_capital_pol: 0 }
+  - { id: financial_conduct_authority, label: Financial Conduct Authority, creation_open: false, min_capital_pol: 0 }
+  - { id: competition_commission,      label: Competition Commission,      creation_open: false, min_capital_pol: 0 }
+  - { id: press_complaints_body,       label: Press Complaints Body,       creation_open: false, min_capital_pol: 0 }
+  - { id: central_bank,                label: Central Bank,                creation_open: false, min_capital_pol: 0 }
+
+# All governance institution_types are creation_open: false because government
+# bodies aren't user-foundable in-app. They're seeded by the country's
+# Tier 2 PR (staq curates V0 reference; future country authors include their
+# own incumbents). NOT a Tier 3 royalty-bearing flow.
+
+events:
+  - { type: election,              label: General Election,             cadence: irregular, simulator: null, deterministic_replay: true }
+  - { type: parliamentary_session, label: Parliamentary Session,        cadence: weekly,    simulator: null }
+  - { type: budget_speech,         label: Annual Budget Speech,         cadence: annual,    simulator: null }
+  - { type: cabinet_reshuffle,     label: Cabinet Reshuffle,            cadence: irregular, simulator: null }
+  - { type: court_term,            label: Court Term,                   cadence: quarterly, simulator: null }
+  - { type: by_election,           label: By-Election,                  cadence: irregular, simulator: null }
+
+competition_hierarchy:
+  tiers:
+    # Governance has a thin "competition" layer — elections are the closest analog.
+    # Single tier (general elections); multi-party but no league-style promotion.
+    - id: tier_1_general
+      label: General Elections (national)
+      format: rating_based   # vote-share-driven outcome, not league-table
+      tier_rank: 1
+      max_participants: 1000   # parties or candidates
+      season_event_id: election
+
+calendar:
+  season_length_months: 48   # standard parliamentary term
+  off_season_length_months: 0
+  transfer_windows: []       # no transfers; ministers reshuffle ad-hoc
+  season_start_in_world: "2024-06-01"   # PM's confidence-vote date
+
+regulator_institution_id: null   # governance regulates itself via judiciary; no separate regulator
+
+licensing:
+  certifications:
+    - id: judicial_appointment_certification
+      label: Judicial Appointment Certification
+      issued_by_institution_id: judicial-appointments-commission-foxbridge
+      renewal_period_months: null
+      fee_pol: 0
+  required_for_professions: [judge]
+
+economics:
+  transfer_market:
+    type: negotiated_only       # cabinet-shuffles negotiated, not market-priced
+    fee_cap_pol: 0
+  sponsorship_market:
+    type: open
+    external_brand_allowed: false
+  broadcasting_rights:
+    model: no_broadcasting
+
+founder_royalty: 0.0
+
+cognition:
+  embedding_model: voyage-3
+  corpora:
+    event:
+      source: ipfs://Qm.../governance-event-stub
+      loader: raw-text
+      chunk_strategy: per-vote-event
+    commentary:
+      source: ipfs://Qm.../governance-commentary-stub
+      loader: raw-text
+      chunk_strategy: per-thread-segment
+    decision:
+      source: ipfs://Qm.../governance-speeches-stub
+      loader: raw-text
+      chunk_strategy: per-quote
+    governance:
+      # Governance industry's `governance` corpus IS the constitutional / statutory
+      # text of the country. Composes with per-country corpus per V0-PLAN §3.10.
+      source: ipfs://Qm.../westminster-template
+      loader: markdown-tree
+      chunk_strategy: per-section
+    tactical:
+      source: ipfs://Qm.../political-theory-canon
+      loader: raw-text
+      chunk_strategy: per-section
+
+contributor_attribution:
+  author: the staq
+  co_authors: []
+  repo_url: https://github.com/the-staq/polis/tree/main/polis/configs/industries/governance
+  license: CC-BY-4.0
+  attribution: the staq and contributors
+  merged_in_world: "2026-09-01"
+  rfc_id: null
+
+status: alpha
+
+metadata:
+  schema_version: "0.1.1"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  founded_in_world: "2024-06-01"

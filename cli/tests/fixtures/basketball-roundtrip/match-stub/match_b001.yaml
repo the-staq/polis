@@ -1,0 +1,60 @@
+# Foxbridge Titans 84 — 79 Ravensby Fishers · Hartshire Combination · Week 1
+# Schema: ../../../../../../schemas/conflict.schema.json
+# (Matches are conflicts of type=duel/scale=institution_vs_institution at fixture level;
+#  V1+ adds a dedicated 'event' schema if the conflict abstraction proves too heavy.)
+#
+# Tests V0-PLAN's deterministic-replay invariant: same rng_seed + same lineup state
+# always produces same outcome. The simulator.py in this directory consumes this YAML
+# and produces the same final-score output every run.
+
+id: conflict_b001
+type: duel
+scale: institution_vs_institution
+world: modern-earth-2026
+country: england-on-polis
+
+initiator:
+  party_id: foxbridge-titans
+  party_type: institution
+defender:
+  party_id: ravensby-fishers
+  party_type: institution
+
+casus_belli:
+  category: ideological
+  summary: "Scheduled fixture · Hartshire Combination Week 1 · 2026-27 season opener"
+
+resolution_engine: basketball_match_v1_stub
+rng_seed: "0x4f9c2a7e91d3b58f"
+
+# Lineup state at tip-off (substrate-instance data; CI fixture references
+# canonical 5-on-5 starters from each team's institution.yaml)
+strategy:
+  initiator_strategy: aggressive
+  defender_strategy: defensive
+
+outcomes:
+  winner_party_id: foxbridge-titans
+  loser_party_id: ravensby-fishers
+  settlement_pol: 0
+  reputation_changes:
+    foxbridge-titans: 1.2
+    ravensby-fishers: -0.8
+  press_recap_uri: null
+
+aftermath:
+  scheduled_events:
+    - event_type: titans_record_update
+      scheduled_in_world: "2026-10-04"
+      params: { wins_delta: 1, losses_delta: 0 }
+    - event_type: fishers_record_update
+      scheduled_in_world: "2026-10-04"
+      params: { wins_delta: 0, losses_delta: 1 }
+
+status: concluded
+opened_in_world: "2026-10-04"
+concluded_in_world: "2026-10-04"
+
+metadata:
+  schema_version: "0.1.0"
+  created_at_real: "2026-05-09T00:00:00Z"

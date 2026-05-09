@@ -1,0 +1,91 @@
+# Parliament of England-on-Polis — chambers, parties, current seats
+# Schema: ../../../schemas/country.schema.json (parliament block)
+# Substrate-fictional party names. No real-world UK political party
+# names appear here.
+
+current_session:
+  number: 47
+  opened: "2024-09-12"
+  expected_dissolution: "2028-09-11"
+  speaker_character_id: c_speaker_pinkerton
+  serjeant_at_arms_character_id: null
+
+chambers:
+  - name: House of Commons-Equivalent
+    seats: 412
+    selection: elected
+    term_months: 48
+    party_distribution:
+      - { party_id: harvest-and-labour,    name: Harvest & Labour,         leader_character_id: c_pm_pell-whitcombe, seats: 218, role: government }
+      - { party_id: foxbridge-conservative, name: Foxbridge Conservative,   leader_character_id: c_opposition_leader, seats: 142, role: opposition }
+      - { party_id: liberal-democrats-fb,  name: Liberal Democrats,         leader_character_id: null,                seats: 32,  role: opposition }
+      - { party_id: green-and-rural,       name: Green & Rural,             leader_character_id: null,                seats: 12,  role: opposition }
+      - { party_id: northern-confederation, name: Northern Confederation,   leader_character_id: null,                seats: 8,   role: opposition }
+    independents: 0
+
+  - name: House of Review
+    seats: 180
+    selection: appointed
+    term_months: 144
+    composition_notes: >
+      Appointed for staggered 12-year terms by independent commission;
+      politically affiliated where declared but bound by convention to
+      review rather than block. House of Review may amend or delay
+      legislation; cannot block supply or extend the term of Parliament.
+
+parties:
+  - id: harvest-and-labour
+    short_name: H&L
+    formed_in_world: 1899
+    platform: >
+      Center-left labour-aligned coalition. Pro-union, redistributive
+      taxation, public-services investment. Currently in government.
+    leader_character_id: c_pm_pell-whitcombe
+    chair_character_id: null
+
+  - id: foxbridge-conservative
+    short_name: FCP
+    formed_in_world: 1834
+    platform: >
+      Centre-right traditionalist. Property rights, lower corporate
+      taxation, market-led services with regulatory floor. Official
+      opposition.
+    leader_character_id: c_opposition_leader
+    chair_character_id: null
+
+  - id: liberal-democrats-fb
+    short_name: LD
+    formed_in_world: 1988
+    platform: >
+      Liberal-centrist. Civil liberties, electoral reform, federalism.
+      Coalition partner in 2010-2015 ministry.
+    leader_character_id: null
+
+  - id: green-and-rural
+    short_name: GR
+    formed_in_world: 2007
+    platform: >
+      Environmentalist with rural-protectionist alignment. Anti-
+      industrial-fishing, pro-tenant-farmer, climate-policy primacy.
+    leader_character_id: null
+
+  - id: northern-confederation
+    short_name: NC
+    formed_in_world: 2015
+    platform: >
+      Devolution-maximalist for Northshire / Salt Fells. Regional
+      taxation, regional broadcasting, regional industrial policy.
+    leader_character_id: null
+
+procedure:
+  bill_stages: [first_reading, second_reading, committee_stage, report_stage, third_reading, review_chamber, royal_assent_or_pm_assent]
+  prime_ministers_questions: { weekly: true, day: wednesday, duration_minutes: 30 }
+  vote_of_no_confidence:
+    threshold_simple_majority: true
+    triggers_dissolution: true
+    cooldown_months: 6
+
+provenance:
+  source: substrate-fictional Westminster shape
+  authored_by: the staq
+  license: CC-BY-4.0

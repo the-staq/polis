@@ -1,0 +1,57 @@
+# Treasury Minister — cabinet position SLOT
+# Constitutional basis: Constitution Article II §2.
+
+position_id: treasury-minister
+title: Treasury Minister
+title_short: Chancellor
+ministry: HM Treasury, Foxbridge
+ministry_id: hm-treasury-foxbridge
+
+appointment:
+  by: prime_minister
+  must_be_member_of_parliament: true
+  oath_required: true
+
+portfolio:
+  primary_responsibilities:
+    - public_finance_and_fiscal_policy
+    - tax_administration_via_inland_revenue_foxbridge
+    - government_budget_authorship_and_presentation
+    - public_debt_management
+    - financial_services_regulation_oversight
+    - economic_growth_and_employment_strategy
+  delegated_authorities:
+    - tax_rate_revisions_subject_to_parliamentary_approval
+    - bond_issuance_within_parliamentary_limit
+    - emergency_treasury_drawdown_for_authorised_purposes
+  consultative_role:
+    - bank_of_foxbridge_independence_respected
+    - foxbridge_conduct_authority_independent_of_treasury
+    - regulator_chair_recommendations_to_pm
+
+powers:
+  - propose_finance_bill_annually
+  - propose_supplementary_estimates
+  - sign_off_state_borrowing
+  - approve_tax_authority_enforcement_priorities
+  - chair_economic_strategy_cabinet_committee
+
+statutory_instruments:
+  - Foxbridge Income Tax (Earnings) Regulations
+  - Foxbridge Corporation Tax Order
+  - Foxbridge Customs and Tariff Order
+
+accountability:
+  to_parliament_via: treasury_select_committee
+  reporting_cadence: budget_annual_plus_autumn_statement
+  national_audit_oversight: true
+
+compensation:
+  base_salary_pol_per_month: 14500
+
+current_incumbent_seed: ../../../seeds/modern-earth-2026/england-on-polis/government/cabinet/treasury-minister.yaml
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"

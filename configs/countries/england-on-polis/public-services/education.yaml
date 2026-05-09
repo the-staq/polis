@@ -1,0 +1,76 @@
+# Foxbridge education system
+# Universal free state education from 5 to 18; higher-education
+# tuition-fee-loan model with means-tested maintenance support.
+
+institution_id: foxbridge-education-system
+parent_ministry_id: dept-of-education-foxbridge   # subsumed under Dept of Education at V1+
+parent_minister_role: health-secretary             # placeholder; education-secretary is V1+ split
+
+founding_principle:
+  universal: true
+  free_at_state_school_5_to_18: true
+  compulsory_5_to_18: true
+
+stages:
+  - { id: early_years,            ages: "0-4",   provision: voluntary_with_30hours_free_for_3_4yo, sector: mixed }
+  - { id: primary,                ages: "5-11",  provision: free_state_or_independent_paid, sector: mixed }
+  - { id: secondary,              ages: "11-16", provision: free_state_or_independent_paid, sector: mixed }
+  - { id: post_16,                ages: "16-18", provision: free_state_or_apprenticeship_or_independent_paid, sector: mixed }
+  - { id: higher_education,       ages: "18+",   provision: tuition_fee_loan_means_tested_maintenance, sector: universities_v1_plus }
+  - { id: lifelong_learning,      ages: "any",   provision: limited_state_subsidy, sector: mixed }
+
+state_school_types:
+  - community_schools_run_by_county_council
+  - foundation_schools_run_by_governing_body
+  - voluntary_aided_schools_with_religious_or_charitable_character
+  - academy_schools_state_funded_independent_governance
+  - free_schools_state_funded_parent_or_community_initiated
+
+curriculum:
+  national_curriculum_subjects:
+    - english
+    - mathematics
+    - science
+    - history
+    - geography
+    - languages_modern
+    - art_and_design
+    - music
+    - physical_education
+    - design_and_technology
+    - computing
+    - religious_education_with_opt_out
+    - citizenship_and_civic_education
+  examination_authorities: [foxbridge-examination-and-assessment-authority]
+  primary_assessments: at_age_7_and_11
+  secondary_assessments_at_16: foxbridge_general_certificate
+  post_16_assessments: foxbridge_advanced_certificates_or_vocational_equivalents
+
+private_independent_sector:
+  permitted: true
+  registration_with_dept_of_education_required: true
+  inspection_by_foxbridge-schools-inspectorate: true
+  charitable_status_eligibility_subject_to_public_benefit_test: true
+
+higher_education:
+  v0_status: not_seeded   # V1+ when university institutions added
+  funding_model:
+    tuition_fee_loan_capped_pol_per_year: 9250
+    interest_rate_on_loan: rpi_plus_3_percent
+    repayment_threshold_pol_per_year: 27295
+    repayment_rate: 0.09_of_income_above_threshold
+    write_off_after_years: 30
+
+athlete_education_pathway:
+  age_under_18:
+    - mandatory_education_to_18_per_compulsory_age
+    - hartshire_football_academy_compliance_with_dual_career_obligations
+    - examination_special_arrangements_for_match_clashes
+  age_18_plus:
+    - foxbridge_player_education_fund_offers_partial_scholarship_for_part_time_higher_ed
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"
+  source_template: UK education system structure, publicly available

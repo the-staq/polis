@@ -1,0 +1,43 @@
+# Inter-team transfer · Olabode Ifowodo from a Tier 2 club to Foxbridge Titans
+# (the Tier 2 selling club is elided for fixture brevity; this contract demonstrates
+# the substrate's transfer shape — sale type with sell_on_clause_percent)
+# Schema: ../../../../schemas/contract.schema.json
+id: contract_b003
+type: sale
+industry: basketball-modern-earth
+world: modern-earth-2026
+governing_country_id: england-on-polis
+
+parties:
+  - { party_id: tier2-club-stub, party_type: institution, role: seller, signed_at_real: "2024-08-22T10:00:00Z", signature_method: principal_approval }
+  - { party_id: foxbridge-titans, party_type: institution, role: buyer, signed_at_real: "2024-08-22T10:00:00Z", signature_method: principal_approval }
+  - { party_id: c_b003, party_type: character, role: asset, signed_at_real: "2024-08-22T11:30:00Z", signature_method: agent_approval }
+
+terms:
+  sale:
+    asset_id: c_b003
+    asset_type: character
+    price_pol: 32000
+    buyer_id: foxbridge-titans
+    seller_id: tier2-club-stub
+    sell_on_clause_percent: 0.20   # 20% of any future Ifowodo sale goes to original Tier 2 club
+
+termination:
+  buyout_clause_pol: null
+  notice_period_days: 0
+  termination_for_cause: { allowed: false, no_compensation_owed: false }
+  termination_mutual: { allowed: false, settlement_pol: null }
+  termination_force_majeure: { allowed: true }
+
+smart_contract_address: null
+saga_id: null
+
+status: active
+signed_in_world: "2024-08-22"
+signed_at_real: "2024-08-22T11:30:00Z"
+
+dispute: null
+
+metadata:
+  schema_version: "0.1.0"
+  created_at_real: "2026-05-09T00:00:00Z"

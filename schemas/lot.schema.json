@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/lot.schema.json",
+  "title": "Lot",
+  "description": "Smallest land unit in the substrate's geographic hierarchy (per PRD §6.7 + §7). Country → state/province → city → district → lot. Each lot has coordinates, zoning, ownership, optional rental, optional improvements, property tax, and natural endowments (per PRD §8.2 — endowments are the only zero-input economic class).",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "id",
+    "world",
+    "country",
+    "coordinates",
+    "size_sqm",
+    "zoning",
+    "base_price_pol",
+    "current_price_pol"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^lot_[a-z0-9_-]{3,63}$"
+    },
+
+    "world": {"type": "string"},
+
+    "country": {"type": "string"},
+
+    "subdivision_id": {
+      "type": ["string", "null"],
+      "description": "Foreign key to country.territory.subdivisions[].id — the most-granular subdivision containing this lot."
+    },
+
+    "parent_district_id": {
+      "type": ["string", "null"],
+      "description": "Convenience foreign key to the immediate-parent district (denormalized for query performance)."
+    },
+
+    "coordinates": {
+      "type": "object",
+      "required": ["lat", "lon"],
+      "properties": {
+        "lat": {"type": "number", "minimum": -90, "maximum": 90},
+        "lon": {"type": "number", "minimum": -180, "maximum": 180},
+        "elevation_m": {"type": ["number", "null"]}
+      }
+    },
+
+    "boundary_geojson": {
+      "type": ["string", "null"],
+      "description": "Optional GeoJSON polygon defining the lot boundary. For abstract worlds, may be null."
+    },
+
+    "size_sqm": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Lot footprint in square meters. Capacity-bounding for production processes (per PRD §8.7 'a 50m² garage cannot output 10,000 cars/month')."
+    },
+
+    "zoning": {
+      "type": "string",
+      "enum": [
+        "residential",
+        "commercial",
+        "industrial",
+        "agricultural",
+        "military",
+        "mixed_use",
+        "civic",
+        "religious",
+        "open_space",
+        "transit",
+        "extraction",
+        "restricted"
+      ]
+    },
+
+    "zoning_authority_id": {
+      "type": ["string", "null"],
+      "description": "Foreign key to the institution / subdivision controlling zoning at this lot. Subdivisions with has_own_government can rezone; otherwise country-level zoning_authority applies."
+    },
+
+    "base_price_pol": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Initial price set by deterministic pricing engine (per PRD §7.4: population density × GDP-equivalent × local-feature-density × country-stratum × random seed)."
+    },
+
+    "current_price_pol": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Current market price. Substrate-tracked, not authored."
+    },
+
+    "ownership": {
+      "type": "object",
+      "description": "Current ownership. May be character, institution, or unowned (e.g. public land).",
+      "properties": {
+        "owner_id": {"type": ["string", "null"]},
+        "owner_type": {
+          "type": "string",
+          "enum": ["character", "institution", "country_treasury", "subdivision_council", "unowned"]
+        },
+        "acquired_in_world": {"type": ["string", "null"], "format": "date"},
+        "acquisition_price_pol": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+
+    "rental": {
+      "type": ["object", "null"],
+      "description": "Optional active rental contract. Null if owner-occupied or vacant.",
+      "properties": {
+        "is_rented": {"type": "boolean"},
+        "tenant_id": {"type": ["string", "null"]},
+        "tenant_type": {
+          "type": "string",
+          "enum": ["character", "institution"]
+        },
+        "monthly_rent_pol": {"type": "number", "minimum": 0},
+        "lease_contract_id": {
+          "type": ["string", "null"],
+          "description": "Foreign key to contract.schema.json (type='lease')."
+        },
+        "lease_until_in_world": {"type": ["string", "null"], "format": "date"}
+      }
+    },
+
+    "improvements": {
+      "type": "array",
+      "description": "Built structures + upgrades on the lot (e.g. 'luxury_finish_v2', 'rooftop_garden', 'blast_furnace', 'stadium_capacity_18400'). Drive zoning-conforming production capacity.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": {"type": "string"},
+          "label": {"type": "string"},
+          "built_in_world": {"type": ["string", "null"], "format": "date"},
+          "value_pol": {"type": "number", "minimum": 0},
+          "depreciation_per_year": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.02}
+        }
+      }
+    },
+
+    "property_tax_pol_per_year": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Annual property tax owed to country / subdivision treasury. Computed from current_price_pol × applicable_property_tax_rate (country.taxation.property_tax_rate × subdivision adders if applicable). Substrate-computed, but authoring may override for known lots."
+    },
+
+    "endowments": {
+      "type": "array",
+      "description": "Per PRD §8.2 — natural endowments. The only zero-input economic class. Seeded by world generator from real-Earth data (USGS / soil maps / climate / hydrology) for default worlds, or authored for fictional worlds. Players cannot edit; can only discover/deplete/transform.",
+      "items": {
+        "type": "object",
+        "required": ["tag", "intensity"],
+        "properties": {
+          "tag": {
+            "type": "string",
+            "description": "Free-form endowment type (e.g. 'crude_oil', 'iron_ore', 'arable_land', 'deepwater_port_access', 'lithium_brine', 'solar_irradiance', 'wind_resource', 'freshwater', 'timber')."
+          },
+          "intensity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "0-1 scale. Decays with extraction; over-extraction collapses the field."
+          },
+          "discovered": {
+            "type": "boolean",
+            "default": true,
+            "description": "False if undiscovered (requires exploration profession to unlock)."
+          },
+          "depletion_rate_per_extraction_cycle": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0.0
+          }
+        }
+      }
+    },
+
+    "infrastructure": {
+      "type": "object",
+      "description": "Substrate-level infrastructure access (set by subdivision / country).",
+      "properties": {
+        "power_grid_kwh_max": {"type": ["number", "null"], "minimum": 0},
+        "water_supply_liters_per_day": {"type": ["number", "null"], "minimum": 0},
+        "internet_tier": {
+          "type": "string",
+          "enum": ["none", "dial_up", "broadband", "fiber", "satellite", "subspace"]
+        },
+        "transit_access": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+
+    "occupancy": {
+      "type": "object",
+      "description": "Who's currently at this lot. Substrate-tracked for character location.",
+      "properties": {
+        "current_character_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "current_institution_id": {
+          "type": ["string", "null"],
+          "description": "Institution that operates from this lot (e.g. Cattlemarket Park is Hartwell FC's headquarters)."
+        }
+      }
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["available", "owned_unoccupied", "owner_occupied", "rented", "disputed", "seized", "destroyed"],
+      "default": "available"
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string", "default": "0.1.0"},
+        "seeded_at_real": {"type": "string", "format": "date-time"},
+        "last_transaction_at_real": {"type": ["string", "null"], "format": "date-time"}
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

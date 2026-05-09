@@ -1,0 +1,51 @@
+# Riverpark — home ground of Eastfen Town
+# Schema: ../../../../../../schemas/lot.schema.json
+# Site of the 2018 on-pitch tragedy (memoriam/sandiland.yaml death_event.lot_id).
+
+id: lot_hartshire_eastfen_riverpark
+world: modern-earth-2026
+country: england-on-polis
+subdivision_id: hartshire
+parent_district_id: lot_hartshire_eastfen
+
+coordinates:
+  lat: 52.318
+  lon: -1.564
+  elevation_m: 42   # river-flat
+
+size_sqm: 22400
+zoning: civic
+zoning_authority_id: hartshire-county-council
+
+base_price_pol: 2_800_000
+current_price_pol: 3_650_000
+property_tax_pol_per_year: 43800
+
+ownership:
+  owner_id: c_eastfen-town
+  acquired_in_world: "1899-08-22"
+
+improvements:
+  - { id: stadium_main_stand, label: Main Stand (river-side), capacity_seats: 4800, built_in_world: "1962-01-01" }
+  - { id: stadium_terrace_north, label: North Terrace (standing), capacity: 5200, built_in_world: "1934-01-01" }
+  - { id: stadium_terrace_south, label: South Terrace (standing), capacity: 4400, built_in_world: "1934-01-01" }
+  - { id: stadium_east_stand, label: East Stand (away allocation), capacity_seats: 2200, built_in_world: "1989-01-01" }
+  - { id: training_pitch, label: Training Pitch (single), surface: natural_grass }
+  - { id: pavilion_clubhouse, label: Clubhouse }
+
+occupancy:
+  current_institution_id: c_eastfen-town
+  current_character_ids: []
+
+endowments:
+  - { tag: river_frontage, intensity: 0.4 }
+status: owner_occupied
+
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0
+  notes: |
+    Site of the 2018 Sandiland tragedy. The Federation rulebook's Sandiland
+    Provisions on academy cardiac screening were drafted in the months
+    following the incident here.

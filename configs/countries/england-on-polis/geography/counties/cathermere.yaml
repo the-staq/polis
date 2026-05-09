@@ -1,0 +1,23 @@
+# Cathermere — county sketch
+id: cathermere
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Cathermere
+  short_name: CATH
+  motto: Inter lacus
+  established_in_world: 1130
+  narrative_brief: >
+    Lake-country county. National-park designation covers a quarter
+    of its territory. Tourism, sheep-farming, light hospitality; high
+    second-home density an ongoing local-politics flashpoint.
+geography: { area_km2: 2960, population: 480_000, capital_town_id: lot_cathermere_lakefoot, bordering_counties: [northshire, salt-fells, greycombe-county], bbox: { south: 54.30, west: -3.20, north: 54.90, east: -2.40 } }
+government: { has_own_council: true, council_institution_id: cathermere-county-council, council_seats: 42, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [tourism, agriculture_pastoral, hospitality, conservation]
+  unemployment_rate: 0.052
+  median_household_income_pol_per_year: 31_000
+regional_culture: { dominant_dialect: cathermere-soft, patron_saint: St Hilda of the Lakes }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

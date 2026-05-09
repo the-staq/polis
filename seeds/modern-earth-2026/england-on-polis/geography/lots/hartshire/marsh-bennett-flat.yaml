@@ -1,0 +1,50 @@
+# Player flats off Brackensley Park — Marsh-Bennett's residence
+# Schema: ../../../../../../schemas/lot.schema.json
+# Referenced by marsh-bennett.yaml as state.location_lot_id.
+
+id: lot_hartshire_hartwell_player-flats
+world: modern-earth-2026
+country: england-on-polis
+subdivision_id: hartshire
+parent_district_id: lot_hartshire_hartwell
+
+coordinates:
+  lat: 52.184
+  lon: -1.808
+  elevation_m: 75
+
+size_sqm: 1850   # six-flat block, gardens included
+zoning: residential
+zoning_authority_id: hartshire-county-council
+
+base_price_pol: 1_650_000
+current_price_pol: 1_920_000
+property_tax_pol_per_year: 23040
+
+ownership:
+  owner_id: hartwell-fc   # club-owned player accommodation
+  acquired_in_world: "2002-09-14"
+
+improvements:
+  - { id: building_block, label: Player Flats Block (6 units), built_in_world: "2003-01-01" }
+  - { id: parking_residents, label: Residents' parking, capacity_vehicles: 12 }
+
+rental:
+  is_rented: true
+  tenant_id: c_marsh-bennett
+  tenant_type: character
+  monthly_rent_pol: 1100
+  lease_contract_id: contract_hfc_marsh-bennett_residence
+  lease_until_in_world: "2027-06-30"
+
+occupancy:
+  current_institution_id: hartwell-fc
+  current_character_ids: [c_marsh-bennett]
+
+endowments: []
+status: rented
+
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0

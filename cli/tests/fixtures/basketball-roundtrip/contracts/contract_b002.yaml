@@ -1,0 +1,65 @@
+# Sigrid Ostmark → Ravensby Fishers · 2-year contract
+# Negotiated by lambeth-sports-agency (user-founded Tier 3 institution)
+# Schema: ../../../../schemas/contract.schema.json
+id: contract_b002
+type: employment
+industry: basketball-modern-earth
+world: modern-earth-2026
+governing_country_id: england-on-polis
+
+parties:
+  - { party_id: ravensby-fishers, party_type: institution, role: employer, signed_at_real: "2025-08-04T14:00:00Z", signature_method: principal_approval }
+  - { party_id: c_b007, party_type: character, role: employee, signed_at_real: "2025-08-04T14:18:00Z", signature_method: agent_approval }
+  - { party_id: lambeth-sports-agency, party_type: institution, role: representing_agent, signed_at_real: "2025-08-04T14:18:00Z", signature_method: principal_approval }
+
+terms:
+  employment:
+    base_salary_pol_per_month: 2400
+    salary_currency: POL
+    duration_months: 24
+    start_in_world: "2025-08-15"
+    end_in_world: "2027-08-14"
+    probation_months: 3
+    annual_bonus_target_pol: 4000
+    signing_bonus_pol: 1500
+    equity_shares: null
+    performance_bonuses:
+      - { condition: "team_finishes_top_4",       amount_pol: 3000 }
+      - { condition: "averages_15_points_per_game", amount_pol: 4500 }
+      - { condition: "transfer_to_top_tier_at_or_after_2027_window", amount_pol: 2000 }
+    performance_modifiers:
+      - { trigger: "team_relegated", modifier_type: salary_multiplier, amount: 0.80 }
+
+termination:
+  buyout_clause_pol: 24000
+  notice_period_days: 30
+  termination_for_cause:
+    allowed: true
+    no_compensation_owed: true
+  termination_mutual:
+    allowed: true
+    settlement_pol: null
+  termination_force_majeure:
+    allowed: true
+  termination_market_buyout:
+    allowed: true
+    amount_pol: 24000
+    first_refusal: true   # Fishers has first refusal at the buyout amount
+
+smart_contract_address: null
+saga_id: null
+
+status: active
+signed_in_world: "2025-08-04"
+signed_at_real: "2025-08-04T14:18:00Z"
+
+# Note for the fixture: when this contract triggers a transfer (player buyout),
+# the substrate routes 5% commission to lambeth-sports-agency (per its industry
+# role as agent), AND lambeth-sports-agency's founder_royalty (0.5%) pays to
+# principal_user_renata_marquez in perpetuity. Tier 3 economics path.
+
+dispute: null
+
+metadata:
+  schema_version: "0.1.0"
+  created_at_real: "2026-05-09T00:00:00Z"

@@ -1,0 +1,49 @@
+# Eastfen Town — flat-pitch country · volatile form · Hartshire Combination
+id: c_eastfen-town
+industry: football-modern-earth
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: club
+
+identity:
+  name: Eastfen Town
+  short_name: EFT
+  founding_year_in_world: 1902
+  headquarters_lot_id: lot_hartshire_eastfen_the-drains
+  motto: Either fours or naughts
+  narrative_brief: >
+    Flat-pitch country. Volatile form, "either 4-0 or 0-4" according to
+    the Echo. The Drains is what locals call the ground; visiting fans
+    who arrive on time find out why.
+
+governance: { structure: shareholder_board, decision_threshold: 0.51 }
+capital: { initial_treasury_pol: 130000, current_treasury_pol: 124000 }
+
+staff:
+  roles:
+    - { role_id: chair, title: Chairman, department: executive, reports_to_role_id: null, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 0 } }
+    - { role_id: head_coach, title: Manager, department: coaching, reports_to_role_id: chair, incumbent_character_id: null, compensation: { base_salary_pol_per_month: 8500 } }
+  members_by_role: []
+
+operations:
+  revenue_streams:
+    - { id: gate, label: Gate, estimated_monthly_pol: 16000 }
+    - { id: broadcasting, label: Combination Share, estimated_monthly_pol: 12000 }
+  cost_structure:
+    - { id: payroll, label: Payroll, estimated_monthly_pol: 24000 }
+    - { id: ground, label: The Drains operations, estimated_monthly_pol: 6000 }
+
+reputation: { public_score: 55, awards: [], scandal_history: [] }
+
+industry_specific:
+  ground_name: The Drains
+  ground_capacity: 12300
+  league_id: foxbridge-football-pyramid
+  current_tier: tier_3_combination
+  current_record: { played: 8, wins: 3, draws: 2, losses: 3, goals_for: 10, goals_against: 11, points: 11, league_position: 7 }
+  current_form: [L, D, W, L, W]
+
+founder_royalty: 0.0
+status: operating
+metadata: { schema_version: "0.1.0", current_in_world_date: "2026-10-05", seed_curator: the-staq, source_design_data: "design/data.js atlas + league row 7" }

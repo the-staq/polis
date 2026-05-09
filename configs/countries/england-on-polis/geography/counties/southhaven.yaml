@@ -1,0 +1,23 @@
+# Southhaven — county sketch
+id: southhaven
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Southhaven
+  short_name: SOUTH
+  motto: Sub austro
+  established_in_world: 1100
+  narrative_brief: >
+    South-coast county. Tourism-led economy, retiree-heavy demographics,
+    resort towns and chalk cliffs. Politically marginal; swings between
+    Foxbridge Conservative and Liberal Democrats.
+geography: { area_km2: 3380, population: 1_420_000, capital_town_id: lot_southhaven_brindle-bay, bordering_counties: [foxbridge, westmark, midshire], bbox: { south: 50.45, west: -2.40, north: 51.20, east: -0.80 } }
+government: { has_own_council: true, council_institution_id: southhaven-county-council, council_seats: 79, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [tourism, hospitality, financial_services_retired_savers, retail]
+  unemployment_rate: 0.041
+  median_household_income_pol_per_year: 42_000
+regional_culture: { dominant_dialect: southhaven-soft, patron_saint: St Cuthwine of the Cliffs }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

@@ -1,0 +1,84 @@
+# Foxbridge sanctions and immigration bars
+# V0: external sanctions screening defaults to engine-layer OFAC/UN/EU
+# floor per Constitution Article XI §3. Country-level sanctions list
+# below activates at V1+ when other countries spawn and diplomatic
+# relations begin to differentiate.
+
+policy_basis:
+  engine_layer_floor:
+    - ofac_specially_designated_nationals
+    - un_security_council_sanctions
+    - eu_consolidated_sanctions
+    - csam_offenders
+    - real_world_threats
+  country_level_v1_plus:
+    - foreign_office_designations_to_be_added
+    - parliamentary_sanctions_orders_to_be_added
+
+sanctions_list:
+  v0_active: []
+  v1_plus_pathway: |
+    Foreign Secretary may, with cabinet approval and parliamentary
+    notice, designate persons or entities subject to:
+      - travel ban (immigration bar);
+      - asset freeze;
+      - prohibition on dealings;
+      - prohibition on football-club ownership.
+    Designations are subject to judicial review. Listed persons have
+    right to contest designation per Foxbridge Sanctions Order
+    appeals process.
+
+immigration_bars:
+
+  - bar_id: criminal_record_serious
+    description: Conviction for serious criminal offence; exclusion period scaled to sentence
+    statutory_basis: Foxbridge Immigration Rules §320
+    appeal_route: foxbridge_immigration_tribunal
+
+  - bar_id: terrorism_or_hostile_state_actor
+    description: Reasonable grounds to suspect involvement in terrorism or activity hostile to England-on-Polis
+    statutory_basis: Foxbridge Counter-Terrorism Order
+    appeal_route: special_immigration_appeals_commission_with_security_cleared_advocates
+
+  - bar_id: csam_offence
+    description: Conviction for CSAM offence anywhere in the world
+    statutory_basis: Foxbridge Criminal Code §6 + Constitution Article XI
+    appeal_route: none_engine_floor_immutable
+
+  - bar_id: doping_violation_lifetime
+    description: Lifetime doping ban from a recognised sport governing body
+    statutory_basis: Foxbridge Football Act §19 + Sport Minister regulation
+    appeal_route: foxbridge_immigration_tribunal_with_anti_doping_assessor
+
+  - bar_id: fraud_corruption_in_sport
+    description: Conviction for match-fixing, bribery, or insider betting
+    statutory_basis: Foxbridge Criminal Code §15–§16 + Football Act
+    appeal_route: foxbridge_immigration_tribunal
+
+  - bar_id: financial_crime
+    description: Conviction for money laundering, fraud above ₽250,000, or insolvency-related offences
+    statutory_basis: Foxbridge Criminal Code §11–§12
+    appeal_route: foxbridge_immigration_tribunal
+
+  - bar_id: undesirable_conduct
+    description: Conduct, character, or associations such that exclusion is conducive to public good
+    statutory_basis: Home Secretary discretion subject to judicial review
+    appeal_route: judicial_review_high_court_only
+
+review_and_appeal:
+  burden_of_proof: balance_of_probabilities
+  judicial_review_grounds: [illegality, irrationality, procedural_unfairness, proportionality]
+  removal_directions_pause_pending_appeal: true
+  detention_subject_to_judicial_oversight: true
+  age_assessment_safeguards_for_unaccompanied_minors: true
+
+football_specific:
+  fit_and_proper_persons_test_for_owners: cross_reference_football_act_section_20
+  athlete_visa_revocation_on_doping: per_visa_categories_athlete_visa
+  match_fixing_conviction_triggers_lifetime_bar: true
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"
+  source_template: UK sanctions and immigration enforcement framework, OGL v3.0

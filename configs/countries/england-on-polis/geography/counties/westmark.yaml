@@ -1,0 +1,23 @@
+# Westmark — county sketch
+id: westmark
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Westmark
+  short_name: WEST
+  motto: Per portus prosperitas
+  established_in_world: 1066
+  narrative_brief: >
+    Western coastal county. Port towns, fishing fleets in steep decline,
+    container shipping ascendant. Liberal-leaning urban centres,
+    conservative-leaning rural hinterland.
+geography: { area_km2: 4120, population: 1_180_000, capital_town_id: lot_westmark_port-celwynne, bordering_counties: [hartshire, southhaven, midshire], bbox: { south: 51.20, west: -3.50, north: 52.00, east: -2.10 } }
+government: { has_own_council: true, council_institution_id: westmark-county-council, council_seats: 71, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [shipping_and_logistics, food_processing, tourism_coastal, agriculture_horticulture]
+  unemployment_rate: 0.055
+  median_household_income_pol_per_year: 36_500
+regional_culture: { dominant_dialect: westmark-coastal, patron_saint: St Brendan of the Sea }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

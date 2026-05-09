@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/conflict.schema.json",
+  "title": "Conflict",
+  "description": "Adversarial action between substrate parties. Per PRD §6.9 + §14: wars, lawsuits, hostile takeovers, foreclosures, coups, sanctions, espionage. Resolved deterministically via ConflictWorkflow with rng_seed for replayability. V0 live for football contract disputes + hostile club takeovers (V0-PLAN A2).",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "id",
+    "type",
+    "scale",
+    "world",
+    "initiator",
+    "defender",
+    "casus_belli",
+    "rng_seed",
+    "status",
+    "opened_in_world"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^conflict_[a-z0-9_-]{3,63}$"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "lawsuit",
+        "contract_dispute",
+        "duel",
+        "assassination_attempt",
+        "whistleblowing",
+        "expose",
+        "hostile_takeover",
+        "market_war",
+        "sabotage",
+        "coup",
+        "civil_war",
+        "secession",
+        "war",
+        "sanction_imposition",
+        "espionage",
+        "foreclosure",
+        "bankruptcy",
+        "default"
+      ]
+    },
+
+    "scale": {
+      "type": "string",
+      "enum": [
+        "character_vs_character",
+        "character_vs_institution",
+        "institution_vs_institution",
+        "country_vs_country",
+        "internal_to_country",
+        "economic"
+      ],
+      "description": "Per PRD §14.1 conflict scales. Drives which resolver runs."
+    },
+
+    "world": {"type": "string"},
+
+    "country": {
+      "type": ["string", "null"],
+      "description": "Country whose laws govern (for sub-country conflicts). Null for cross-country wars."
+    },
+
+    "initiator": {
+      "type": "object",
+      "required": ["party_id", "party_type"],
+      "properties": {
+        "party_id": {"type": "string"},
+        "party_type": {
+          "type": "string",
+          "enum": ["character", "institution", "country", "industry"]
+        }
+      }
+    },
+
+    "defender": {
+      "type": "object",
+      "required": ["party_id", "party_type"],
+      "properties": {
+        "party_id": {"type": "string"},
+        "party_type": {"type": "string", "enum": ["character", "institution", "country", "industry"]}
+      }
+    },
+
+    "third_parties": {
+      "type": "array",
+      "description": "Affected non-principal parties (e.g. allies in war, downstream parties in contract disputes).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "party_id": {"type": "string"},
+          "party_type": {"type": "string"},
+          "role": {"type": "string", "description": "e.g. 'ally', 'witness', 'mediator', 'downstream_affected'."}
+        }
+      }
+    },
+
+    "casus_belli": {
+      "type": "object",
+      "required": ["category", "summary"],
+      "description": "Required justification (per GUARDRAILS Layer 5). Engine refuses war declarations / hostile actions without documented cause.",
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": [
+            "trade_dispute",
+            "treaty_breach",
+            "sanctions_violation",
+            "territorial_dispute",
+            "succession_dispute",
+            "contract_breach",
+            "unpaid_debt",
+            "defamation",
+            "fraud",
+            "harassment",
+            "discrimination",
+            "anti_competitive_practice",
+            "regulatory_violation",
+            "ideological",
+            "personal"
+          ]
+        },
+        "summary": {"type": "string", "maxLength": 1000},
+        "evidence_refs": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Foreign keys to substrate artifacts that support the claim (contracts breached, press articles, transaction IDs)."
+        }
+      }
+    },
+
+    "forces": {
+      "type": "object",
+      "description": "For type='war' / 'civil_war' / 'coup' / 'secession'. Force composition.",
+      "properties": {
+        "initiator_forces": {
+          "type": "object",
+          "properties": {
+            "armies": {"type": "array", "items": {"type": "string"}, "description": "Foreign keys to institution.schema.json instances representing armies."},
+            "total_soldiers": {"type": "integer", "minimum": 0},
+            "avg_equipment_quality": {"type": "number", "minimum": 0, "maximum": 1},
+            "leadership_score": {"type": "number", "minimum": 0, "maximum": 1},
+            "supply_situation": {"type": "string", "enum": ["abundant", "adequate", "stretched", "broken"]}
+          }
+        },
+        "defender_forces": {
+          "type": "object",
+          "properties": {
+            "armies": {"type": "array", "items": {"type": "string"}},
+            "total_soldiers": {"type": "integer", "minimum": 0},
+            "avg_equipment_quality": {"type": "number", "minimum": 0, "maximum": 1},
+            "leadership_score": {"type": "number", "minimum": 0, "maximum": 1},
+            "supply_situation": {"type": "string"}
+          }
+        }
+      }
+    },
+
+    "strategy": {
+      "type": "object",
+      "description": "For multi-phase conflicts. Each side picks a strategy.",
+      "properties": {
+        "initiator_strategy": {
+          "type": "string",
+          "enum": ["aggressive", "defensive", "scorched_earth", "asymmetric", "litigative", "settlement_seeking"]
+        },
+        "defender_strategy": {
+          "type": "string",
+          "enum": ["aggressive", "defensive", "scorched_earth", "asymmetric", "litigative", "settlement_seeking"]
+        }
+      }
+    },
+
+    "resolution_engine": {
+      "type": "string",
+      "description": "Substrate component that resolved (or will resolve) this conflict (e.g. 'war_resolver_v1', 'lawsuit_resolver_v1', 'amm_takeover_resolver_v1').",
+      "default": "default_resolver_v1"
+    },
+
+    "rng_seed": {
+      "type": "string",
+      "pattern": "^0x[a-f0-9]{8,64}$",
+      "description": "Deterministic seed for replayable resolution. Per V0-PLAN match-simulator pattern (substrate-shaped)."
+    },
+
+    "outcomes": {
+      "type": "object",
+      "description": "Substrate-tracked once resolution completes.",
+      "properties": {
+        "winner_party_id": {"type": ["string", "null"]},
+        "loser_party_id": {"type": ["string", "null"]},
+        "settlement_pol": {"type": ["number", "null"], "minimum": 0},
+        "casualties": {
+          "type": "object",
+          "description": "For type='war' etc.",
+          "properties": {
+            "initiator": {"type": "integer", "minimum": 0},
+            "defender": {"type": "integer", "minimum": 0}
+          }
+        },
+        "asset_transfers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from_party_id": {"type": "string"},
+              "to_party_id": {"type": "string"},
+              "asset_type": {"type": "string"},
+              "asset_id": {"type": "string"},
+              "valuation_pol": {"type": "number", "minimum": 0}
+            }
+          }
+        },
+        "territory_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lot_id_or_region_id": {"type": "string"},
+              "from_country_id": {"type": "string"},
+              "to_country_id": {"type": "string"}
+            }
+          }
+        },
+        "reparations_pol": {"type": ["number", "null"], "minimum": 0},
+        "reputation_changes": {
+          "type": "object",
+          "description": "Map keyed by party_id, value is reputation delta (-100 to +100)."
+        },
+        "press_recap_uri": {
+          "type": ["string", "null"],
+          "description": "LLM-generated narrative recap of the resolution. Published to world feed."
+        }
+      }
+    },
+
+    "aftermath": {
+      "type": "object",
+      "description": "Lingering effects scheduled post-resolution (refugee flows, currency volatility, ongoing reputation cascades).",
+      "properties": {
+        "scheduled_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "event_type": {"type": "string"},
+              "scheduled_in_world": {"type": "string", "format": "date"},
+              "params": {"type": "object"}
+            }
+          }
+        }
+      }
+    },
+
+    "status": {
+      "type": "string",
+      "enum": [
+        "filed",
+        "served",
+        "in_strategy_phase",
+        "in_resolution",
+        "settled",
+        "concluded",
+        "appealed",
+        "vacated",
+        "withdrawn"
+      ],
+      "default": "filed"
+    },
+
+    "opened_in_world": {"type": "string", "format": "date"},
+    "concluded_in_world": {"type": ["string", "null"], "format": "date"},
+
+    "judicial_authority_id": {
+      "type": ["string", "null"],
+      "description": "For type='lawsuit' / 'contract_dispute' — institution serving as judicial body (per country.regulators / country.government.branches.judiciary)."
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string", "default": "0.1.0"},
+        "created_at_real": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

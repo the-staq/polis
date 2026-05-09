@@ -1,0 +1,45 @@
+Polis content license — Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+This license applies to reference content configurations in polis/configs/
+including but not limited to:
+  - Worlds (e.g. Modern Earth 2026)
+  - Countries (e.g. England-on-Polis: constitution, laws, government structure,
+    regulatory bodies, public services)
+  - Industries (e.g. football-modern-earth: rules, governance, calendar)
+  - Institutions (e.g. Hartwell FC: history, character, operations)
+  - Documentation prose and examples
+
+You are free to:
+  - Share — copy and redistribute the material in any medium or format
+  - Adapt — remix, transform, and build upon the material for any purpose,
+    even commercially
+
+Under the following terms:
+  - Attribution — You must give appropriate credit to "the staq and
+    contributors", provide a link to the license, and indicate if changes
+    were made. You may do so in any reasonable manner, but not in any way
+    that suggests the licensor endorses you or your use.
+
+No additional restrictions — You may not apply legal terms or technological
+measures that legally restrict others from doing anything the license permits.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+----------------------------------------------------------------------
+
+Provenance disclosure: Some content in polis/configs/ is adapted from
+public-domain or open-license sources (UK legislation under the Open
+Government Licence v3.0; constitutional templates from the Comparative
+Constitutions Project under CC-BY 4.0; IFAB Laws of the Game under
+CC-BY 4.0; etc.). Per-source provenance and license tracking lives in
+polis/configs/sources.yaml. Adaptations preserve original license terms
+where required and provide attribution per source.
+
+----------------------------------------------------------------------
+
+Tier 3 original creations (per CONTRIBUTING.md §3) are creator-owned with
+a license-to-host grant to the staq, NOT under CC-BY 4.0. Those
+contributions are governed by the separate Tier 3 Contributor License
+Agreement signed at submission time.
+
+Copyright © 2026 the staq and contributors.

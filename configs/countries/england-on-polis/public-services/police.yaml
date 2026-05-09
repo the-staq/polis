@@ -1,0 +1,68 @@
+# Foxbridge police service
+# County-based forces; national operational independence; Home Secretary
+# policy oversight; chief constables operationally independent.
+
+institution_id: foxbridge-police-service
+parent_ministry_id: home-office-foxbridge
+parent_minister_role: home-secretary
+
+founding_principle:
+  policing_by_consent: true
+  operational_independence: true
+  ministerial_oversight_on_policy_only: true
+  no_intervention_in_individual_cases: true
+
+structure:
+  national_organisation: federated_county_forces
+  county_forces:
+    - { id: foxbridge-police, county: foxbridge, role: capital_region_force_includes_diplomatic_protection_and_specialist_units }
+    - { id: hartshire-constabulary, county: hartshire, role: county_force_includes_match_day_policing_for_hartshire_combination_clubs }
+    - { id: northshire-police, county: northshire, role: county_force }
+    - { id: westmark-police, county: westmark, role: county_force_with_port_specialist_unit }
+    - { id: southhaven-police, county: southhaven, role: county_force }
+    - { id: eastmoor-police, county: eastmoor, role: county_force }
+    - { id: midshire-police, county: midshire, role: county_force }
+    - { id: cathermere-police, county: cathermere, role: county_force_with_lakes_rescue_collaboration }
+    - { id: stonebridge-police, county: stonebridge, role: county_force }
+    - { id: greycombe-county-police, county: greycombe-county, role: county_force }
+    - { id: salt-fells-police, county: salt-fells, role: county_force_with_coast_specialist_unit }
+  national_units:
+    - { id: foxbridge-major-crime-unit, scope: serious-organised-crime-cross-county }
+    - { id: foxbridge-counter-terrorism-command, scope: terrorism-related-investigation_and_protective_security }
+    - { id: foxbridge-economic-crime-unit, scope: fraud_money_laundering_market_abuse }
+    - { id: foxbridge-cybercrime-unit, scope: computer_misuse_internet_crime }
+    - { id: foxbridge-public-protection-unit, scope: csam_child_abuse_safeguarding }
+    - { id: foxbridge-sport-integrity-unit, scope: match_fixing_doping_corruption_in_sport }
+
+oversight:
+  policy: home-secretary_via_dept-of-policing
+  operational_independence: chief-constable_per_force
+  external_oversight: foxbridge-independent-office-for-police-conduct
+  parliamentary: home-affairs-select-committee
+  county_political_oversight: police-and-crime-commissioner_elected_per_county_4yr_term
+
+powers_and_safeguards:
+  - powers_under_foxbridge-police-and-criminal-evidence-rules
+  - safeguards_in_foxbridge-criminal-procedure-rules
+  - cautions_at_arrest
+  - detention_clock_24h_extendable_to_96h_with_judicial_authorisation
+  - body_worn_video_mandatory_in_public_facing_roles
+  - independent_complaints_route
+
+football_match_day:
+  matchday_policing_subject_to_safety-advisory-group_clearance: true
+  cost_recovery_under_foxbridge-football-act_section_12_via_special_police_services_charging: true
+  coordination_with_clubs_safety_officers: true
+  stewards_remain_responsible_inside_stadium_perimeter: true
+
+complaints_and_misconduct:
+  internal_route: professional-standards-department_per_force
+  external_route: foxbridge-independent-office-for-police-conduct
+  statutory_appeal: foxbridge-police-appeals-tribunal
+  serious_misconduct_referrals_mandatory: true
+
+provenance:
+  authored_by: the staq
+  license: CC-BY-4.0
+  schema_version: "0.1.0"
+  source_template: UK police service structure, publicly available

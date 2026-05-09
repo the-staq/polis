@@ -1,0 +1,23 @@
+# Salt Fells — county sketch
+id: salt-fells
+country: england-on-polis
+world: modern-earth-2026
+type: county
+parent_subdivision_id: null
+identity:
+  name: Salt Fells
+  short_name: SF
+  motto: Fines sale lavati
+  established_in_world: 1175
+  narrative_brief: >
+    Northwesternmost county. Saltmarsh and high fell country; ancient
+    mining traditions; the country's only coast-and-fell county. Strongly
+    devolutionist; high turnout for Northern Confederation candidates.
+geography: { area_km2: 5210, population: 380_000, capital_town_id: lot_salt-fells_marshford, bordering_counties: [northshire, cathermere, stonebridge, greycombe-county], bbox: { south: 54.30, west: -3.50, north: 55.20, east: -2.70 } }
+government: { has_own_council: true, council_institution_id: salt-fells-county-council, council_seats: 39, electoral_basis: divisions_first_past_the_post, has_own_taxation: false }
+economy:
+  primary_sectors: [agriculture_pastoral, salt_extraction_legacy, tourism_coastal_fells, public_sector]
+  unemployment_rate: 0.067
+  median_household_income_pol_per_year: 29_000
+regional_culture: { dominant_dialect: salt-fells-broad, patron_saint: St Olwen of the Salt Marsh }
+provenance: { authored_by: the staq, license: CC-BY-4.0, schema_version: "0.1.0" }

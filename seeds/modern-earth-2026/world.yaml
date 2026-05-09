@@ -1,0 +1,155 @@
+# Modern Earth 2026 — V0 world seed
+# Schema: ../../schemas/world.schema.json (v0.1.1)
+#
+# This is THE world for V0. Single world, single country (England-on-Polis),
+# single industry (football-modern-earth + governance substrate-industry).
+# Substrate-fictional version of the present day; reminiscent of real Earth
+# but with substrate-fictional countries, institutions, and people.
+
+id: modern-earth-2026
+name: Modern Earth 2026
+era: contemporary
+
+description: >
+  Substrate-fictional present-day Earth analogue. Mobile internet, AI-assisted
+  everything, current-real-world geopolitical tensions abstracted into
+  substrate-fictional analogues. Football is the dominant global sport.
+  No real-world country names, no real-world political party names, no
+  real-world living-person references — refused at the model layer.
+  Curated by the staq.
+
+geography:
+  source: earth-derived
+  map_provider: osm
+  initial_view:
+    lat: 54.978   # Foxbridge-on-Tyne (capital of England-on-Polis)
+    lon: -1.617
+    zoom: 6
+  available_regions: all
+  tile_style_uri: null
+
+calendar:
+  system: gregorian
+  in_world_day_per_real_day: 1.0
+  in_world_year_at_launch: 2026
+  months_per_year: 12
+  weeks_per_year: 52
+  current_in_world_date: "2026-10-05"
+
+physics:
+  gravity: earth_standard
+  travel_speed: modern_aviation
+  communication: internet
+
+economic_base:
+  primary_currency: POL
+  default_inflation: 0.024
+  default_taxation_posture: country_governed
+
+moderation:
+  floor: engine_default
+  policy:
+    violence_allowed: true
+    adult_content_allowed: false
+    real_world_political_references: refused
+    real_world_brand_references: refused
+  age_gate_world_min: 18
+
+age_gate: 18
+
+available_languages: [en]
+visibility: invite_only
+status: in_development
+
+countries_allowed:
+  user_creatable: false   # V0: only the-staq curates countries
+  max_countries: null
+  real_earth_country_naming: transparent_reference_allowed   # England-on-Polis OK
+
+industries_allowed:
+  user_creatable: false
+  era_constraint: true   # no medieval jousting; no cyberpunk gene-mods
+
+mortality:
+  v0_severity: permissive
+  suicide_safeguarding_policy: engine_gated_v0
+  needs_calibration:
+    hunger:
+      decay_per_day: 0.30
+      seek_threshold: 0.40
+      damage_floor: 0.10
+      days_at_floor_to_health_damage: 3
+      health_damage_per_day_below_floor: 0.04
+    thirst:
+      decay_per_day: 0.50
+      seek_threshold: 0.50
+      damage_floor: 0.15
+      days_at_floor_to_health_damage: 1
+      health_damage_per_day_below_floor: 0.08
+    energy:
+      decay_per_day: 0.25
+      seek_threshold: 0.35
+      damage_floor: 0.10
+      days_at_floor_to_health_damage: 5
+      health_damage_per_day_below_floor: 0.02
+    health:
+      seek_threshold: 0.50
+      damage_floor: 0.25
+      mortality_threshold: 0.10
+      weekly_mortality_probability_at_zero_health: 0.10
+    warmth:
+      decay_per_day: 0.10
+      seek_threshold: 0.40
+      damage_floor: 0.15
+      days_at_floor_to_health_damage: 2
+      health_damage_per_day_below_floor: 0.05
+    comfort:
+      decay_per_day: 0.05
+      seek_threshold: 0.30
+      damage_floor: 0.10
+      days_at_floor_to_health_damage: 14
+      health_damage_per_day_below_floor: 0.005
+    hygiene:
+      decay_per_day: 0.15
+      seek_threshold: 0.40
+      damage_floor: 0.15
+      days_at_floor_to_health_damage: 14
+      health_damage_per_day_below_floor: 0.01
+    mood:
+      decay_per_day: 0.04
+      seek_threshold: 0.30
+      damage_floor: 0.10
+      days_at_floor_to_health_damage: 21
+      health_damage_per_day_below_floor: 0.005
+    social:
+      decay_per_day: 0.06
+      seek_threshold: 0.30
+      damage_floor: 0.10
+      days_at_floor_to_health_damage: 28
+      health_damage_per_day_below_floor: 0.003
+    purpose:
+      decay_per_day: 0.02
+      seek_threshold: 0.25
+      damage_floor: 0.10
+      days_at_floor_to_health_damage: 60
+      health_damage_per_day_below_floor: 0.002
+
+cognition:
+  embedding_model: voyage-3
+  corpora:
+    context:
+      source: polis/seeds/modern-earth-2026/world-context/
+      loader: markdown-tree
+      chunk_strategy: per-section
+      description: >
+        World-context priors. Mobile internet, AI-assisted everything,
+        substrate-fictional contemporary geopolitics. Loaded as 5th-layer
+        retrieval per V0-PLAN §3.10.
+
+launch_date: "2026-08-01"
+
+metadata:
+  schema_version: "0.1.1"
+  authored_by: the staq
+  license: CC-BY-4.0
+  current_in_world_date: "2026-10-05"

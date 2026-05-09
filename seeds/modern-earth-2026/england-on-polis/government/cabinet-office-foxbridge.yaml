@@ -1,0 +1,80 @@
+# Cabinet Office Foxbridge — permanent civil service coordinating body
+# Schema: ../../../../schemas/institution.schema.json
+# Cabinet Secretary heads it; politically neutral; serves successive governments.
+
+id: cabinet-office-foxbridge
+industry: governance
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: civil_service_office
+
+identity:
+  name: Cabinet Office Foxbridge
+  short_name: Cabinet Office
+  founding_year_in_world: 1916
+  headquarters_lot_id: lot_foxbridge_governance_district_cabinet-office
+  motto: Continuity of state
+  narrative_brief: >
+    The permanent professional civil service that coordinates cabinet
+    business, holds institutional memory across successive governments,
+    and runs the machinery the elected ministers steer. Politically
+    neutral. The Cabinet Secretary is the most senior civil servant
+    in the country.
+
+governance:
+  structure: state_owned
+  decision_threshold: 0.51
+  board:
+    - { character_id: c_cabinet_secretary, role: Cabinet Secretary (head), appointed_in_world: "2018-04-15", voting_weight: 1.0 }
+
+capital:
+  initial_treasury_pol: 0
+  current_treasury_pol: 0
+
+staff:
+  roles:
+    - role_id: cabinet_secretary
+      title: Cabinet Secretary
+      department: leadership
+      reports_to_role_id: null
+      incumbent_character_id: c_cabinet_secretary
+      compensation: { base_salary_pol_per_month: 12000 }
+      reporting_cadence: daily
+    - role_id: deputy_cabinet_secretary
+      title: Deputy Cabinet Secretary
+      department: leadership
+      reports_to_role_id: cabinet_secretary
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 8500 }
+      reporting_cadence: weekly
+  departments:
+    - { id: leadership,     label: Cabinet Office Leadership,       head_role_id: cabinet_secretary, budget_pol_per_month: 20500, headcount_target: 4 }
+    - { id: secretariat,    label: Cabinet Secretariat,             head_role_id: deputy_cabinet_secretary, budget_pol_per_month: 32000, headcount_target: 24 }
+    - { id: machinery_unit, label: Machinery of Government Unit,    head_role_id: deputy_cabinet_secretary, budget_pol_per_month: 14000, headcount_target: 8 }
+
+operations:
+  revenue_streams:
+    - { id: treasury_allocation, label: Country Treasury Allocation, estimated_monthly_pol: 66500 }
+  cost_structure:
+    - { id: payroll, label: Civil Service Payroll, estimated_monthly_pol: 66500 }
+
+reputation:
+  public_score: 41   # by design — civil servants are not public-facing
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  is_seeded_at_country_founding: true
+  political_neutrality: required
+  serves_successive_governments: true
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"
+  seed_curator: the-staq

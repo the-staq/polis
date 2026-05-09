@@ -1,0 +1,130 @@
+# HM Government Foxbridge — the executive government of England-on-Polis
+# Schema: ../../../../schemas/institution.schema.json
+#
+# Parent institution for PM + cabinet ministers. Per country.government.branches.executive
+# in country template; per character files like prime-minister.yaml + treasury-minister.yaml
+# which reference current_institution_id: hm-government-foxbridge.
+
+id: hm-government-foxbridge
+industry: governance
+country: england-on-polis
+world: modern-earth-2026
+founder_principal_id: principal_the-staq
+type: executive_government
+
+identity:
+  name: HM Government Foxbridge
+  short_name: HMG
+  founding_year_in_world: 1689   # in-world post-revolutionary settlement
+  headquarters_lot_id: lot_foxbridge_governance_district_no-10-equivalent
+  motto: Honour the office, not the holder
+  narrative_brief: >
+    The executive arm of the England-on-Polis state. Headed by the Prime
+    Minister; staffed by cabinet ministers (Treasury, Justice, Foreign Affairs,
+    Sport, Labour, Home, Health) who serve at the PM's pleasure. Sits in
+    the Foxbridge governance district; the country's permanent civil
+    service (see cabinet-office-foxbridge) operates alongside it under
+    the Cabinet Secretary's coordination.
+
+governance:
+  structure: state_owned
+  decision_threshold: 0.51
+  board:
+    - { character_id: c_pm_pell-whitcombe, role: Prime Minister, appointed_in_world: "2024-06-01", term_until_in_world: "2028-06-01", voting_weight: 1.0 }
+    - { character_id: c_treasury_minister, role: Treasury Minister, appointed_in_world: "2024-06-01", voting_weight: 1.0 }
+    - { character_id: c_justice_minister, role: Justice Minister, appointed_in_world: "2024-06-01", voting_weight: 1.0 }
+    - { character_id: c_foreign_secretary, role: Foreign Secretary, appointed_in_world: "2024-06-01", voting_weight: 1.0 }
+    - { character_id: c_sport_minister, role: Sport Minister, appointed_in_world: "2024-06-01", voting_weight: 1.0 }
+    - { character_id: c_labour_minister, role: Labour Minister, appointed_in_world: "2024-06-01", voting_weight: 1.0 }
+
+capital:
+  initial_treasury_pol: 0   # state institutions don't carry POL treasury — they spend country tax revenue
+  current_treasury_pol: 0
+
+staff:
+  roles:
+    - role_id: pm
+      title: Prime Minister
+      department: executive
+      reports_to_role_id: null
+      incumbent_character_id: c_pm_pell-whitcombe
+      compensation: { base_salary_pol_per_month: 14000 }
+      reporting_cadence: as_needed
+    - role_id: treasury_minister
+      title: Treasury Minister
+      department: ministries
+      reports_to_role_id: pm
+      incumbent_character_id: c_treasury_minister
+      compensation: { base_salary_pol_per_month: 9500 }
+      reporting_cadence: weekly
+    - role_id: justice_minister
+      title: Justice Minister
+      department: ministries
+      reports_to_role_id: pm
+      incumbent_character_id: c_justice_minister
+      compensation: { base_salary_pol_per_month: 9000 }
+      reporting_cadence: weekly
+    - role_id: foreign_secretary
+      title: Foreign Secretary
+      department: ministries
+      reports_to_role_id: pm
+      incumbent_character_id: c_foreign_secretary
+      compensation: { base_salary_pol_per_month: 9000 }
+      reporting_cadence: weekly
+    - role_id: sport_minister
+      title: Sport Minister
+      department: ministries
+      reports_to_role_id: pm
+      incumbent_character_id: c_sport_minister
+      compensation: { base_salary_pol_per_month: 8500 }
+      reporting_cadence: monthly
+    - role_id: labour_minister
+      title: Labour & Employment Minister
+      department: ministries
+      reports_to_role_id: pm
+      incumbent_character_id: c_labour_minister
+      compensation: { base_salary_pol_per_month: 9000 }
+      reporting_cadence: weekly
+    - role_id: home_minister
+      title: Home Office Minister
+      department: ministries
+      reports_to_role_id: pm
+      incumbent_character_id: null   # vacant — to be seeded later or filled by election
+      compensation: { base_salary_pol_per_month: 9000 }
+      reporting_cadence: weekly
+    - role_id: health_minister
+      title: Health Minister
+      department: ministries
+      reports_to_role_id: pm
+      incumbent_character_id: null
+      compensation: { base_salary_pol_per_month: 9000 }
+      reporting_cadence: weekly
+  departments:
+    - { id: executive, label: Executive (No 10), head_role_id: pm, budget_pol_per_month: 14000, headcount_target: 8 }
+    - { id: ministries, label: Cabinet Ministries, head_role_id: pm, budget_pol_per_month: 56000, headcount_target: 7 }
+
+operations:
+  revenue_streams:
+    - { id: treasury_allocation, label: Country Treasury Allocation (operational), estimated_monthly_pol: 56000 }
+  cost_structure:
+    - { id: cabinet_payroll, label: Cabinet Payroll, estimated_monthly_pol: 56000 }
+    - { id: residences,      label: Official Residences + Cars,                  estimated_monthly_pol: 12000 }
+
+reputation:
+  public_score: 64   # PM's approval rating average
+  awards: []
+  scandal_history: []
+
+industry_specific:
+  is_seeded_at_country_founding: true
+  cabinet_size_target: 7
+
+founder_royalty: 0.0
+
+status: operating
+
+metadata:
+  schema_version: "0.1.0"
+  founded_at_real: "2026-05-09T00:00:00Z"
+  current_in_world_date: "2026-09-15"
+  seed_curator: the-staq

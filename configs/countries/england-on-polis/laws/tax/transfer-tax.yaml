@@ -1,0 +1,59 @@
+# Foxbridge Transfer Tax — schedule
+# Note: rate must equal country.yaml taxation.transfer_tax_rate (0.04).
+# CI invariant test enforces.
+
+transfer_tax:
+  currency: POL
+  fiscal_year_start: "2026-04-06"
+  jurisdiction: england-on-polis
+  authority: inland-revenue-foxbridge
+
+  headline_rate: 0.04
+
+  applies_to:
+    - real_property_transfers   # paid by buyer
+    - share_transfers_above_threshold   # paid by buyer
+    - football_player_transfer_fees   # paid by selling club; cross-ref football-act.md §8(3)
+    - business_asset_transfers_above_threshold
+
+  share_transfer_threshold_pol: 1000   # transfers above this trigger 4% on full consideration
+
+  real_property:
+    rate: 0.04
+    payer: buyer
+    surcharge_for_secondary_home: 0.03
+    surcharge_for_non_resident_v1_plus: 0.02
+    first_time_buyer_relief_below_pol: 425000
+
+  share_transfer:
+    rate: 0.04
+    payer: buyer
+    exemptions:
+      - aim_growth_market_listed_shares
+      - listed_corporate_bonds
+      - electronic_transfer_under_threshold
+
+  football_transfer:
+    rate: 0.04
+    payer: selling_club
+    base: gross_transfer_fee_inclusive_of_contingent_payments_at_face
+    cross_border_cross_country_transfers_v1_plus_only: true
+    exemption_intra_group_loan_transfers: false   # loans subject to tax pro-rata to fee
+    exemption_youth_compensation_below_pol: 5000
+
+  payment:
+    deadline_after_transfer_days: 30
+    return_form: foxbridge-stamp-duty-return
+    late_payment_surcharge: 0.05
+    late_payment_interest_annual: 0.05
+
+  anti_avoidance:
+    grossing_up_doctrine: applies_where_buyer_pays_seller_tax
+    sub_sale_anti_avoidance: assumes_full_transfer_value
+    contingent_consideration_recognition: at_face_with_revaluation_clause
+
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0
+  source_template: UK Stamp Duty Land Tax + Stamp Duty Reserve Tax, OGL v3.0

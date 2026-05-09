@@ -1,0 +1,57 @@
+# Foxbridge Property Tax — schedule
+
+property_tax:
+  currency: POL
+  fiscal_year_start: "2026-04-06"
+  jurisdiction: england-on-polis
+  authority: inland-revenue-foxbridge
+
+  annual_rate: 0.012
+  basis: registered_taxable_value_per_foxbridge_land_registry
+  applies_to:
+    - residential_real_property
+    - commercial_real_property
+    - football_grounds_and_stadia
+    - industrial_premises
+    - agricultural_land_with_special_relief
+
+  exemptions:
+    principal_residence_below_threshold_pol: 0    # no homestead exemption at V0
+    listed_heritage_buildings: 0.5_relief
+    charitable_premises: 1.0_full_exemption
+    diplomatic_premises: 1.0_full_exemption
+    public_sector_owned_premises: out_of_scope
+
+  agricultural_relief:
+    rate: 0.50_relief
+    eligibility: registered_agricultural_use_for_minimum_24_months
+
+  capital_region_supplement:
+    applies_to_county: foxbridge
+    supplemental_rate: 0.005       # +0.5% additional on capital-region property
+    constitutional_basis: article_vi_section_2
+
+  council_tax_equivalent:
+    enabled_at_v0_for_county_foxbridge_only: true
+    other_counties_no_local_council_tax: true
+
+  payment:
+    cadence: quarterly
+    due_dates: [april_1, july_1, october_1, january_1]
+    late_payment_surcharge: 0.05
+    late_payment_interest_annual: 0.05
+
+  enforcement:
+    distraint_warrant_after_arrears_months: 6
+    forced_sale_after_arrears_months: 24
+    public_register_of_defaulters_above_pol: 25000
+
+  football_specific:
+    stadium_assessed_at_full_market_value: true
+    relief_for_supporter_owned_mutuals: 0.25_relief
+
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0
+  source_template: UK Council Tax + Business Rates regimes, OGL v3.0

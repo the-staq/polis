@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/soft_skills.schema.json",
+  "title": "SoftSkills",
+  "description": "Canonical 9-attribute soft-skill taxonomy applied to every character regardless of profession. Soft skills compose with profession-specific hard skills (industry.schema.json professions[].base_skills[]) into character ranking via professions[].overall_rating_formula. Soft skills evolve slowly (typically 0.5-1.5 points per in-world year) and are mostly cap-bounded by personality archetype, distinguishing them from coachable hard skills which can move fast under training. Substrate engine ticks soft-skill nudges in response to life events (won title, contract dispute resolved, public scandal), not weekly drills. Per skills-design doctrine — see polis/SKILLS-DESIGN.md.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "composure",
+    "charisma",
+    "resilience",
+    "integrity",
+    "decisiveness",
+    "empathy",
+    "ambition",
+    "ego",
+    "work_ethic"
+  ],
+
+  "properties": {
+    "composure": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Performance under pressure. High composure → footballer takes the penalty in 89th minute and hits the corner; manager fronts the press after a 4-0 home defeat and stays on-message. Low composure → mistakes in big moments, defensive answers in interviews."
+    },
+    "charisma": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Influence on other characters in social and broadcast contexts. Modulates relationship-building speed, dressing-room presence, supporter affinity, broadcasting performance for journalist roles."
+    },
+    "resilience": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Bounce-back from setback. Affects post-injury return, post-relegation rebuild, post-public-scandal recovery, repeat-failure-then-succeed arcs. Modulates how quickly mood and form recover after negative events."
+    },
+    "integrity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Honesty and consistency. Affects propensity to honour contracts vs angle for transfer, propensity to disclose to media vs spin, susceptibility to bribery / match-fixing approaches (low integrity → higher risk surface). Substrate hard floor (Constitution Article XI) refuses CSAM / real-world-threats regardless of this value — integrity governs only legal-but-shady behaviours."
+    },
+    "decisiveness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Speed under uncertainty. Affects tactical adjustments mid-match (manager), career-moment decisions (transfer offer with tight window), institution-level choices (board votes). High decisiveness → faster ping-resolution by the character without escalating to player; low decisiveness → more frequent ping_player by default."
+    },
+    "empathy": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Sensitivity to others' states. Affects management of dressing-room conflict, agent-client trust, mentor-relationships, ability to handle players going through personal difficulty. High empathy unlocks mentor-bonus to younger characters' growth_curve."
+    },
+    "ambition": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Drive to advance. Affects job-application willingness for stretch roles, willingness to accept bigger contracts at lower-quality clubs vs smaller contracts at bigger clubs, retirement timing. High ambition → frequent stretch-application; low ambition → settles for current role."
+    },
+    "ego": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Self-regard. Affects acceptance of squad-rotation, willingness to share credit, response to public criticism. High ego compounds with low integrity to produce difficult dressing-room characters; high ego with high integrity produces principled stars who clash on principle. Distinct from ambition — ambition is forward-pointed; ego is self-pointed."
+    },
+    "work_ethic": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Daily effort. Modulates effective training_load_per_week multiplier on hard-skill growth_curves: a player with work_ethic 90 gains skills at ~1.2× the curve rate; work_ethic 30 gains at ~0.7×. Work-ethic itself improves slowly via mentor relationships (high-empathy mentor + young mentee) and degrades after sustained demoralising periods (relegation, contract dispute, locker-room poison)."
+    }
+  },
+
+  "additionalProperties": false
+}

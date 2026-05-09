@@ -1,0 +1,796 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/country.schema.json",
+  "title": "Country",
+  "description": "A country template in a Polis world. Captures jurisdictional structure, government, laws, taxation, citizenship, regulatory bodies, foreign policy, plus the bound constraints that encode substrate guardrails (engine hard floors, constructive bounds, contribution review gates, runtime, cross-country, termination). Authored by the staq or via Tier 2 contribution; not in-app foundable.",
+  "type": "object",
+  "version": "0.1.1",
+
+  "required": [
+    "id",
+    "world",
+    "name",
+    "founded_in_world",
+    "founder_principal_id",
+    "identity",
+    "territory",
+    "government",
+    "citizenship",
+    "currency",
+    "taxation",
+    "laws",
+    "regulators",
+    "foreign_policy",
+    "cognition"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{2,63}$",
+      "description": "Slug identifier; must be unique within the world."
+    },
+
+    "world": {
+      "type": "string",
+      "description": "Foreign key to a world.schema.json instance."
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "description": "Human-readable country name. The substrate-fictional name (e.g. 'England-on-Polis'); MUST NOT be a real-world country name verbatim. Engine real-name registry refusal applies."
+    },
+
+    "founded_in_world": {
+      "type": "string",
+      "format": "date",
+      "description": "In-world founding date. Substrate calendar."
+    },
+
+    "founder_principal_id": {
+      "type": "string",
+      "description": "Principal who founded this country. Anti-sybil-tracked at engine level (PRD §6.6.1)."
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["motto", "languages", "naming_convention"],
+      "properties": {
+        "flag": {
+          "type": "string",
+          "description": "IPFS URI or asset path. Substrate-fictional design only."
+        },
+        "motto": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "languages": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$"},
+          "minItems": 1,
+          "description": "BCP-47 language codes. At least one required."
+        },
+        "naming_convention": {
+          "type": "string",
+          "description": "How institutions, regions, and characters in this country are named. The convention prevents real-world reference creep (e.g. 'all major cities take the suffix -on-Tyne or -Foxbridge'). LLM-judge enforces conformance at country-content authoring time."
+        },
+        "narrative_brief": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "1-2 paragraph editorial framing. Substrate-fictional. No real names."
+        }
+      }
+    },
+
+    "territory": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["real-earth-bounded", "fictional-bounded", "abstract"],
+          "description": "Geographic basis. real-earth-bounded uses OSM territory; fictional uses authored GeoJSON; abstract has no map."
+        },
+        "bounds_geojson": {
+          "type": "string",
+          "description": "Path or IPFS URI to a GeoJSON polygon defining country territory."
+        },
+        "capital": {
+          "type": "object",
+          "required": ["city_id"],
+          "properties": {
+            "city_id": {"type": "string"},
+            "lat": {"type": "number", "minimum": -90, "maximum": 90},
+            "lon": {"type": "number", "minimum": -180, "maximum": 180}
+          }
+        },
+        "subdivisions": {
+          "type": "array",
+          "description": "Jurisdictional layers below country (e.g. counties, then cities, then districts, then lots). Each layer can have its OWN tax authority and laws within country bounds — federations are real, not flattened.",
+          "items": {
+            "type": "object",
+            "required": ["level", "id", "name"],
+            "properties": {
+              "level": {
+                "type": "string",
+                "enum": ["state", "province", "county", "region", "canton", "prefecture", "city", "district", "neighborhood"],
+                "description": "Jurisdictional layer. Country defines its hierarchy."
+              },
+              "id": {"type": "string"},
+              "name": {"type": "string"},
+              "parent_subdivision_id": {
+                "type": ["string", "null"],
+                "description": "Null for top-level subdivisions; otherwise points to parent layer."
+              },
+              "has_own_government": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether this subdivision has its own government workflow with independent law-making authority. Federations: true at state/canton level."
+              },
+              "has_own_taxation": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether this subdivision can levy its own taxes (in addition to country-level)."
+              },
+              "council_institution_id": {
+                "type": ["string", "null"],
+                "description": "Foreign key to an institution-schema.json instance representing the local council (if applicable)."
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "government": {
+      "type": "object",
+      "required": ["type", "branches", "head_of_state_role", "electoral_system"],
+      "description": "Substrate-real government structure. Not a string — a populated object with branches, ministries, offices, civil-service roles. Founder must populate the actual incumbents at country-creation; engine does not auto-spawn government.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "constitutional_democracy",
+            "parliamentary_republic",
+            "presidential_republic",
+            "constitutional_monarchy",
+            "absolute_monarchy",
+            "single_party_state",
+            "theocracy",
+            "directorial_council",
+            "anarcho_capitalist"
+          ]
+        },
+        "branches": {
+          "type": "object",
+          "required": ["executive", "legislative"],
+          "properties": {
+            "executive": {
+              "type": "object",
+              "required": ["head_role", "cabinet_positions"],
+              "properties": {
+                "head_role": {
+                  "type": "string",
+                  "description": "e.g. 'Prime Minister', 'President', 'First Consul'"
+                },
+                "head_character_id": {
+                  "type": ["string", "null"],
+                  "description": "Foreign key to character.schema.json — current incumbent (null at country founding)."
+                },
+                "cabinet_positions": {
+                  "type": "array",
+                  "minItems": 3,
+                  "description": "Named cabinet ministries with role descriptions. Real positions, not placeholders.",
+                  "items": {
+                    "type": "object",
+                    "required": ["title", "portfolio"],
+                    "properties": {
+                      "title": {"type": "string"},
+                      "portfolio": {"type": "string"},
+                      "incumbent_character_id": {"type": ["string", "null"]}
+                    }
+                  }
+                }
+              }
+            },
+            "legislative": {
+              "type": "object",
+              "required": ["chambers"],
+              "properties": {
+                "chambers": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["name", "seats", "selection"],
+                    "properties": {
+                      "name": {"type": "string"},
+                      "seats": {"type": "integer", "minimum": 1, "maximum": 2000},
+                      "selection": {
+                        "type": "string",
+                        "enum": ["elected", "appointed", "hereditary", "mixed"]
+                      },
+                      "term_months": {"type": "integer", "minimum": 12, "maximum": 600, "description": "Lower / elected chambers typically 24-72 months; upper / review chambers may run 96-240 (e.g. England-on-Polis House of Review at 144). Cap at 600 admits substrate-fictional appointed-for-life chambers without expiring."}
+                    }
+                  }
+                }
+              }
+            },
+            "judiciary": {
+              "type": "object",
+              "properties": {
+                "supreme_court_seats": {"type": "integer", "minimum": 1, "maximum": 25},
+                "judicial_appointment": {
+                  "type": "string",
+                  "enum": ["executive_appointment", "legislative_confirmation", "elected", "merit_commission", "hereditary"]
+                },
+                "common_law": {
+                  "type": "boolean",
+                  "description": "If true, judicial precedent is binding (BAILII-style); if false, civil-code system."
+                }
+              }
+            }
+          }
+        },
+
+        "head_of_state_role": {
+          "type": "string",
+          "description": "Title for ceremonial head of state (may equal head_role for presidential systems, or differ for parliamentary/monarchical)."
+        },
+
+        "electoral_system": {
+          "type": "string",
+          "enum": ["FPTP", "PR", "STV", "approval", "ranked_choice", "two_round", "appointment_only"],
+          "description": "How elected positions are filled. Engine refuses elections that violate this system."
+        },
+
+        "term_length_months": {
+          "type": "integer",
+          "minimum": 24,
+          "maximum": 96,
+          "description": "BOUND: term length in months. Engine refuses term changes outside [24, 96] — no infinite-term presidents."
+        },
+
+        "term_limits": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "BOUND: max consecutive terms. Engine refuses incumbent re-running beyond limit."
+        },
+
+        "civil_service": {
+          "type": "object",
+          "description": "Permanent professional government workforce.",
+          "properties": {
+            "permanent_secretaries": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["title", "ministry"],
+                "properties": {
+                  "title": {"type": "string"},
+                  "ministry": {"type": "string"},
+                  "incumbent_character_id": {"type": ["string", "null"]}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "actuarial_life_expectancy": {
+      "$ref": "https://schemas.polis.example/mortality.schema.json#/$defs/actuarial_life_expectancy",
+      "description": "Country-level life-expectancy distribution. Used at character spawn to sample state.vital_status.life_expectancy_age. See mortality.schema.json + polis/MORTALITY-DESIGN.md."
+    },
+
+    "civic_rights": {
+      "type": "object",
+      "description": "Rights guaranteed to citizens of this country. The engine enforces these as constraints on Workflow actions affecting citizens.",
+      "required": ["voting_eligibility", "candidacy_eligibility"],
+      "properties": {
+        "voting_eligibility": {
+          "type": "object",
+          "required": ["minimum_age"],
+          "properties": {
+            "minimum_age": {"type": "integer", "minimum": 16, "maximum": 25},
+            "residency_required_months": {"type": "integer", "minimum": 0, "maximum": 120},
+            "citizenship_required": {"type": "boolean", "default": true}
+          }
+        },
+        "candidacy_eligibility": {
+          "type": "object",
+          "required": ["minimum_age"],
+          "properties": {
+            "minimum_age": {"type": "integer", "minimum": 18, "maximum": 40},
+            "residency_required_months": {"type": "integer", "minimum": 0, "maximum": 240},
+            "citizenship_required": {"type": "boolean", "default": true}
+          }
+        },
+        "due_process": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, citizenship-stripping and asset-seizure require judicial ruling (not founder fiat). Engine enforces."
+        },
+        "property_rights": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, expropriation requires due process + compensation."
+        },
+        "press_freedom": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, country cannot censor in-substrate journalism. Libel laws still apply (see laws.press)."
+        },
+        "freedom_of_assembly": {
+          "type": "boolean",
+          "default": true
+        },
+        "freedom_of_movement": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether citizens can leave the country. Engine refuses workflow actions that would block emigration if true."
+        }
+      }
+    },
+
+    "citizenship": {
+      "type": "object",
+      "required": ["open_immigration", "naturalization_period_days"],
+      "properties": {
+        "open_immigration": {
+          "type": "boolean",
+          "default": true,
+          "description": "If false, country can refuse new immigrants by policy."
+        },
+        "naturalization_period_days": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 1825,
+          "description": "BOUND: 30 days to 5 years. Engine refuses naturalization shorter than 30d (sybil risk) or longer than 5y (hostile-by-design)."
+        },
+        "dual_citizenship_allowed": {"type": "boolean", "default": true},
+        "citizenship_fee_pol": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100000,
+          "description": "BOUND: 0 to 100K POL. Engine refuses fees beyond range."
+        },
+        "stripping_requires_judicial_ruling": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true (and civic_rights.due_process true), founder cannot unilaterally strip citizenship; engine refuses."
+        }
+      }
+    },
+
+    "currency": {
+      "type": "object",
+      "required": ["enabled"],
+      "description": "Country's own currency (in addition to POL). Optional — country can use POL only.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "If false (V0 default for england-on-polis), POL is the only legal tender; the rest of this object is ignored."
+        },
+        "symbol": {"type": "string", "minLength": 2, "maxLength": 4},
+        "name": {"type": "string"},
+        "initial_peg_pol": {
+          "type": "number",
+          "minimum": 0.0001,
+          "maximum": 10000,
+          "description": "Initial peg vs POL. AMM pool seeded with this rate."
+        },
+        "monetary_policy": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["managed_float", "currency_board", "free_float", "fixed_peg"]
+            },
+            "central_bank_institution_id": {"type": "string"},
+            "inflation_target": {
+              "type": "number",
+              "minimum": -0.05,
+              "maximum": 0.10,
+              "description": "BOUND: -5% to 10% annually. Outside this is hyperinflation/severe-deflation pathology; engine refuses."
+            },
+            "reserve_requirement": {
+              "type": "number",
+              "minimum": 0.05,
+              "maximum": 0.40,
+              "description": "BOUND: 5% to 40% reserve ratio for chartered banks."
+            },
+            "max_daily_mint_ratio": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 0.001,
+              "description": "BOUND: max fraction of supply that can be minted in 24h. Caps Zimbabwe-shaped attacks."
+            }
+          }
+        }
+      }
+    },
+
+    "taxation": {
+      "type": "object",
+      "required": ["income_tax", "property_tax_rate", "transaction_tax_rate", "treasury_recipient_institution_id"],
+      "properties": {
+        "income_tax": {
+          "type": "object",
+          "required": ["brackets"],
+          "description": "Progressive income tax. Brackets define the schedule.",
+          "properties": {
+            "brackets": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 10,
+              "items": {
+                "type": "object",
+                "required": ["income_above", "rate"],
+                "properties": {
+                  "income_above": {"type": "number", "minimum": 0},
+                  "rate": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 0.65,
+                    "description": "BOUND: per-bracket rate capped at 65% (above is structurally expropriative; engine refuses)."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "property_tax_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 0.05,
+          "description": "BOUND: annual property tax capped at 5%."
+        },
+        "transaction_tax_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 0.03,
+          "description": "BOUND: per-transaction tax capped at 3%."
+        },
+        "corporate_tax_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 0.50,
+          "description": "BOUND: corporate income tax capped at 50%."
+        },
+        "capital_gains_tax_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 0.50
+        },
+        "transfer_tax_rate": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 0.10,
+          "description": "Tax on cross-character / cross-institution asset transfers — relevant for football transfer fees."
+        },
+        "treasury_recipient_institution_id": {
+          "type": "string",
+          "description": "Foreign key — the institution receiving tax revenue. Must exist before country goes live."
+        }
+      }
+    },
+
+    "laws": {
+      "type": "object",
+      "description": "Country's filed laws. Each law is either prose (markdown for AI retrieval) or data (machine-readable rules). Engine enforces data-laws at workflow level; AI retrieves prose-laws for context.",
+      "required": ["civil", "criminal", "must_include"],
+      "properties": {
+        "civil": {
+          "type": "object",
+          "description": "Contract, property, tort. Each pointer references a markdown file (relative path) OR an inline rules object.",
+          "properties": {
+            "contract_act": {"type": "string", "description": "Path to contract-act.md"},
+            "property_act": {"type": "string"},
+            "tort_act": {"type": "string"}
+          }
+        },
+        "criminal": {
+          "type": "object",
+          "properties": {
+            "code": {"type": "string"},
+            "procedure": {"type": "string"}
+          }
+        },
+        "commercial": {
+          "type": "object",
+          "properties": {
+            "corporations_act": {"type": "string"},
+            "bankruptcy_act": {"type": "string"},
+            "securities_regulation": {"type": "string"}
+          }
+        },
+        "labour": {
+          "type": "object",
+          "properties": {
+            "employment_act": {"type": "string"},
+            "minimum_wage_pol_per_week": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Machine-readable bound; ConflictWorkflow enforces during contract disputes."
+            },
+            "union_act": {"type": "string"},
+            "pensions_act": {"type": "string"}
+          }
+        },
+        "tax": {
+          "type": "string",
+          "description": "Path to tax-law prose. Numerical rates live in taxation.* — this is the explanatory text."
+        },
+        "immigration": {
+          "type": "object",
+          "properties": {
+            "visa_categories": {"type": "array", "items": {"type": "string"}},
+            "sanctions_and_bars": {"type": "string"}
+          }
+        },
+        "press": {
+          "type": "object",
+          "properties": {
+            "defamation_standard": {"type": "string", "description": "Path to defamation-and-libel.md"},
+            "libel_actionable_threshold": {
+              "type": "string",
+              "enum": ["actual_malice", "negligence", "strict_liability", "serious_harm_test"],
+              "description": "Machine-readable libel standard. Engine routes press output through this when ConflictWorkflow handles libel cases."
+            }
+          }
+        },
+        "sport": {
+          "type": "string",
+          "description": "Path to sport-law prose. Industry-specific regulation lives in industry.cognition.corpora.governance — this is country-level overlay (gambling/broadcasting/club-licensing)."
+        },
+        "must_include": {
+          "type": "array",
+          "description": "ENGINE HARD FLOOR: laws that every country MUST encode regardless of other choices. The validator refuses any country missing these. These are non-overridable by any country, industry, or institution rule.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "csam_prohibition",
+              "real_world_threats_prohibition",
+              "ofac_un_eu_sanctions_compliance",
+              "anti_csam_imagery_minor_age_verification",
+              "anti_doxxing"
+            ]
+          },
+          "minItems": 5,
+          "maxItems": 5,
+          "default": [
+            "csam_prohibition",
+            "real_world_threats_prohibition",
+            "ofac_un_eu_sanctions_compliance",
+            "anti_csam_imagery_minor_age_verification",
+            "anti_doxxing"
+          ]
+        }
+      }
+    },
+
+    "regulators": {
+      "type": "object",
+      "description": "Regulatory bodies — institutions filling specific country-level regulatory roles. Each is a foreign key to an institution.schema.json instance.",
+      "properties": {
+        "central_bank_institution_id": {"type": ["string", "null"]},
+        "tax_authority_institution_id": {"type": ["string", "null"]},
+        "financial_conduct_authority_institution_id": {"type": ["string", "null"]},
+        "competition_commission_institution_id": {"type": ["string", "null"]},
+        "press_complaints_institution_id": {"type": ["string", "null"]},
+        "sport_governing_bodies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["industry_id", "institution_id"],
+            "properties": {
+              "industry_id": {"type": "string"},
+              "institution_id": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+
+    "foreign_policy": {
+      "type": "object",
+      "required": ["recognized_countries", "allies", "sanctions", "treaties"],
+      "properties": {
+        "recognized_countries": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Country IDs recognized for diplomatic purposes."
+        },
+        "allies": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Strict subset of recognized_countries."
+        },
+        "sanctions": {
+          "type": "array",
+          "description": "Per-individual sanctions (substrate-fictional). NOT bulk-country sanctions; engine refuses >5% of-country-citizenry blanket sanctions per GUARDRAILS Layer 5.",
+          "items": {
+            "type": "object",
+            "required": ["target_id", "reason", "imposed_in_world"],
+            "properties": {
+              "target_id": {"type": "string"},
+              "reason": {"type": "string"},
+              "imposed_in_world": {"type": "string", "format": "date"}
+            }
+          }
+        },
+        "treaties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "title", "parties", "scope", "signed_in_world"],
+            "properties": {
+              "id": {"type": "string"},
+              "title": {"type": "string"},
+              "parties": {
+                "type": "array",
+                "items": {"type": "string"},
+                "minItems": 2
+              },
+              "scope": {
+                "type": "string",
+                "enum": ["trade", "defense", "extradition", "tax", "border", "cultural", "scientific", "monetary"]
+              },
+              "signed_in_world": {"type": "string", "format": "date"},
+              "expires_in_world": {"type": ["string", "null"], "format": "date"},
+              "terms_path": {"type": "string", "description": "Markdown file with treaty text."}
+            }
+          }
+        },
+        "recognition_threshold_required": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 3,
+          "description": "BOUND: minimum number of existing-country recognitions a new country needs before it can sign cross-border contracts. Bootstrap exemption for Polis-curated worlds."
+        }
+      }
+    },
+
+    "contributor_attribution": {
+      "type": "object",
+      "description": "Tier 2 open-source attribution: countries are open-source contributions to the public repo (Apache-2 / CC-BY-4 license stack), not in-app founded. This block records authorship for credit and PR-review provenance. There is no in-app capital lock at the country layer.",
+      "properties": {
+        "author": {
+          "type": "string",
+          "description": "Primary author display name (or 'the staq' for V0 reference templates)."
+        },
+        "co_authors": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Optional co-author credits."
+        },
+        "repo_url": {
+          "type": "string",
+          "description": "URL to the canonical PR / commit in the public repo (e.g. github.com/the-staq/polis/pull/N)."
+        },
+        "license": {
+          "type": "string",
+          "default": "CC-BY-4.0",
+          "description": "License of the country template. Default CC-BY 4.0 per OPEN-SOURCE.md Tier 2."
+        },
+        "attribution": {
+          "type": "string",
+          "default": "the staq and contributors",
+          "description": "Required attribution string per CC-BY 4.0."
+        },
+        "merged_in_world": {"type": ["string", "null"], "format": "date"},
+        "rfc_id": {
+          "type": ["string", "null"],
+          "description": "RFC identifier if the country lands via RFC process at V1+ (e.g. RFC-0042). Null at V0."
+        }
+      }
+    },
+
+    "founder_royalty": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 0.0,
+      "default": 0.0,
+      "description": "BOUND: countries are open-source Tier 2 contributions; no perpetual royalty accrues at the country layer. Royalty mechanics live at Tier 3 (institution.schema.json's founder_royalty, capped at 0.5%). Reserved as 0 at the country layer; the field is retained for symmetry with industry/institution schemas but is structurally bounded to 0."
+    },
+
+    "dissolution": {
+      "type": "object",
+      "description": "Conditions under which the engine dissolves the country. The substrate's termination guardrail: a country left unfunded, abandoned, or evacuated by its citizens reverts to substrate.",
+      "properties": {
+        "founder_abandonment_days": {
+          "type": "integer",
+          "minimum": 90,
+          "maximum": 730,
+          "default": 180,
+          "description": "Days of founder inactivity before engine triggers dissolution review."
+        },
+        "treasury_insolvency_days": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 365,
+          "default": 60
+        },
+        "citizen_migration_threshold": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 0.95,
+          "default": 0.80,
+          "description": "Fraction of population leaving that triggers dissolution review."
+        },
+        "wind_down_redemption_rate": {
+          "type": "string",
+          "enum": ["last_amm_rate", "average_30d", "polis_managed_rate"],
+          "default": "last_amm_rate",
+          "description": "How country-currency is redeemed for POL on dissolution. Per PRD §12.4."
+        }
+      }
+    },
+
+    "cognition": {
+      "type": "object",
+      "required": ["embedding_model", "corpora"],
+      "description": "Per-country retrieval index. AI characters retrieve from these corpora when reasoning about country-specific matters. See V0-PLAN §3.10 5-layer retrieval composition.",
+      "properties": {
+        "embedding_model": {
+          "type": "string",
+          "description": "Pinned per country. Corpus rebuilds on model upgrade are explicit migrations."
+        },
+        "corpora": {
+          "type": "object",
+          "required": ["legal", "government", "regulatory"],
+          "properties": {
+            "legal": {
+              "type": "object",
+              "properties": {
+                "source": {"type": "string", "description": "Path or IPFS URI to country/laws/ tree."},
+                "loader": {"type": "string", "enum": ["raw-text", "yaml", "markdown-tree"]},
+                "chunk_strategy": {"type": "string"}
+              }
+            },
+            "government": {
+              "type": "object",
+              "properties": {
+                "source": {"type": "string"},
+                "loader": {"type": "string"},
+                "chunk_strategy": {"type": "string"}
+              }
+            },
+            "regulatory": {
+              "type": "object",
+              "properties": {
+                "source": {"type": "string"},
+                "loader": {"type": "string"},
+                "chunk_strategy": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["draft", "founder_locked", "alpha", "live", "wind_down", "dissolved"],
+      "default": "draft",
+      "description": "Lifecycle state. Founder-locked = capital deposited, cooling-off active. Live = past cooling-off. wind_down = dissolution triggered."
+    },
+
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"type": "string", "default": "0.1.0"},
+        "founded_at_real": {"type": "string", "format": "date-time"},
+        "last_constitutional_change_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    }
+  },
+
+  "additionalProperties": false
+}

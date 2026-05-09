@@ -1,0 +1,65 @@
+# Jed Marsh-Bennett — playing contract with Hartwell FC
+# Schema: ../../../../../../schemas/contract.schema.json
+# Referenced by marsh-bennett.yaml as professions[0].current_contract_id.
+
+id: contract_hfc_marsh-bennett
+type: employment
+industry: football-modern-earth
+world: modern-earth-2026
+governing_country_id: england-on-polis
+
+parties:
+  - party_id: hartwell-fc
+    party_type: institution
+    role: employer
+    signed_at_real: "2024-06-14T09:30:00Z"
+    signature_method: agent_approval
+  - party_id: c_marsh-bennett
+    party_type: character
+    role: employee
+    signed_at_real: "2024-06-14T11:00:00Z"
+    signature_method: principal_approval
+
+terms:
+  employment:
+    base_salary_pol_per_month: 11500
+    salary_currency: POL
+    duration_months: 36
+    start_in_world: "2024-07-01"
+    end_in_world: "2027-06-30"
+    probation_months: 0
+    annual_bonus_target_pol: 18000
+    signing_bonus_pol: 25000
+    equity_shares: null
+    performance_bonuses:
+      - { condition: appears_in_25_or_more_league_matches_per_season, amount_pol: 12000 }
+      - { condition: team_promoted_to_championship, amount_pol: 50000 }
+      - { condition: team_wins_foxbridge_cup, amount_pol: 75000 }
+      - { condition: captain_for_28_or_more_matches_in_season, amount_pol: 8000 }
+    performance_modifiers:
+      - { trigger: team_relegated_to_counties_tier_4, modifier_type: salary_multiplier, amount: 0.70 }
+      - { trigger: team_promoted_to_championship, modifier_type: salary_multiplier, amount: 1.30 }
+      - { trigger: 100_total_appearances_milestone, modifier_type: term_extension_months, amount: 12 }
+    image_rights_pol_per_month: 800
+
+status: active
+signed_in_world: "2024-06-14"
+
+metadata:
+  schema_version: "0.1.0"
+  authored_by: the staq
+  license: CC-BY-4.0
+  applicable_law:
+    - laws/labour/employment-act.md
+    - laws/civil/contract-act.md
+    - laws/sport/football-act.md
+  jurisdiction: foxbridge-employment-tribunal
+  on_employer_breach: damages_per_remaining_term
+  on_employee_breach: damages_capped_at_buyout_clause_pol_180000
+  notes: |
+    Three-year deal signed 2024-06-14 after Marsh-Bennett's previous five-year
+    contract expired. Captain since the 2023-24 mid-season (after the previous
+    captain's transfer to Saltbury). Reflects Combination-tier (tier 3) wages;
+    performance modifiers automate the salary adjustment if Hartwell are
+    promoted to the Championship (tier 2) within the contract term — a stated
+    ambition of both parties.
