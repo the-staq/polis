@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/sim_result.schema.json",
+  "title": "SimResult",
+  "description": "The persisted, replayable record of one simulation run produced by the polis/sim/ substrate kernel. Closes the loop on sim_config.schema.json's output_schema_ref. SimResult is the orchestration-side envelope wrapping the kernel's in-process FinalState (polis/sim/contract.py) with the metadata required for replay, audit, ledger settlement, and narrative surfaces (V0-PLAN §3.8). Per DECISION-SIM-ENGINE.md. v0.1.0 ships the universal envelope + Event sub-schema; per-industry outcome shapes are declared by each industry's SimConfig.output_schema_ref override.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "sim_id",
+    "industry_id",
+    "kernel_version",
+    "config_version",
+    "seed",
+    "started_at",
+    "ended_at",
+    "sim_duration_seconds",
+    "terminated_by",
+    "event_log",
+    "outcome"
+  ],
+
+  "properties": {
+    "sim_id": {
+      "type": "string",
+      "pattern": "^sim_[A-Za-z0-9_-]{8,64}$",
+      "description": "Globally unique identifier for this sim run. Convention: 'sim_' + ULID or UUID. Used as the foreign key from ledger settlement entries, narrative-surface references, and replay-recording lookups."
+    },
+
+    "industry_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{2,63}$",
+      "description": "Foreign key to the industry whose SimConfig drove this run (e.g. 'football-modern-earth', 'basketball-toy'). Mirrors SimConfig.industry_id."
+    },
+
+    "world_id": {
+      "type": "string",
+      "description": "World this sim ran in. Required for V0-PLAN §5.1 rule 5 (world_id on every queryable row). Omitted only for global / cross-world sims, which V0 does not have."
+    },
+
+    "kernel_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[A-Za-z0-9.-]+)?$",
+      "description": "Semver of polis/sim/ at run time. Recorded so replays know which kernel to use; mismatched kernels can produce divergent event logs even with the same seed."
+    },
+
+    "config_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[A-Za-z0-9.-]+)?$",
+      "description": "Semver of the SimConfig at run time (SimConfig.metadata.version). Rule changes that affect output distributions bump this; replays against newer configs must reconcile or fail."
+    },
+
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "RNG seed passed to SeededRandom. Load-bearing for determinism — calibration suites depend on bit-identical event_log given the same (kernel_version, config_version, seed, stub_llm_hook)."
+    },
+
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Wall-clock UTC timestamp when sim execution began. ISO 8601."
+    },
+
+    "ended_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Wall-clock UTC timestamp when sim execution finished. ISO 8601."
+    },
+
+    "sim_duration_seconds": {
+      "type": "number",
+      "minimum": 0,
+      "description": "How far sim_time advanced during the run. Driver-defined unit — for football this is 5400 (90 min) + injury time; for a steel shift 28800 (8 hours)."
+    },
+
+    "wall_duration_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "How long the run took in real wall-clock milliseconds. For calibration runs, this measures kernel performance; for live runs, this is dominated by LLM-hook latency."
+    },
+
+    "terminated_by": {
+      "type": "string",
+      "enum": ["duration", "target_state", "event_count", "queue_drained", "explicit_end", "error", "external"],
+      "description": "How the sim ended.\n- 'duration', 'target_state', 'event_count': matched the corresponding EndCondition in SimConfig.\n- 'queue_drained': no further events scheduled and no end-condition met (legitimate for some sims, suspicious for others).\n- 'explicit_end': a handler called sim.end().\n- 'error': uncaught exception (see error field).\n- 'external': workflow cancelled the run (e.g., player abandoned)."
+    },
+
+    "termination_detail": {
+      "type": "object",
+      "description": "Optional extra context for terminated_by. e.g., for 'error', { error_type, message, traceback }; for 'external', { cancelled_by, reason }.",
+      "additionalProperties": true
+    },
+
+    "event_log": {
+      "type": "array",
+      "description": "Full play-by-play in sim_time order. Each Event mirrors the polis.sim.events.Event dataclass. Same schema serves every industry — payload carries the domain-specific detail.",
+      "items": { "$ref": "#/$defs/Event" }
+    },
+
+    "outcome": {
+      "type": "object",
+      "description": "Industry-specific summary of how the sim ended. Open object — the kernel does not introspect. Per-industry SimConfig.output_schema_ref points at the schema this outcome conforms to (e.g., football: { score: {home, away}, winner, top_scorer, key_events }; court: { verdict, damages, costs_award }; election: { winner, margin, turnout, swing_constituencies }).",
+      "additionalProperties": true
+    },
+
+    "llm_hook": {
+      "type": "object",
+      "description": "Which LLM hook drove decision points, and any replay metadata. Determines whether the run is bit-replayable.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Hook identifier (e.g. 'stub', 'random', 'ollama:llama3.2', 'litellm:claude-3-5-sonnet-20251022', 'temporal:cognition.decide')."
+        },
+        "deterministic": {
+          "type": "boolean",
+          "description": "True for stub/random/recorded hooks; false for live LLM-routed hooks. Calibration suites must use deterministic hooks."
+        },
+        "model_version": {
+          "type": "string",
+          "description": "If applicable — pinned model identifier (e.g. 'claude-3-5-sonnet-20251022'). Required when deterministic=false for replay forensics per V0-PLAN §3.3."
+        },
+        "recording_ref": {
+          "type": "string",
+          "description": "Foreign key to a recorded-LLM-responses payload (V0.5+ recording-hook feature). Enables exact replay of a live run."
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "replay_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{16,64}$",
+      "description": "Optional hash of (kernel_version, config_version, seed, llm_hook.name, event_log) — fast equality check for 'did two runs produce the same outcome'. Used by calibration drift detection."
+    },
+
+    "metadata": {
+      "type": "object",
+      "description": "Free-form: workflow_id that triggered the sim, parent_sim_id for nested sims, calibration_run flag, notes.",
+      "additionalProperties": true,
+      "properties": {
+        "workflow_id": {
+          "type": "string",
+          "description": "Temporal workflow ID that triggered this sim — for trace correlation."
+        },
+        "calibration_run": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when this run is part of a Monte Carlo calibration suite. Outcome is compared against per-industry target distributions; not persisted to live narrative surfaces."
+        },
+        "parent_sim_id": {
+          "type": "string",
+          "description": "For nested sims (e.g., a court-case sim spawned during a hostile-takeover sim) — back-reference to the outer sim_id."
+        }
+      }
+    }
+  },
+
+  "additionalProperties": false,
+
+  "$defs": {
+    "Event": {
+      "type": "object",
+      "description": "One thing that happened in the sim, at a moment in sim_time. Mirrors polis.sim.events.Event dataclass. Industry-agnostic envelope; payload carries domain detail.",
+      "required": ["sim_time", "action_type", "sequence"],
+      "properties": {
+        "sim_time": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Seconds since sim start. Driver-defined mapping from native time unit."
+        },
+        "actor_id": {
+          "type": ["string", "null"],
+          "description": "Which actor caused this event. Null for environmental events (kickoff, weather, regulator-driven, automatic timer)."
+        },
+        "action_type": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "description": "Industry-defined verb. Examples: 'pass', 'shot', 'objection', 'produce', 'vote_cast', 'punch_thrown'."
+        },
+        "payload": {
+          "type": "object",
+          "description": "Industry-specific detail. The kernel does not introspect. Example football payloads: {target: [28, -3], xg: 0.34}; example court payloads: {exhibit_id: 'E-7', sustained: false}.",
+          "additionalProperties": true
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Monotonic counter set by the kernel on emit. Tie-breaker for same-sim_time events; guarantees deterministic ordering across runs with the same seed."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

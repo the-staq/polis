@@ -97,7 +97,7 @@ just like any other consumer.
 ## Pending
 
 - ~~`polis/schemas/sim_config.schema.json` — JSON Schema equivalent of `SimConfig`~~ — **shipped** (round-trip enforced by `tests/test_sim_config_schema.py`; Pydantic source in `config.py` stays manual mirror until codegen pipeline per V0-PLAN §5 ships)
-- `polis/schemas/sim_result.schema.json` — JSON Schema for `FinalState.outcome` shape; referenced by `SimConfig.output_schema_ref` but not yet defined
+- ~~`polis/schemas/sim_result.schema.json` — JSON Schema for `FinalState.outcome` shape; referenced by `SimConfig.output_schema_ref`~~ — **shipped** (basketball-fixture round-trip enforced by `tests/test_sim_result_schema.py`; Pydantic `SimResult` model + `FinalState.to_sim_result()` helper to follow when orchestration in `polis-internal` wires this in)
 - `patterns/event.py`, `patterns/tick.py`, `patterns/turn.py` — reusable drivers
   for common sim shapes
 - Calibration harness scaffolding (`polis/sim/calibration/`) — Monte Carlo runner,
