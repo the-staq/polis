@@ -21,10 +21,10 @@ import importlib
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 
-from polis.sim.contract import FinalState, Observation, SimTime
-from polis.sim.events import Event, EventLog
-from polis.sim.llm_hook import LLMHook
-from polis.sim.rng import SeededRandom
+from .contract import FinalState, Observation, SimTime
+from .events import Event, EventLog
+from .llm_hook import LLMHook
+from .rng import SeededRandom
 
 
 @dataclass(order=True)

@@ -96,8 +96,8 @@ just like any other consumer.
 
 ## Pending
 
-- `polis/schemas/sim_config.schema.json` — JSON Schema equivalent of `SimConfig`,
-  alongside the other 8 substrate schemas (V0-PLAN §5)
+- ~~`polis/schemas/sim_config.schema.json` — JSON Schema equivalent of `SimConfig`~~ — **shipped** (round-trip enforced by `tests/test_sim_config_schema.py`; Pydantic source in `config.py` stays manual mirror until codegen pipeline per V0-PLAN §5 ships)
+- `polis/schemas/sim_result.schema.json` — JSON Schema for `FinalState.outcome` shape; referenced by `SimConfig.output_schema_ref` but not yet defined
 - `patterns/event.py`, `patterns/tick.py`, `patterns/turn.py` — reusable drivers
   for common sim shapes
 - Calibration harness scaffolding (`polis/sim/calibration/`) — Monte Carlo runner,

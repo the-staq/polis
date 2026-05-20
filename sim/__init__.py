@@ -15,7 +15,7 @@ Production runtime (LLM-hook wiring, retrieval injection, ledger settlement)
 lives in `polis-internal` and consumes the same primitives.
 """
 
-from polis.sim.config import (
+from .config import (
     ActorRoleSpec,
     DriverType,
     EndCondition,
@@ -23,11 +23,11 @@ from polis.sim.config import (
     EventSpec,
     SimConfig,
 )
-from polis.sim.contract import FinalState, Observation, SimTime, Simulator
-from polis.sim.events import Event, EventLog
-from polis.sim.kernel import Sim, run_sim
-from polis.sim.llm_hook import Action, DecisionContext, LLMHook, RandomLLMHook, StubLLMHook
-from polis.sim.rng import SeededRandom
+from .contract import FinalState, Observation, SimTime, Simulator
+from .events import Event, EventLog
+from .kernel import Sim, run_sim
+from .llm_hook import Action, DecisionContext, LLMHook, RandomLLMHook, StubLLMHook
+from .rng import SeededRandom
 
 __all__ = [
     # config

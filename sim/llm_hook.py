@@ -19,7 +19,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any, Protocol, runtime_checkable
 
-from polis.sim.rng import SeededRandom
+from .rng import SeededRandom
 
 
 @dataclass(frozen=True, slots=True)

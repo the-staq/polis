@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-from polis.sim.events import EventLog
+from .events import EventLog
 
 
 SimTime = float

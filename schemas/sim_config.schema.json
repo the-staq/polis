@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/sim_config.schema.json",
+  "title": "SimConfig",
+  "description": "Declarative configuration for a per-industry simulation, consumed by the polis/sim/ substrate kernel. One SimConfig per industry-sim per world. Authoring contract for any new industry sim (football match, basketball game, court case, hostile takeover, election, steel production, boxing, music recording session). The kernel is industry-agnostic; this schema captures everything an industry needs to declare to plug into it. Per DECISION-SIM-ENGINE.md (2026-05-20). Pydantic v2 source in polis/sim/config.py is the canonical interim until codegen flips JSON Schema → Pydantic per V0-PLAN §5.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "industry_id",
+    "driver",
+    "end_condition",
+    "events"
+  ],
+
+  "properties": {
+    "industry_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{2,63}$",
+      "description": "Slug identifier matching the parent industry config (e.g. 'football-modern-earth', 'basketball-toy'). Foreign key to industry.schema.json instance."
+    },
+
+    "driver": {
+      "type": "string",
+      "enum": ["event", "tick", "turn"],
+      "description": "Time-stepping pattern.\n- 'event': event-driven scheduler; next event scheduled from current state. Match-shaped (football, basketball).\n- 'tick': fixed-cadence; every N seconds, all active actors process. Production-shaped (steel, manufacturing).\n- 'turn': turn-based; one actor acts per turn, round-robin. Legal-shaped (court case, negotiation)."
+    },
+
+    "end_condition": {
+      "type": "object",
+      "required": ["type"],
+      "description": "When the sim stops. Exactly one set of conditional fields is honored per type.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["duration", "target_state", "event_count"],
+          "description": "- 'duration': end at sim_time >= sim_seconds.\n- 'target_state': end when state matches a predicate.\n- 'event_count': end after N events of a specific type (e.g., 12 rounds of boxing)."
+        },
+        "sim_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Required when type='duration'. Sim-time seconds since start."
+        },
+        "target_state": {
+          "type": "object",
+          "description": "Required when type='target_state'. Sub-tree of sim state to match. Industry-defined.",
+          "additionalProperties": true
+        },
+        "event_type": {
+          "type": "string",
+          "description": "Required when type='event_count'. The action_type to count toward the end threshold."
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Required when type='event_count'. Number of matching events that triggers end."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "duration" } } },
+          "then": { "required": ["sim_seconds"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "target_state" } } },
+          "then": { "required": ["target_state"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "event_count" } } },
+          "then": { "required": ["event_type", "count"] }
+        }
+      ]
+    },
+
+    "roles": {
+      "type": "array",
+      "description": "Actor roles this sim expects. Validated at sim setup against the role counts. Industry-defined vocabulary (goalkeeper, judge, factory_foreman, voter).",
+      "items": {
+        "type": "object",
+        "required": ["role"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{1,63}$",
+            "description": "Role identifier within this sim (e.g. 'goalkeeper', 'home_player', 'judge')."
+          },
+          "schema_ref": {
+            "type": "string",
+            "default": "polis/schemas/character.schema.json",
+            "description": "Which substrate schema actors in this role validate against. Almost always character.schema.json; could be institution.schema.json for institutional actors (a club, a regulator)."
+          },
+          "min_count": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 1,
+            "description": "Minimum number of actors required in this role for the sim to start."
+          },
+          "max_count": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "description": "Maximum number of actors allowed in this role. Null means unbounded."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+
+    "initial_state": {
+      "type": "object",
+      "description": "Starting state of the sim. Industry-specific shape — kernel does not introspect. Football: {score: {home: 0, away: 0}, possession: 'home'}. Court case: {phase: 'opening', objections: 0}.",
+      "additionalProperties": true
+    },
+
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Event vocabulary for this sim. Each event has an industry-defined action_type, a Python handler that mutates state + schedules follow-ups, and optionally a decision_point flag that gates an LLM hook call.",
+      "items": {
+        "type": "object",
+        "required": ["id", "handler"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{1,63}$",
+            "description": "Industry-defined verb. Examples: 'pass', 'shot', 'objection', 'produce', 'vote_cast', 'punch_thrown'. The kernel emits Events with this as action_type."
+          },
+          "handler": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_][\\w.]+$",
+            "description": "Dotted Python path to the handler. Signature: 'async def handler(sim: Sim, ctx: Action | None) -> None'. Loaded via importlib at sim startup; missing modules fail fast."
+          },
+          "decision_point": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, kernel calls LLMHook.decide() before invoking the handler; the returned Action is passed as ctx. Use for moments where a character chooses (shoot vs pass, object vs concede, fire vs hire)."
+          },
+          "decision_type": {
+            "type": "string",
+            "description": "Required if decision_point=true. Passed to the LLM hook in DecisionContext.decision_type. Examples: 'shot_choice', 'objection_call', 'transfer_offer_response'."
+          },
+          "legal_actions": {
+            "type": "array",
+            "default": [],
+            "description": "Industry-defined action vocabulary the LLM hook is allowed to return. Empty list means the handler accepts any action_type string. Stub hooks pick from this list deterministically.",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": { "decision_point": { "const": true } },
+              "required": ["decision_point"]
+            },
+            "then": { "required": ["decision_type"] }
+          }
+        ]
+      }
+    },
+
+    "output_schema_ref": {
+      "type": "string",
+      "default": "polis/schemas/sim_result.schema.json",
+      "description": "Schema that FinalState.outcome conforms to after the sim ends. Default points at the canonical sim_result schema (not yet shipped — pending follow-up). Industry-specific output shapes can override."
+    },
+
+    "metadata": {
+      "type": "object",
+      "description": "Free-form: version, author, calibration target dataset reference, source attribution, last_calibrated_at timestamp, notes.",
+      "additionalProperties": true,
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Semver of this sim config — bumped on rule changes that affect output distributions."
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Editorial — what this sim is for. Especially important for fixture configs (e.g. 'kernel-validation only, not production')."
+        },
+        "calibration_target_ref": {
+          "type": "string",
+          "description": "Path to the per-industry calibration target distributions (e.g. 'polis/configs/industries/football-modern-earth/sim/calibration/epl.yaml')."
+        },
+        "not_production": {
+          "type": "boolean",
+          "default": false,
+          "description": "Marks fixture / test configs that must never be loaded in alpha or prod. Engine checks this at startup."
+        }
+      }
+    }
+  },
+
+  "additionalProperties": false,
+
+  "$defs": {
+    "Note_pending_artifacts": {
+      "description": "Pending substrate artifacts referenced by this schema (per polis/sim/README.md 'Pending'): polis/schemas/sim_result.schema.json (FinalState.outcome shape) and the codegen pipeline (V0-PLAN §5) that produces Pydantic + SQLAlchemy + TypeScript from this JSON Schema. Until codegen lands, polis/sim/config.py is the canonical Pydantic source and must be kept in sync with this schema by hand."
+    }
+  }
+}

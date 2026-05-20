@@ -18,6 +18,7 @@ These schemas are the **public API of Polis**. Pydantic / SQLAlchemy / TypeScrip
 | `lot.schema.json`          | 0.1.0 | Smallest land unit — coordinates, zoning, ownership, rental, endowments |
 | `soft_skills.schema.json`  | 0.1.0 | Canonical 9-attribute soft-skill taxonomy (composure, charisma, resilience, integrity, decisiveness, empathy, ambition, ego, work_ethic) |
 | `mortality.schema.json`    | 0.1.0 | Cause-of-death catalogue (16 entries), death-event record, vital_status, needs_calibration, actuarial_life_expectancy. Suicide is engine-gated |
+| `sim_config.schema.json`   | 0.1.0 | Per-industry simulation config consumed by the `polis/sim/` substrate kernel — driver (event/tick/turn), end conditions, actor roles, event vocabulary with optional LLM decision points, output schema ref. Per [`../../DECISION-SIM-ENGINE.md`](../../DECISION-SIM-ENGINE.md) |
 
 ## Discipline
 

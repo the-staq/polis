@@ -8,9 +8,12 @@ parsed model. Industry-specific event probabilities live in callable handler
 modules pointed to by `events[].handler` — see `polis/configs/industries/basketball/sim/`
 for a worked example.
 
-NOTE: A JSON Schema equivalent (`polis/schemas/sim_config.schema.json`) should
-land alongside the other 8 substrate schemas per V0-PLAN §5. Pending in the
-substrate-schemas pass.
+Canonical source: `polis/schemas/sim_config.schema.json` (per V0-PLAN §5 —
+JSON Schema is the contract; Pydantic / SQLAlchemy / TS / docs are codegen
+artifacts). Until codegen ships, this Pydantic model is the manual mirror and
+must be kept in sync with the JSON Schema by hand. Drift is caught by
+`tests/test_sim_config_schema.py` (every shipped config must parse against
+both the JSON Schema and this Pydantic model).
 """
 
 from __future__ import annotations
