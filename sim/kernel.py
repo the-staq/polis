@@ -18,8 +18,10 @@ from __future__ import annotations
 import asyncio
 import heapq
 import importlib
+import importlib.util
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from .contract import FinalState, Observation, SimTime
 from .events import Event, EventLog
@@ -33,7 +35,7 @@ class _ScheduledEvent:
 
     time: SimTime
     sequence: int
-    callback: Callable[["Sim"], Awaitable[None]] = field(compare=False)
+    callback: Callable[["Sim", object | None], Awaitable[None]] = field(compare=False)
 
 
 class Sim:
@@ -46,9 +48,19 @@ class Sim:
         # sim.event_log contains everything that happened
     """
 
-    def __init__(self, config, llm_hook: LLMHook) -> None:
+    def __init__(
+        self,
+        config,
+        llm_hook: LLMHook,
+        config_dir: Path | str | None = None,
+    ) -> None:
         self.config = config
         self.llm_hook = llm_hook
+        self.config_dir: Path | None = Path(config_dir) if config_dir else None
+        """Source directory of the parsed sim_config YAML. Used to resolve
+        file-path handler refs (e.g., `./handlers.py::bootstrap`). Populated by
+        `load_sim_from_yaml()`; remains `None` for dotted-module-only configs
+        (e.g., basketball)."""
         self.now: SimTime = 0.0
         self.state: dict = {}
         self.rng: SeededRandom | None = None
@@ -73,21 +85,67 @@ class Sim:
         return Observation(sim_time=self.now, state=dict(self.state))
 
     def _load_handlers(self) -> None:
-        """Import each event handler from its dotted path. Done once at reset."""
+        """Resolve each event handler ref into a callable. Done once at reset.
+
+        Two ref formats supported:
+          - `pkg.module.func` (dotted-module, legacy) — `importlib.import_module`
+          - `./relative_path.py::func` (file-path) — resolved against `config_dir`
+
+        File-path form unblocks hyphenated industry directories (e.g.,
+        `football-modern-earth/`) that can't be Python package names.
+        """
         self._handlers = {}
         for event_spec in self.config.events:
-            module_path, _, func_name = event_spec.handler.rpartition(".")
-            if not module_path:
-                raise ValueError(f"event handler must be dotted path, got {event_spec.handler!r}")
-            module = importlib.import_module(module_path)
-            handler = getattr(module, func_name)
-            self._handlers[event_spec.id] = handler
+            self._handlers[event_spec.id] = self._resolve_handler(event_spec.handler)
 
-    def schedule(self, delay: SimTime, callback: Callable[["Sim"], Awaitable[None]]) -> None:
+    def _resolve_handler(self, ref: str) -> Callable:
+        if "::" in ref:
+            return self._resolve_file_handler(ref)
+        module_path, _, func_name = ref.rpartition(".")
+        if not module_path:
+            raise ValueError(
+                f"handler ref must be dotted path (`pkg.module.func`) or "
+                f"file form (`./file.py::func`), got {ref!r}"
+            )
+        module = importlib.import_module(module_path)
+        return getattr(module, func_name)
+
+    def _resolve_file_handler(self, ref: str) -> Callable:
+        path_part, _, func_name = ref.partition("::")
+        if not func_name:
+            raise ValueError(f"file-form handler ref missing function: {ref!r}")
+        if self.config_dir is None:
+            raise ValueError(
+                f"file-path handler ref {ref!r} requires Sim(config_dir=...). "
+                f"Pass config_dir or use `load_sim_from_yaml()` which sets it."
+            )
+        file_path = (self.config_dir / path_part).resolve()
+        if not file_path.exists():
+            raise FileNotFoundError(
+                f"handler module not found: {file_path} (from ref {ref!r}, "
+                f"config_dir={self.config_dir})"
+            )
+        module_name = f"_polis_sim_handler_{file_path.stem}_{id(self):x}"
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"cannot build module spec for handler file: {file_path}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return getattr(module, func_name)
+
+    def schedule(
+        self,
+        delay: SimTime,
+        callback: Callable[["Sim", object | None], Awaitable[None]],
+    ) -> None:
         """Schedule a callback to run after `delay` sim seconds.
 
         Sequence counter breaks ties for callbacks scheduled at the same sim_time —
         guarantees deterministic event ordering across runs with the same seed.
+
+        Callback signature: `async def handler(sim, ctx) -> None`. The kernel
+        passes `ctx=None` for scheduled callbacks; decision-point dispatch
+        happens inside handlers (via `sim.llm_hook.decide(...)`).
         """
         if delay < 0:
             raise ValueError(f"schedule delay must be >= 0, got {delay}")
@@ -124,7 +182,7 @@ class Sim:
         scheduled = heapq.heappop(self._queue)
         self.now = scheduled.time
         events_before = len(self.event_log.events)
-        await scheduled.callback(self)
+        await scheduled.callback(self, None)
         new_events = self.event_log.events[events_before:]
 
         done = self._done or self._check_end_condition()
@@ -166,9 +224,20 @@ class Sim:
         return self._handlers[event_id]
 
 
-async def run_sim(config, *, seed: int, llm_hook: LLMHook, until: SimTime | None = None) -> FinalState:
-    """Convenience: create + reset + run a sim in one call."""
-    sim = Sim(config=config, llm_hook=llm_hook)
+async def run_sim(
+    config,
+    *,
+    seed: int,
+    llm_hook: LLMHook,
+    until: SimTime | None = None,
+    config_dir: Path | str | None = None,
+) -> FinalState:
+    """Convenience: create + reset + run a sim in one call.
+
+    Pass `config_dir` when any handler ref uses file-path form
+    (`./handlers.py::func`). For dotted-module-only configs, omit.
+    """
+    sim = Sim(config=config, llm_hook=llm_hook, config_dir=config_dir)
     await sim.reset(config, seed=seed)
     # Driver-specific bootstrap: schedule the first event(s). Configs typically
     # provide a `bootstrap` handler that does this; if not, the run is a no-op.

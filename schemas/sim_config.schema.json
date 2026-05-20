@@ -4,7 +4,7 @@
   "title": "SimConfig",
   "description": "Declarative configuration for a per-industry simulation, consumed by the polis/sim/ substrate kernel. One SimConfig per industry-sim per world. Authoring contract for any new industry sim (football match, basketball game, court case, hostile takeover, election, steel production, boxing, music recording session). The kernel is industry-agnostic; this schema captures everything an industry needs to declare to plug into it. Per DECISION-SIM-ENGINE.md (2026-05-20). Pydantic v2 source in polis/sim/config.py is the canonical interim until codegen flips JSON Schema → Pydantic per V0-PLAN §5.",
   "type": "object",
-  "version": "0.1.0",
+  "version": "0.1.1",
 
   "required": [
     "industry_id",
@@ -126,8 +126,8 @@
           },
           "handler": {
             "type": "string",
-            "pattern": "^[a-zA-Z_][\\w.]+$",
-            "description": "Dotted Python path to the handler. Signature: 'async def handler(sim: Sim, ctx: Action | None) -> None'. Loaded via importlib at sim startup; missing modules fail fast."
+            "pattern": "^([a-zA-Z_][\\w.]+|\\.{1,2}/[\\w./-]+\\.py::[a-zA-Z_]\\w*)$",
+            "description": "Handler reference. Two forms accepted: (1) dotted Python path 'pkg.module.func' loaded via importlib (default); (2) file-path form './relative/path.py::func' resolved against the sim_config.yaml directory and loaded via importlib.util.spec_from_file_location. Use form (2) when the industry directory has hyphens (e.g. football-modern-earth/) and cannot be a Python module name. Signature in both forms: 'async def handler(sim: Sim, ctx: Action | None) -> None'."
           },
           "decision_point": {
             "type": "boolean",

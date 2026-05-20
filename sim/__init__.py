@@ -22,6 +22,7 @@ from .config import (
     EndConditionType,
     EventSpec,
     SimConfig,
+    load_sim_from_yaml,
 )
 from .contract import FinalState, Observation, SimTime, Simulator
 from .events import Event, EventLog
@@ -37,6 +38,7 @@ __all__ = [
     "EndConditionType",
     "EventSpec",
     "SimConfig",
+    "load_sim_from_yaml",
     # contract
     "FinalState",
     "Observation",

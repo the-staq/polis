@@ -1,0 +1,76 @@
+# Football match sim config — corpus-driven.
+# Schema: ../../../../schemas/sim_config.schema.json
+#
+# Rates and outcome probabilities are NOT in this file. They live in
+# ./derived_distributions.yaml (hand-authored placeholder; replaced by the
+# StatsBomb ingestion pipeline output). handlers.py loads it at bootstrap.
+#
+# This file declares:
+#   - the event vocabulary (kickoff, shot_attempt, goal, foul, card, half_time,
+#     final_whistle)
+#   - which event ids the LLM hook decides at (shot_attempt only at V0)
+#   - the starting state shape
+#   - the actor roles the sim expects
+#
+# Handler refs use the file-path form (`./handlers.py::func`) because the
+# parent directory `football-modern-earth/` contains a hyphen — not a valid
+# Python module name for dotted-import. The kernel resolves these against
+# the rules.yaml directory; see polis/sim/kernel.py:_resolve_file_handler.
+
+industry_id: "football-modern-earth"
+driver: "event"
+
+end_condition:
+  type: "duration"
+  sim_seconds: 5400  # 90 minutes
+
+roles:
+  - role: "home_player"
+    min_count: 11
+    max_count: 11
+  - role: "away_player"
+    min_count: 11
+    max_count: 11
+  - role: "referee"
+    min_count: 1
+    max_count: 1
+
+initial_state:
+  half: 1
+  possession: "home"
+  score: { home: 0, away: 0 }
+  shots: { home: 0, away: 0 }
+  shots_on_target: { home: 0, away: 0 }
+  fouls: { home: 0, away: 0 }
+  yellows: { home: 0, away: 0 }
+  reds: { home: 0, away: 0 }
+
+events:
+  - id: "bootstrap"
+    handler: "./handlers.py::bootstrap"
+
+  - id: "match_event"
+    handler: "./handlers.py::match_event"
+
+  - id: "shot_attempt"
+    handler: "./handlers.py::shot_attempt"
+    decision_point: true
+    decision_type: "shot_choice"
+    legal_actions: ["shoot_close", "shoot_far", "pass_back"]
+
+  - id: "foul"
+    handler: "./handlers.py::foul"
+
+  - id: "half_time"
+    handler: "./handlers.py::half_time"
+
+  - id: "final_whistle"
+    handler: "./handlers.py::final_whistle"
+
+output_schema_ref: "polis/schemas/sim_result.schema.json"
+
+metadata:
+  version: "0.0.1"
+  calibration_target_ref: "./derived_distributions.yaml"
+  purpose: "Football match sim — corpus-driven event rates per V0-PLAN §3.10"
+  data_source: "placeholder distributions; replaced by StatsBomb open-data ingestion"

@@ -19,6 +19,7 @@ both the JSON Schema and this Pydantic model).
 from __future__ import annotations
 
 from enum import Enum
+from pathlib import Path
 
 from pydantic import BaseModel, Field
 
@@ -111,3 +112,24 @@ class SimConfig(BaseModel):
 
     metadata: dict = Field(default_factory=dict)
     """Free-form: version, author, calibration target ref, etc."""
+
+
+def load_sim_from_yaml(yaml_path: str | Path) -> tuple[SimConfig, Path]:
+    """Parse a rules.yaml from disk. Returns (config, config_dir).
+
+    `config_dir` is the absolute parent directory of `yaml_path`, used by the
+    kernel to resolve file-path handler refs (e.g., `./handlers.py::bootstrap`).
+    Pass both into `Sim(config=..., config_dir=...)` or `run_sim(..., config_dir=...)`.
+
+    Raises FileNotFoundError if the file is missing. Pydantic raises
+    ValidationError on shape mismatch (caller catches if needed).
+    """
+    import yaml as _yaml
+
+    path = Path(yaml_path).expanduser().resolve()
+    if not path.exists():
+        raise FileNotFoundError(f"sim config not found: {path}")
+    with path.open() as f:
+        raw = _yaml.safe_load(f)
+    config = SimConfig.model_validate(raw)
+    return config, path.parent

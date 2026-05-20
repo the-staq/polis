@@ -34,6 +34,8 @@ def _final_state_to_sim_result(
     config_version: str,
     started_at: datetime,
     ended_at: datetime,
+    world_time_at_start: datetime,
+    world_time_at_end: datetime,
     terminated_by: str,
     llm_hook_name: str,
     deterministic: bool,
@@ -51,6 +53,8 @@ def _final_state_to_sim_result(
         "seed": final.seed,
         "started_at": started_at.isoformat().replace("+00:00", "Z"),
         "ended_at": ended_at.isoformat().replace("+00:00", "Z"),
+        "world_time_at_start": world_time_at_start.isoformat().replace("+00:00", "Z"),
+        "world_time_at_end": world_time_at_end.isoformat().replace("+00:00", "Z"),
         "sim_duration_seconds": final.sim_time,
         "wall_duration_ms": int((ended_at - started_at).total_seconds() * 1000),
         "terminated_by": terminated_by,
@@ -98,6 +102,10 @@ async def test_basketball_sim_produces_valid_sim_result():
     final = await run_sim(cfg, seed=42, llm_hook=hook)
     ended = datetime.now(timezone.utc)
 
+    # Per DECISION-TIME-MODEL.md: world rate is 12× wall. Test scaffolds a
+    # plausible world-time window; real orchestration computes from WorldClock.
+    world_start = datetime(2026, 5, 20, 14, 0, 0, tzinfo=timezone.utc)
+    world_end = datetime(2026, 5, 21, 2, 0, 0, tzinfo=timezone.utc)
     result = _final_state_to_sim_result(
         final,
         sim_id=f"sim_{uuid.uuid4().hex[:16]}",
@@ -105,6 +113,8 @@ async def test_basketball_sim_produces_valid_sim_result():
         config_version=(cfg.metadata or {}).get("version", "0.0.1"),
         started_at=started,
         ended_at=ended,
+        world_time_at_start=world_start,
+        world_time_at_end=world_end,
         terminated_by="duration",
         llm_hook_name="stub",
         deterministic=True,

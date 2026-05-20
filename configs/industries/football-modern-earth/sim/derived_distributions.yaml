@@ -1,0 +1,91 @@
+# Football empirical event-rate distributions — PLACEHOLDER.
+#
+# Schema: ../../../schemas/derived_distributions.schema.json
+#
+# These are HAND-AUTHORED realistic-ballpark numbers, NOT computed from a corpus.
+# Sim handlers load this file at bootstrap to drive Poisson event rates and
+# categorical sampling. Hand-authoring lets the sim run + the contract stay
+# load-bearing before the StatsBomb ingestion pipeline produces real data.
+#
+# Replacement contract:
+#   When polis-internal/app/retrieval/ingestion/football/statsbomb_loader.py
+#   runs against StatsBomb open-data, it overwrites this file with
+#   `provenance: computed` and real mean/stdev/n values. Until then, every
+#   field tagged `n: 0` marks the value as a placeholder.
+#
+# Source figures: rough public averages from top-flight European football
+# (EPL / La Liga / Bundesliga 2020-2025 era). Goal-minute distribution
+# slightly weighted toward late-game per standard observation (~55% second-half
+# goal share). Numbers do NOT come from any particular dataset and should not
+# be cited; they're stand-ins for the real StatsBomb-derived figures.
+
+source_id: placeholder
+provenance: placeholder
+computation_version: "0.1.0"
+matches_processed: 0
+events_processed: 0
+
+metrics:
+  goals_per_match:
+    mean: 2.70
+    stdev: 1.60
+    n: 0
+  shots_per_match:
+    mean: 24.0
+    stdev: 6.9
+    n: 0
+  shots_on_target_per_match:
+    mean: 8.4
+    stdev: 3.1
+    n: 0
+  fouls_per_match:
+    mean: 20.9
+    stdev: 4.5
+    n: 0
+  yellow_cards_per_match:
+    mean: 3.6
+    stdev: 1.8
+    n: 0
+  red_cards_per_match:
+    mean: 0.13
+    stdev: 0.34
+    n: 0
+  # Per-shot xG mean — sim handlers compute shot_conversion = goals/shots.
+  shot_xg:
+    mean: 0.097
+    stdev: 0.142
+    n: 0
+
+outcomes:
+  home_win_rate: 0.43
+  draw_rate: 0.26
+  away_win_rate: 0.31
+
+scorelines_top:
+  - { home: 1, away: 1, freq: 0.103 }
+  - { home: 1, away: 0, freq: 0.094 }
+  - { home: 2, away: 1, freq: 0.082 }
+  - { home: 0, away: 0, freq: 0.077 }
+  - { home: 2, away: 0, freq: 0.075 }
+  - { home: 0, away: 1, freq: 0.058 }
+  - { home: 1, away: 2, freq: 0.054 }
+  - { home: 3, away: 1, freq: 0.046 }
+  - { home: 2, away: 2, freq: 0.041 }
+  - { home: 3, away: 0, freq: 0.040 }
+
+# Coarse-grained 15-min buckets to keep the placeholder honest. Real corpus
+# output will be per-minute (90+ buckets). Frequencies sum to ~1.0.
+goal_minutes_distribution:
+  - { minute: 7,  count: 0, freq: 0.130 }   # 0-14
+  - { minute: 22, count: 0, freq: 0.155 }   # 15-29
+  - { minute: 37, count: 0, freq: 0.165 }   # 30-44 (+ first-half stoppage)
+  - { minute: 52, count: 0, freq: 0.160 }   # 45-59
+  - { minute: 67, count: 0, freq: 0.180 }   # 60-74
+  - { minute: 82, count: 0, freq: 0.210 }   # 75-89 (+ second-half stoppage)
+
+metadata:
+  ingestion_at: "2026-05-20T00:00:00Z"
+  hand_authored_by: "founder"
+  replace_when: "polis-internal StatsBomb pipeline runs against real open-data"
+  license_review_status: "not-applicable-placeholder"
+  expected_real_source: "statsbomb-open-data"

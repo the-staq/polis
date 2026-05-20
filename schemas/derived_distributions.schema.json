@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/derived_distributions.schema.json",
+  "title": "DerivedDistributions",
+  "description": "Empirical event-rate distributions for an industry sim. Loaded by sim handlers at bootstrap and used as Poisson rates / categorical probabilities for event scheduling. Sources distinguish provenance: 'placeholder' (hand-authored realistic values; ships before ingestion pipeline runs) vs 'statsbomb-open-data' / 'cricsheet' / etc. (computed by per-industry ingestion loaders in polis-internal/app/retrieval/ingestion/). The shape is industry-agnostic — football declares goals/shots/fouls; basketball would declare shots/fouls/turnovers; manufacturing would declare defect-rates/throughput. Per V0-PLAN §3.10 + DECISION-SIM-ENGINE.md (open kernel + per-industry sim configs).",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "source_id",
+    "provenance",
+    "computation_version",
+    "metrics"
+  ],
+
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{1,63}$",
+      "description": "Slug identifying the source. 'placeholder' for hand-authored; otherwise matches a polis/configs/sources.yaml entry (e.g. 'statsbomb-open-data', 'cricsheet'). Operator pipeline replaces placeholder file with real source_id once ingestion runs."
+    },
+
+    "provenance": {
+      "type": "string",
+      "enum": ["placeholder", "computed", "manual-review"],
+      "description": "How the numbers got here. 'placeholder' = hand-authored before ingestion pipeline runs (clearly tagged so contributors can't mistake them for real data). 'computed' = output of an ingestion loader against a real corpus (statsbomb-open-data, kloppy, etc.). 'manual-review' = computed values that an operator hand-edited (e.g., trimming outliers); requires explanation in metadata.review_notes."
+    },
+
+    "computation_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver of the ingestion-pipeline computation logic. Bump when the math changes (e.g., switching from mean to median, new outlier filter). Lets sims pin which computation flavor they were calibrated against."
+    },
+
+    "matches_processed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of matches / sessions / units the metrics were computed over. 0 for placeholder. Sim calibration tests use this to scale expected variance."
+    },
+
+    "events_processed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total event count across all processed matches. Audit-trail field for spotting truncated ingestion runs."
+    },
+
+    "metrics": {
+      "type": "object",
+      "description": "Industry-defined per-match metrics, each as a {mean, stdev, n} distribution. Handlers convert mean → Poisson rate over 90 min (or relevant duration) for sampling event arrivals. Industry handlers know which metric names to expect; the schema doesn't enforce a fixed vocabulary so this same shape works for football (goals_per_match), basketball (shots_per_quarter), boxing (punches_per_round), etc.",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/MetricStats"
+      }
+    },
+
+    "outcomes": {
+      "type": "object",
+      "description": "Categorical outcome distribution. Free-form keys; values must sum to ~1.0. For football: home_win_rate + draw_rate + away_win_rate. For boxing: ko_rate + tko_rate + decision_rate + draw_rate. Optional — only present when the industry has a small fixed outcome categorization.",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 1.0
+      }
+    },
+
+    "scorelines_top": {
+      "type": "array",
+      "description": "Top-N most-common scorelines with their empirical frequencies. Football: {home, away, freq}. Calibration target — sim's outcome distribution should approximate these freqs over many runs. Optional; absent for industries without a {home, away} score model.",
+      "items": {
+        "type": "object",
+        "required": ["freq"],
+        "properties": {
+          "home": { "type": "integer", "minimum": 0 },
+          "away": { "type": "integer", "minimum": 0 },
+          "freq": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+        },
+        "additionalProperties": true
+      }
+    },
+
+    "goal_minutes_distribution": {
+      "type": "array",
+      "description": "Per-minute event-arrival histogram. Football-specific: minute 0..90+ with goal frequency. Handlers can sample by minute bucket for time-of-game realism (e.g., late-game goal density spike). Optional; industries without a time-bucketed arrival model omit it.",
+      "items": {
+        "type": "object",
+        "required": ["minute", "count", "freq"],
+        "properties": {
+          "minute": { "type": "integer", "minimum": 0 },
+          "count": { "type": "integer", "minimum": 0 },
+          "freq": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+        },
+        "additionalProperties": false
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "description": "Free-form. Used for review_notes (when provenance='manual-review'), ingestion_at timestamp, license review status, calibration tolerance overrides, etc.",
+      "additionalProperties": true
+    }
+  },
+
+  "additionalProperties": false,
+
+  "$defs": {
+    "MetricStats": {
+      "type": "object",
+      "required": ["mean", "n"],
+      "properties": {
+        "mean": {
+          "type": "number",
+          "description": "Sample mean across processed matches. Sim handlers use this as the Poisson rate (per-match) or the categorical probability anchor."
+        },
+        "stdev": {
+          "type": "number",
+          "minimum": 0.0,
+          "description": "Population standard deviation. 0 when n<=1. Sim calibration tests use mean ± k*stdev/sqrt(N) bands as accept/reject windows."
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Sample size (matches contributing to the statistic). 0 for placeholder; non-zero once ingestion runs."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
