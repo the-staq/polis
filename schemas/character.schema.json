@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/character.schema.json",
   "title": "Character",
-  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces), professions, finances, relationships, affinities, principal-agent governance. v0.1.1 adds soft_skills (canonical 9-attribute taxonomy per soft_skills.schema.json) and per-profession skills_metadata. v0.1.2 adds state.vital_status (life_expectancy, biological_age_modifier, chronic_conditions, death_event) referencing mortality.schema.json per polis/MORTALITY-DESIGN.md. v0.1.3 amends finances per DECISION-CURRENCY-MODEL.md (coin_balance/pol_balance/currency_unit/starter_capital_coin). v0.1.4 amends cognition per DECISION-TIME-MODEL.md (renames decision_frequency → decision_frequency_wall to disambiguate wall-clock frame; adds event_subscriptions[] for reactive wakes) and adds affinities[] per DECISION-AFFINITY-PRIMITIVE.md (typed/weighted/factor-attributed emotional investments — fans, supporters, anti-rivals).",
+  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces, event subscriptions, pending events cap), professions, finances, relationships, affinities, principal-agent governance. v0.1.1 adds soft_skills + per-profession skills_metadata. v0.1.2 adds state.vital_status per polis/MORTALITY-DESIGN.md. v0.1.3 amends finances per DECISION-CURRENCY-MODEL.md (coin_balance/pol_balance/currency_unit/starter_capital_coin). v0.1.4 amends cognition per DECISION-TIME-MODEL.md (renames decision_frequency → decision_frequency_wall; adds event_subscriptions[]) and adds affinities[] per DECISION-AFFINITY-PRIMITIVE.md. v0.1.5 adds cognition.pending_events_cap (default 100) — per-character override of the in-flight reactive event queue ceiling that CharacterLifeWorkflow enforces under signal flood.",
   "type": "object",
-  "version": "0.1.4",
+  "version": "0.1.5",
 
   "required": [
     "id",
@@ -138,6 +138,13 @@
             "type": "string",
             "pattern": "^[a-z][a-z0-9_]{2,63}$"
           }
+        },
+        "pending_events_cap": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 100,
+          "description": "Maximum number of in-flight reactive events queued in CharacterLifeWorkflow before overflow protection kicks in. Subscribed events beyond this cap are logged + counted (workflow query: get_overflowed_events) but not enqueued — prevents OOM + Temporal-history-overflow under signal flood. Default 100 fits closed-alpha event volume per DECISION-AFFINITY-PRIMITIVE.md cost math. Tune higher for spotlight characters (story-arc protagonists) at V0.5+ once reactive cognition is fully wired."
         },
         "reasoning_temperature": {
           "type": "number",
