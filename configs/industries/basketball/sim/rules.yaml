@@ -1,0 +1,55 @@
+# Toy basketball sim config.
+# Exercises the polis/sim kernel to prove the substrate is not football-shaped
+# (V0-PLAN §5.1 rule 3). Minimal but real — kernel boots, schedules events,
+# emits an event log, returns a final score.
+#
+# Real basketball calibration data is V0.5+ work. This is a kernel-validation
+# fixture, not a production basketball sim.
+
+industry_id: "basketball-toy"
+driver: "event"
+
+end_condition:
+  type: "duration"
+  sim_seconds: 2880  # 48 minutes, 4 quarters of 12
+
+roles:
+  - role: "home_player"
+    min_count: 5
+    max_count: 5
+  - role: "away_player"
+    min_count: 5
+    max_count: 5
+  - role: "referee"
+    min_count: 1
+    max_count: 1
+
+initial_state:
+  score:
+    home: 0
+    away: 0
+  possession: "home"
+  clock_quarter: 1
+
+events:
+  - id: "bootstrap"
+    handler: "polis.configs.industries.basketball.sim.handlers.bootstrap"
+
+  - id: "possession_change"
+    handler: "polis.configs.industries.basketball.sim.handlers.possession_change"
+
+  - id: "shot_attempt"
+    handler: "polis.configs.industries.basketball.sim.handlers.shot_attempt"
+    decision_point: true
+    decision_type: "shot_choice"
+    legal_actions: ["two_point", "three_point", "pass_instead"]
+
+  - id: "score"
+    handler: "polis.configs.industries.basketball.sim.handlers.score"
+
+output_schema_ref: "polis/schemas/sim_result.schema.json"
+
+metadata:
+  version: "0.0.1"
+  purpose: "kernel-validation fixture per V0-PLAN §5.1 rule 3"
+  not_production: true
