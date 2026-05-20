@@ -1,0 +1,58 @@
+id: long-range-screamer
+name: "Long-range screamer (25-yard strike)"
+category: speculative-shot
+difficulty: expert
+historical_origin: >
+  Long-range goals from outside the box have been part of football's vocabulary
+  since the earliest days, but the modern "screamer" — power-struck from 25+
+  yards with significant dip or curl — became a signature finish from the
+  1990s onwards as ball technology and pitch quality improved.
+
+prerequisites:
+  - skill: shooting
+    min: 78
+  - skill: composure
+    min: 60
+  - skill: balance
+    min: 70
+
+context_examples:
+  - "Midfielder picks up a loose ball 25 yards out, defenders backing off"
+  - "Cleared corner falls to the edge of the box; attacker hits first time"
+  - "Counter-attack ends with the ball ahead of the runner; he opens his body and unloads"
+
+mechanics:
+  - "Plant foot placed firmly beside the ball; non-kicking arm out for balance"
+  - "Clean strike with the laces (instep) — top half of the ball for dip, slight side-spin for curl"
+  - "Follow-through aimed roughly at the top corner; aim is approximate, the power is the point"
+
+typical_outcomes:
+  - outcome: goal_top_corner
+    likelihood: low_but_signature
+  - outcome: goalkeeper_save_at_full_stretch
+    likelihood: medium
+  - outcome: shot_off_target
+    likelihood: high
+  - outcome: deflected_for_corner
+    likelihood: medium
+
+narrative_examples:
+  - >
+    Cobbledick takes a touch out of his feet 28 yards from goal, glances up
+    once, and unloads — the strike dips viciously in the last five yards and
+    the goalkeeper is wrong-footed by the trajectory, watching the ball
+    nestle in the top corner from his haunches.
+  - >
+    Twenty-five yards out, a half-cleared corner sat up perfectly, and
+    Marsh-Bennett's first-time strike was struck with such venom that the
+    goalkeeper barely had time to flinch — the ball flashed past his right
+    shoulder and into the side netting, the away end on their feet before
+    the keeper had even straightened up.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1990-present"
+  region: "global"
+  reviewed_by: []

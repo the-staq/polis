@@ -1,0 +1,60 @@
+id: reflex-point-blank
+name: "Reflex point-blank save"
+category: goalkeeping-instinct
+difficulty: expert
+historical_origin: >
+  The signature goalkeeper moment — a shot from close range, no time to think,
+  the keeper's hand or boot in the way through pure reflex. Universal across
+  every era; the great keepers (Yashin, Banks, Schmeichel, Buffon, Neuer,
+  Allisson) are defined by their highlight reels of these moments.
+
+prerequisites:
+  - skill: positioning
+    min: 75
+  - skill: reflexes
+    min: 80
+  - skill: composure
+    min: 70
+
+context_examples:
+  - "Striker meets a low cross at the back post from 6 yards out"
+  - "Deflected shot from the edge of the box that changes direction late"
+  - "Header from a corner kick that the keeper has barely a half-second to react to"
+
+mechanics:
+  - "Keeper's positioning has already done most of the work — body in the line of the shot"
+  - "Reaction is sub-conscious — hand, foot, or chest gets in the way before deliberate thought"
+  - "Often results in an awkward landing; the save is the priority, the landing is collateral"
+  - "Strong-side hand or boot for shots to the keeper's natural side; weak-side parry for the opposite"
+
+typical_outcomes:
+  - outcome: save_with_ball_held
+    likelihood: low_at_point_blank
+  - outcome: save_parried_to_safety
+    likelihood: high
+  - outcome: save_parried_into_dangerous_area
+    likelihood: medium
+  - outcome: shot_too_close_keeper_beaten
+    likelihood: medium_if_skill_low
+
+narrative_examples:
+  - >
+    The low cross is met by the unmarked striker six yards out — by every
+    expectation the ball is in the net — but the keeper sticks out a left
+    boot from his prone dive and the ball cannons up over the bar. The
+    striker has both hands on his head; nobody on the pitch can quite believe
+    what they have just seen.
+  - >
+    A shot from the edge of the box takes a wicked deflection off a defender's
+    shin and changes direction at the last instant. The keeper, already
+    committed the other way, twists in mid-air and gets a strong hand to it,
+    palming it over the bar with what looks like impossible flexibility.
+    The away end is on its feet applauding the opposition keeper.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1900-present"
+  region: "global"
+  reviewed_by: []

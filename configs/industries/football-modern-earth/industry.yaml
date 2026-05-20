@@ -353,28 +353,76 @@ founder_royalty: 0.0   # industries are open-source per OPEN-SOURCE.md Tier 2
 cognition:
   embedding_model: voyage-3
   corpora:
+    # Per DECISION-CALIBRATION-SOURCE.md: `examples` is the canonical V0
+    # calibration source. Commercial event-level data (StatsBomb / Opta /
+    # Wyscout) is out of scope for the substrate — premium operators may
+    # BYO-corpus into their own deployment, but the substrate's reference
+    # path uses community-authored examples + LLM-as-environment.
+    examples:
+      # Few-shot example YAMLs grouped by event-type, used by sim handlers as
+      # narrative anchors for LLM-driven event generation. Per-event-type
+      # files live under sim/examples/{event_type}/*.yaml. New event types and
+      # skills are added by community PRs — no engine code required.
+      source: ./sim/examples/
+      loader: examples-tree
+      chunk_strategy: per-example-file
+      license: CC-BY-4.0
+      ships_in: open-repo
     event:
-      source: ipfs://Qm.../statsbomb-open-data
-      loader: statsbomb-open
-      chunk_strategy: per-match-event-window
+      # V0: superseded by `examples` above. The empirical-distribution path
+      # below is retained as a CI fast-path fallback (placeholder
+      # derived_distributions.yaml ships realistic-ballpark values).
+      # V0.5+: legal/elections/gov industries that have FOSS-licensed corpora
+      # will use this slot for real `provenance: computed` empirical data.
+      source: ./sim/derived_distributions.yaml
+      loader: placeholder-distributions
+      chunk_strategy: per-match-aggregate
+      license: CC-BY-4.0
+      ships_in: open-repo
+      note: >
+        V0 ships a hand-authored placeholder. Operators may overlay
+        commercial-licensed empirical data in their closed deployment as
+        BYO-corpus per DECISION-CALIBRATION-SOURCE.md §6.
     commentary:
-      source: ipfs://Qm.../reddit-r-soccer-pushshift
-      loader: raw-text
-      chunk_strategy: per-thread-segment
+      # V0: defer. V0.5+ once retrieval-index is wired in polis-internal.
+      # Plan: community-authored example commentary snippets under
+      # sim/examples/commentary/ following the same shape as event examples.
+      source: ./sim/examples/commentary/
+      loader: examples-tree
+      chunk_strategy: per-example-file
+      license: CC-BY-4.0
+      ships_in: open-repo
+      status: planned-v0.5
     decision:
-      source: ipfs://Qm.../bbc-postmatch-interviews
-      loader: raw-text
-      chunk_strategy: per-quote
+      # V0: defer. V0.5+ examples of how managers/players/officials make
+      # in-context decisions. Community-authored under examples/decision/.
+      source: ./sim/examples/decision/
+      loader: examples-tree
+      chunk_strategy: per-example-file
+      license: CC-BY-4.0
+      ships_in: open-repo
+      status: planned-v0.5
     governance:
-      # Industry's governance corpus = the rule books / statutes / regulatory framework.
-      # Adapted from IFAB Laws of the Game (CC-BY 4.0) + FIFA RSTP + FA Rules + EFL handbook + Premier League handbook.
-      source: ipfs://Qm.../foxbridge-football-rulebook
+      # Industry's governance corpus = the rule books / statutes / regulatory
+      # framework. Loader implementation:
+      # polis-internal/app/retrieval/ingestion/football/governance_loader.py
+      # Sources operator-provided per
+      # cognition/governance/README.md (IFAB Laws CC-BY-4.0, FIFA RSTP,
+      # FA Rules, EFL Regulations, Premier League Handbook).
+      source: ./cognition/governance/
       loader: markdown-tree
       chunk_strategy: per-section
+      license: mixed-fair-use-V0
+      ships_in: open-repo
     tactical:
-      source: ipfs://Qm.../football-tactical-corpus
-      loader: raw-text
-      chunk_strategy: per-section
+      # V0: defer. V0.5+ examples of tactical patterns (high-press triggers,
+      # low-block shapes, transitional moments). Community-authored.
+      source: ./sim/examples/tactical/
+      loader: examples-tree
+      chunk_strategy: per-example-file
+      license: CC-BY-4.0
+      ships_in: open-repo
+      status: planned-v0.5
 
 contributor_attribution:
   author: the staq

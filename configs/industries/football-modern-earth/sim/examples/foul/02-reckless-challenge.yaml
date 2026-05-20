@@ -1,0 +1,55 @@
+id: reckless-challenge
+name: "Reckless mistimed challenge"
+category: poor-judgment
+difficulty: novice
+historical_origin: >
+  As old as football itself. A player commits to a tackle late or with
+  excessive force, usually because he's been beaten for pace or has misread
+  the play. Distinct from the tactical foul in that the perpetrator wasn't
+  trying to win a card — he simply lost the duel and chose contact over
+  withdrawal.
+
+prerequisites:
+  - skill: composure
+    max: 60   # Reckless challenges correlate with LOW composure
+  - skill: positioning
+    max: 65   # Better-positioned defenders don't need to lunge
+
+context_examples:
+  - "Full-back beaten on the outside and lunges to recover from behind"
+  - "Centre-back caught flat-footed by a quick turn; commits to the tackle anyway"
+  - "Midfielder loses possession and goes through the opponent in frustration"
+
+mechanics:
+  - "Defender's momentum is already wrong; recovery tackle goes in late and over the top of the ball"
+  - "Studs often catch the opponent's ankle or shin"
+  - "Defender's body language afterward is hands-up apology — he knows it was bad"
+
+typical_outcomes:
+  - outcome: foul_called_yellow_card
+    likelihood: high
+  - outcome: foul_called_red_card_serious_foul_play
+    likelihood: medium_if_studs_up
+  - outcome: foul_called_no_card
+    likelihood: medium_if_marginal
+  - outcome: opponent_injured
+    likelihood: medium
+
+narrative_examples:
+  - >
+    The young full-back is turned inside-out by a quick step-over and lunges
+    desperately from behind to recover — the studs are up, the contact is on
+    the achilles, and the referee has no choice. A straight red card, head
+    in his hands, the manager already calling for his replacement.
+  - >
+    Pickering, beaten for pace once already in the half, dives in late on the
+    halfway line — boot on shin, opponent in a heap. Yellow card, and he knows
+    he'll be playing the next forty minutes on a knife-edge.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1900-present"
+  region: "global"
+  reviewed_by: []

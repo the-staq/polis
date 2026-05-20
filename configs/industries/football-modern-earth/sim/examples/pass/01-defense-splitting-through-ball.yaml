@@ -1,0 +1,60 @@
+id: defense-splitting-through-ball
+name: "Defense-splitting through-ball"
+category: creative-pass
+difficulty: expert
+historical_origin: >
+  The single pass that breaks a defensive line by threading between defenders
+  into the space behind them. A vocabulary item present since football's
+  beginning but elevated to art form by playmakers like Xavi, Iniesta, Pirlo,
+  Kevin De Bruyne, and Luka Modrić from the 2000s onward.
+
+prerequisites:
+  - skill: passing
+    min: 80
+  - skill: spatial_awareness
+    min: 75
+  - skill: composure
+    min: 65
+
+context_examples:
+  - "Attacking midfielder receives the ball facing a high defensive line"
+  - "Quick transition — defense not yet set, gaps between centre-backs"
+  - "Counter-attack in numerical advantage; striker making a diagonal run in behind"
+
+mechanics:
+  - "Passer reads the runner's intention before the runner has fully committed"
+  - "Weight of pass is critical — too heavy reaches the goalkeeper; too light is intercepted"
+  - "Often disguised — the body shape suggests a different pass right until the contact"
+  - "Played with the inside of the foot for accuracy, sometimes with outside for added curve"
+
+typical_outcomes:
+  - outcome: striker_one_on_one_with_goalkeeper
+    likelihood: high_if_skill_high
+  - outcome: pass_intercepted_by_recovering_defender
+    likelihood: medium_if_skill_low
+  - outcome: pass_too_heavy_runs_through_to_keeper
+    likelihood: medium
+  - outcome: offside_called_against_runner
+    likelihood: medium
+
+narrative_examples:
+  - >
+    The build-up has been patient — three minutes of possession on the edge of
+    the opposition box — but the killer ball comes in an instant: Marsh-
+    Bennett receives, takes one touch to set his body, and slides a ball
+    between the centre-backs that the cover defender can only watch sail
+    past. Cobbledick is through, one-on-one, the goalkeeper already off his
+    line.
+  - >
+    From the halfway line, Pickering sees the run before anyone in the stadium
+    does — a chipped ball over the defensive line, weighted to drop a yard
+    in front of the onrushing striker. The defender turns desperately, knows
+    he is beaten, and the linesman's flag stays down — it is on.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1900-present (art-form-era: 2000-present)"
+  region: "global"
+  reviewed_by: []

@@ -36,6 +36,46 @@ class Action:
 
 
 @dataclass(frozen=True, slots=True)
+class Example:
+    """One few-shot example from a per-industry examples/ directory.
+
+    Per DECISION-CALIBRATION-SOURCE.md: industries ship curated example sets
+    that real LLM hooks use as few-shot anchors. Stub hooks ignore them; real
+    LLM hooks format them into the prompt.
+
+    Fields mirror the YAML shape in
+    `polis/configs/industries/{industry}/sim/examples/{event_type}/*.yaml`.
+    """
+
+    id: str
+    """Stable kebab-case slug — e.g., 'legover-feint', 'tactical-foul-on-counter'."""
+
+    event_type: str
+    """Which event-type subdirectory this came from — e.g., 'shot', 'foul', 'dribble'."""
+
+    name: str
+    """Human-readable one-liner — 'Legover feint (step-over)'."""
+
+    category: str
+    """Sub-type within event_type — 'deceptive-dribble', 'tactical-foul'."""
+
+    difficulty: str
+    """One of: 'novice', 'intermediate', 'expert', 'virtuoso'."""
+
+    mechanics: tuple[str, ...]
+    """Short bullets describing how the move executes."""
+
+    typical_outcomes: tuple[dict[str, Any], ...]
+    """List of {outcome, likelihood} pairs."""
+
+    narrative_examples: tuple[str, ...]
+    """Rich prose passages — the LLM mimics this voice for generated events."""
+
+    metadata: dict[str, Any] = field(default_factory=dict)
+    """Era, region, contributed_by, license, etc. From the YAML's metadata block."""
+
+
+@dataclass(frozen=True, slots=True)
 class DecisionContext:
     """What the hook sees when deciding.
 
@@ -49,6 +89,9 @@ class DecisionContext:
     decision_type: str
     legal_actions: Sequence[str]
     state: dict[str, Any]
+    examples: Sequence[Example] = ()
+    """Few-shot examples filtered to this decision. Stub hooks ignore;
+    real LLM hooks format into the prompt. Per DECISION-CALIBRATION-SOURCE.md."""
 
 
 @runtime_checkable

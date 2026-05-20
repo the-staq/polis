@@ -1,0 +1,61 @@
+id: cruyff-turn
+name: "Cruyff turn"
+category: directional-deception
+difficulty: expert
+historical_origin: >
+  Named after Johan Cruyff, who executed it in the 1974 World Cup against
+  Sweden in a moment now considered a cornerstone of modern football
+  vocabulary. The move existed informally before, but Cruyff's high-stakes
+  execution on a global stage codified it. Now standard at every level of
+  the game from grassroots upward.
+
+prerequisites:
+  - skill: balance
+    min: 65
+  - skill: ball_control
+    min: 70
+  - skill: spatial_awareness
+    min: 60
+
+context_examples:
+  - "Winger receives a pass on the touchline, facing the byline, marker close behind"
+  - "Striker has back-to-goal in the box; defender pressing tightly from behind"
+  - "Player driving down the wing with a defender shaping to make a recovery tackle"
+
+mechanics:
+  - "Player feints to play the ball forward — full body shape committed to that direction"
+  - "At the last moment, the kicking foot drags the ball back behind the standing leg instead"
+  - "Body rotates 180° in the same instant; the player is now facing back the way he came, ball at his feet"
+  - "Defender, already committed forward, is left two yards behind play"
+
+typical_outcomes:
+  - outcome: defender_beaten_with_space_ahead
+    likelihood: high_if_skill_high
+  - outcome: ball_lost_through_poor_first_touch
+    likelihood: medium_if_skill_low
+  - outcome: defender_reads_it_and_anticipates
+    likelihood: low_if_well_disguised
+  - outcome: turn_executed_but_no_attacking_option
+    likelihood: medium
+
+narrative_examples:
+  - >
+    Backed onto the touchline by his marker, Marsh-Bennett shapes to whip a
+    cross in with his right — a full follow-through, hips open — and at the
+    last instant drags the ball back behind his planted left foot, rotates,
+    and is suddenly running infield with five yards of space the defender
+    can't recover.
+  - >
+    On the edge of the box with his back to goal, Cobbledick fakes the lay-off
+    to his strike partner — the defender lunges to intercept — and the
+    striker's right foot drags the ball backward in the same motion that
+    turns his shoulders, leaving him facing the goal with only the goalkeeper
+    to beat.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1974-present"
+  region: "global (Dutch-originated)"
+  reviewed_by: []

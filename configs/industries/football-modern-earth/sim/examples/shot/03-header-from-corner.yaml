@@ -1,0 +1,55 @@
+id: header-from-corner
+name: "Header from corner kick"
+category: set-piece-finish
+difficulty: intermediate
+historical_origin: >
+  Set-piece goals from corners have been a staple since organized football
+  began. The modern variant — a planned routine targeting a specific zone
+  with an aerial-specialist attacker — emerged in the 1960s and was
+  refined into a science by managers like Sam Allardyce in the 2000s.
+
+prerequisites:
+  - skill: positioning
+    min: 65
+  - skill: stamina
+    min: 60
+  - physical: height_advantage_helpful
+
+context_examples:
+  - "Corner swung to the near post; tall centre-back attacks the first ball"
+  - "Out-swinging corner to the penalty spot; striker times late run to meet it"
+  - "Short corner routine creates space; cross targets back-post attacker"
+
+mechanics:
+  - "Attacker times run to meet the ball at the peak of his jump"
+  - "Neck and shoulders provide the power; eyes stay on the ball through contact"
+  - "Direction set by angle of the forehead at contact, not by neck swing afterward"
+
+typical_outcomes:
+  - outcome: goal
+    likelihood: medium_if_unmarked
+  - outcome: goalkeeper_claim_or_punch
+    likelihood: medium
+  - outcome: defender_clearance
+    likelihood: high
+  - outcome: header_off_target
+    likelihood: medium
+
+narrative_examples:
+  - >
+    The corner is swung in deep, away from the goalkeeper, and Pickering rises
+    above his marker at the back post — a textbook header, looped back across
+    goal and into the far corner with the keeper rooted to his line.
+  - >
+    Out-swinging corner from the right; Cobbledick has timed his run to
+    perfection, arriving on the penalty spot just as the ball drops, and his
+    header is fierce and downward — the keeper can only parry it into the
+    side netting.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1960-present"
+  region: "global (English football has historically over-indexed on this)"
+  reviewed_by: []

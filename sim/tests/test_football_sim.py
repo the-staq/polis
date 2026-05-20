@@ -197,6 +197,50 @@ def test_calibration_means_match_distribution_within_tolerance():
     _within("goals_per_match", goals_observed, metrics["goals_per_match"])
 
 
+@pytest.mark.asyncio
+async def test_examples_load_at_bootstrap_and_thread_into_decision_context():
+    """Per DECISION-CALIBRATION-SOURCE.md: bootstrap loads ./examples/ tree and
+    threads filtered examples through DecisionContext when handlers call decide().
+
+    StubLLMHook ignores examples (V0 CI path); real LLM hooks (V0.5+, polis-
+    internal) will format them as few-shot anchors. This test verifies the
+    plumbing: examples reach the hook with the right shape, filtered by event.
+    """
+    from polis.sim import Action, DecisionContext, StubLLMHook
+
+    cfg, cfg_dir = load_sim_from_yaml(FOOTBALL_RULES)
+
+    seen_decisions: list[DecisionContext] = []
+
+    class _CapturingHook(StubLLMHook):
+        async def decide(self, ctx: DecisionContext) -> Action:
+            seen_decisions.append(ctx)
+            return await super().decide(ctx)
+
+    rng = SeededRandom(seed=42)
+    hook = _CapturingHook(rng=rng, policies={"shot_choice": lambda ctx, r: "shoot_close"})
+    final = await run_sim(cfg, seed=42, llm_hook=hook, config_dir=cfg_dir)
+
+    # Bootstrap loaded the examples tree
+    counts = final.outcome["__example_counts"]
+    assert counts.get("shot", 0) >= 3, f"expected >=3 shot examples, got {counts}"
+    assert counts.get("dribble", 0) >= 2
+    assert counts.get("foul", 0) >= 2
+
+    # Shot decisions saw examples threaded into the DecisionContext
+    shot_decisions = [d for d in seen_decisions if d.decision_type == "shot_choice"]
+    assert len(shot_decisions) > 0, "no shot_choice decisions emitted"
+    first_shot = shot_decisions[0]
+    assert len(first_shot.examples) > 0, "shot_attempt didn't thread examples to hook"
+    assert all(e.event_type == "shot" for e in first_shot.examples), \
+        "shot decision got non-shot examples"
+
+    # Example shape matches the YAML
+    e0 = first_shot.examples[0]
+    assert e0.id and e0.name, f"example missing id/name: {e0}"
+    assert e0.narrative_examples, f"example {e0.id} has no narrative_examples"
+
+
 def test_file_path_handler_resolution_works_for_hyphenated_dir():
     """Regression: football-modern-earth has a hyphen in the dir name. The
     kernel must resolve `./handlers.py::bootstrap` against the rules.yaml

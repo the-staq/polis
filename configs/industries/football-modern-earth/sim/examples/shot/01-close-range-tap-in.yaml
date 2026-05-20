@@ -1,0 +1,50 @@
+id: close-range-tap-in
+name: "Close-range tap-in"
+category: close-range-finish
+difficulty: novice
+historical_origin: >
+  The simplest goal in football — a ball squared across the six-yard box meets
+  an attacker arriving at the back post with an empty net. Universal across
+  every era and every level.
+
+prerequisites:
+  - skill: positioning
+    min: 50
+  - skill: composure
+    min: 40
+
+context_examples:
+  - "Winger cuts back from the byline; striker arrives unmarked at the far post"
+  - "Goalkeeper parries a shot; nearest attacker meets the rebound"
+  - "Low cross travels across the face of goal; attacker slides in to redirect"
+
+mechanics:
+  - "Attacker reads where the ball will arrive a beat before the defenders do"
+  - "Body shape adjusted to face the goal, not the ball"
+  - "Side-foot or instep contact from 1–4 yards out; minimal backlift"
+
+typical_outcomes:
+  - outcome: goal
+    likelihood: very_high_if_unmarked
+  - outcome: blocked_on_line
+    likelihood: low
+  - outcome: missed_clean_chance
+    likelihood: very_low_if_skill_high
+
+narrative_examples:
+  - >
+    Smithson swings in the cross from the right, low and hard across the
+    six-yard box, and Cobbledick has the simplest of jobs at the back post —
+    a stretched right foot, the ball in the net before the keeper can react.
+  - >
+    The goalkeeper can only parry the shot and it falls invitingly into the
+    six-yard box; Marsh-Bennett, gambling on the rebound the entire move,
+    has the simplest tap-in of his career.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1900-present"
+  region: "global"
+  reviewed_by: []

@@ -27,7 +27,7 @@ from .config import (
 from .contract import FinalState, Observation, SimTime, Simulator
 from .events import Event, EventLog
 from .kernel import Sim, run_sim
-from .llm_hook import Action, DecisionContext, LLMHook, RandomLLMHook, StubLLMHook
+from .llm_hook import Action, DecisionContext, Example, LLMHook, RandomLLMHook, StubLLMHook
 from .rng import SeededRandom
 
 __all__ = [
@@ -53,6 +53,7 @@ __all__ = [
     # llm_hook
     "Action",
     "DecisionContext",
+    "Example",
     "LLMHook",
     "RandomLLMHook",
     "StubLLMHook",

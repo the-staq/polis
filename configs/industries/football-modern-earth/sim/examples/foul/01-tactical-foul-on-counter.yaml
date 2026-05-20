@@ -1,0 +1,59 @@
+id: tactical-foul-on-counter
+name: "Tactical foul to stop a counter-attack"
+category: cynical-foul
+difficulty: intermediate
+historical_origin: >
+  The "professional foul" — a cynical, calculated foul to stop a fast break
+  before it becomes a goal-scoring opportunity — became a recognized tactical
+  device in the 1970s and 80s. FIFA introduced the "denial of an obvious
+  goal-scoring opportunity" red card in 1991 partly in response to its
+  prevalence. Now a standard part of any defensive midfielder's vocabulary.
+
+prerequisites:
+  - skill: positioning
+    min: 60
+  - skill: decisiveness
+    min: 70
+  - tactical_awareness: high
+
+context_examples:
+  - "Opposition wins the ball in their own half and breaks at pace with numbers"
+  - "Star striker carrying the ball at speed toward a thinned-out defense"
+  - "Lost possession near the halfway line; the only defender between ball and goal"
+
+mechanics:
+  - "Defensive midfielder reads the danger and accepts the card before it materializes"
+  - "Contact is enough to stop momentum, not violent enough to risk a red"
+  - "Often a sleeve-tug, a body-block, or a clip on the ankle from behind"
+  - "Defender accepts the yellow card without protest — the trade-off is the entire point"
+
+typical_outcomes:
+  - outcome: foul_called_yellow_card
+    likelihood: very_high
+  - outcome: foul_called_red_card_DOGSO
+    likelihood: medium_if_last_man
+  - outcome: free_kick_in_dangerous_area
+    likelihood: high_if_in_attacking_third
+  - outcome: defender_face_saved_from_worse_outcome
+    likelihood: very_high
+
+narrative_examples:
+  - >
+    The pass splits the midfield and Cobbledick is suddenly running at a
+    backpedalling defense — but Pickering, twenty yards behind play, sprints
+    to catch him and clips his ankles cleanly. A yellow card, a free kick,
+    and the counter-attack is dead — exactly the result the captain wanted.
+  - >
+    A loose ball in midfield falls to the away winger and there's open space
+    in front of him; the home holding midfielder makes no attempt to play
+    the ball, just steps across and bundles him over with an arm across the
+    chest. The referee shows the yellow without ceremony — both players knew
+    what the deal was the moment the ball was lost.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1970-present"
+  region: "global"
+  reviewed_by: []

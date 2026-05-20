@@ -4,7 +4,7 @@
   "title": "Industry",
   "description": "A user-created industry within a Polis world. Captures professions, institution types, events, economics, competition hierarchy, regulator slot, season calendar, career progression, licensing/certification, AND the five-sub-corpora cognition slot (event/commentary/decision/governance/tactical) per V0-PLAN §3.10. v0.1.2 adds the skills-layer doctrine: hard-skill growth_curves per skill, profession-level soft_skill_weights, and overall_rating_formula composing hard + soft skills into character ranking — see polis/SKILLS-DESIGN.md.",
   "type": "object",
-  "version": "0.1.2",
+  "version": "0.1.3",
 
   "required": [
     "id",
@@ -529,54 +529,40 @@
         },
         "corpora": {
           "type": "object",
-          "required": ["event", "commentary", "decision", "governance", "tactical"],
+          "description": "Per-industry corpus declarations. Per DECISION-CALIBRATION-SOURCE.md: `examples` is the canonical V0 calibration source. Other corpora (event, commentary, decision, governance, tactical) attach to the retrieval index at V0.5+ or earlier for industries with FOSS-licensed data.",
           "properties": {
+            "examples": {
+              "type": "object",
+              "description": "Few-shot example YAMLs grouped by event-type. Per DECISION-CALIBRATION-SOURCE.md: the canonical V0 calibration source. Sim handlers load these and thread them through DecisionContext.examples; real LLM hooks format as few-shot anchors. Community-extensible — adding a new skill/move/event type requires authoring a YAML, no engine changes.",
+              "$ref": "#/$defs/CorpusEntry"
+            },
             "event": {
               "type": "object",
-              "description": "Structured event/transaction data for the domain (e.g. football → StatsBomb / kloppy match events).",
-              "properties": {
-                "source": {"type": "string"},
-                "loader": {"type": "string", "enum": ["raw-text", "yaml", "json", "kloppy", "statsbomb-open", "custom"]},
-                "chunk_strategy": {"type": "string"}
-              }
+              "description": "Structured event/transaction data. V0: placeholder distributions for industries with licensing-hostile data (sports). V0.5+: real empirical data for industries with FOSS-licensed sources (legal/CAP, elections/MIT, gov/SEC EDGAR).",
+              "$ref": "#/$defs/CorpusEntry"
             },
             "commentary": {
               "type": "object",
-              "description": "Observer commentary on events (e.g. football → Reddit r/soccer match threads, BBC live text).",
-              "properties": {
-                "source": {"type": "string"},
-                "loader": {"type": "string"},
-                "chunk_strategy": {"type": "string"}
-              }
+              "description": "Observer commentary on events (e.g. football → community-authored examples of match-thread commentary; legal → law-review summaries).",
+              "$ref": "#/$defs/CorpusEntry"
             },
             "decision": {
               "type": "object",
-              "description": "Quotes/transcripts from people in industry roles (e.g. football → post-match interviews, manager press conferences).",
-              "properties": {
-                "source": {"type": "string"},
-                "loader": {"type": "string"},
-                "chunk_strategy": {"type": "string"}
-              }
+              "description": "Quotes/transcripts from people in industry roles (e.g. football → post-match interviews; legal → judicial opinions; M&A → CEO calls).",
+              "$ref": "#/$defs/CorpusEntry"
             },
             "governance": {
               "type": "object",
-              "description": "Rule books, statutes, regulatory framework — the industry's own laws (e.g. football → IFAB Laws of the Game, FIFA RSTP, FA Rules).",
-              "properties": {
-                "source": {"type": "string"},
-                "loader": {"type": "string"},
-                "chunk_strategy": {"type": "string"}
-              }
+              "description": "Rule books, statutes, regulatory framework — the industry's own laws (e.g. football → IFAB Laws of the Game, FIFA RSTP; legal → US Code; M&A → SEC regulations).",
+              "$ref": "#/$defs/CorpusEntry"
             },
             "tactical": {
               "type": "object",
-              "description": "Strategy / tactics / professional literature (e.g. football → Inverting the Pyramid, Soccernomics, tactical-analysis blogs).",
-              "properties": {
-                "source": {"type": "string"},
-                "loader": {"type": "string"},
-                "chunk_strategy": {"type": "string"}
-              }
+              "description": "Strategy / tactics / professional literature.",
+              "$ref": "#/$defs/CorpusEntry"
             }
-          }
+          },
+          "additionalProperties": false
         }
       }
     },
@@ -629,5 +615,45 @@
     }
   },
 
-  "additionalProperties": false
+  "additionalProperties": false,
+
+  "$defs": {
+    "CorpusEntry": {
+      "type": "object",
+      "description": "Common shape for any per-industry corpus declaration (examples, event, commentary, decision, governance, tactical). Per DECISION-CALIBRATION-SOURCE.md.",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Where the corpus content lives. Local path (./sim/examples/), URL (https://...), IPFS CID (ipfs://Qm...), or another scheme the loader understands."
+        },
+        "loader": {
+          "type": "string",
+          "description": "Identifier for the loader implementation that consumes this source. Free-form — each industry/loader pair is implementation-specific. Reserved values: 'examples-tree' (community-authored YAMLs grouped by event-type), 'placeholder-distributions' (hand-authored derived_distributions.yaml as fast-path fallback), 'markdown-tree' (heading-tree section chunker for rule books), 'raw-text' (per-document chunker), 'statsbomb-open' (kloppy StatsBomb adapter, polis-internal closed loader)."
+        },
+        "chunk_strategy": {
+          "type": "string",
+          "description": "How the loader chunks content for retrieval. Reserved values: 'per-example-file' (one example YAML = one chunk), 'per-section' (markdown heading sections), 'per-match-aggregate' (one row per match), 'per-thread-segment', 'per-quote'."
+        },
+        "license": {
+          "type": "string",
+          "description": "SPDX or named license under which this corpus ships. CC-BY-4.0 for open-repo community content. 'mixed-fair-use-V0' for governance corpora drawn from operator-provided rule books under fair-use posture. Substrate principle (DECISION-CALIBRATION-SOURCE.md §6): never commit commercially-licensed corpus content to the open repo."
+        },
+        "ships_in": {
+          "type": "string",
+          "enum": ["open-repo", "closed-runtime", "operator-byo"],
+          "description": "Where the content physically lives. 'open-repo' = polis/ Apache 2.0 + CC-BY 4.0. 'closed-runtime' = polis-internal proprietary. 'operator-byo' = operator brings their own (e.g., a club with a paid StatsBomb license overlays it in their deployment)."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["V0-shipped", "planned-v0.5", "planned-v1", "deferred"],
+          "description": "Implementation status. V0-shipped = consumers can use it today. planned-v0.5 = scaffold exists, full wiring lands V0.5+. deferred = explicitly out of V0 scope."
+        },
+        "note": {
+          "type": "string",
+          "description": "Free-form notes — replacement contracts, license review status, BYO-corpus overlays, etc."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
 }

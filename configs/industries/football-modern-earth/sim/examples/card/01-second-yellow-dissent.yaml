@@ -1,0 +1,57 @@
+id: second-yellow-dissent
+name: "Second yellow card for dissent"
+category: avoidable-sending-off
+difficulty: novice
+historical_origin: >
+  As long as football has had cards (yellow + red since 1970), players on a
+  yellow have walked themselves into a second card by arguing with the
+  referee. A peculiarly self-defeating behavior, but persistent across every
+  era and league.
+
+prerequisites:
+  - skill: composure
+    max: 55   # second yellows for dissent correlate with LOW composure
+  - state: already_on_yellow_card
+  - state: emotional_high_pressure_match
+
+context_examples:
+  - "Player on yellow disputes a goal-kick decision, then a free-kick in quick succession"
+  - "Striker on yellow vehemently protests an offside call that went against him"
+  - "Midfielder on yellow surrounds the referee after a yellow for an opponent's foul"
+
+mechanics:
+  - "Player verbally engages the referee after a decision"
+  - "Tone escalates — hands raised, voice loud, often profanity in the player's native language"
+  - "Referee gives the second yellow and immediately the red — player walks before the protest can compound"
+
+typical_outcomes:
+  - outcome: red_card_sending_off
+    likelihood: very_high
+  - outcome: team_down_to_10_players
+    likelihood: certain
+  - outcome: player_fined_by_club_internally
+    likelihood: high
+  - outcome: manager_publicly_critical_post_match
+    likelihood: high
+
+narrative_examples:
+  - >
+    Pickering, already on a yellow for the tactical foul in the first half,
+    cannot help himself when the corner is given against his team — he
+    confronts the referee with both arms wide, voice carrying across the pitch.
+    The second yellow is in the air before he has finished his sentence; he
+    walks knowing he has cost his team the final twenty minutes.
+  - >
+    The offside flag goes up against Cobbledick and he loses control — a
+    sprint thirty yards back to the referee, hands on the official's chest,
+    a sentence the broadcasters will not be able to play back. Yellow, then
+    immediately red, and the captain leads him down the tunnel before he can
+    make it worse.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1970-present"
+  region: "global"
+  reviewed_by: []

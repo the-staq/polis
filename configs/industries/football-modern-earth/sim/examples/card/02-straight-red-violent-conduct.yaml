@@ -1,0 +1,59 @@
+id: straight-red-violent-conduct
+name: "Straight red card for violent conduct"
+category: serious-discipline
+difficulty: novice
+historical_origin: >
+  Violent conduct away from the ball — an off-the-ball elbow, retaliation
+  strike, or stamp — has always been one of football's gravest in-match
+  offences. Video replay (VAR, post-2018) has dramatically increased the rate
+  of detection compared to earlier eras.
+
+prerequisites:
+  - skill: composure
+    max: 50
+  - state: provoked_or_frustrated
+  - state: feels_referee_wont_see
+
+context_examples:
+  - "Off-the-ball elbow in the box during a corner-kick scramble"
+  - "Retaliation strike after a hard but legal challenge moments earlier"
+  - "Stamp on a grounded opponent at the bottom of a ruck of players"
+
+mechanics:
+  - "Strike or contact is unrelated to a play for the ball"
+  - "Player often believes the referee is looking elsewhere"
+  - "Modern game: video assistant catches what the on-field referee missed; replay clip is conclusive"
+
+typical_outcomes:
+  - outcome: red_card_straight
+    likelihood: very_high
+  - outcome: multi_match_suspension_from_FA_or_governing_body
+    likelihood: very_high
+  - outcome: club_imposed_fine_and_apology
+    likelihood: high
+  - outcome: lasting_damage_to_reputation
+    likelihood: medium
+
+narrative_examples:
+  - >
+    The corner is swung in and bodies are jostling in the six-yard box; as the
+    ball goes out for a goal-kick, Pickering catches the opponent's centre-
+    back with an elbow that the referee, ten yards away, missed entirely.
+    Two minutes later, the video assistant calls him to the monitor — the
+    replay leaves no ambiguity. Red, three-match ban, the manager already
+    speaking to the press about an internal disciplinary process.
+  - >
+    Cobbledick is brought down by a hard but legal tackle in midfield, gets
+    up, and shoves the offending player in the face with both hands. The
+    referee, ten yards away, sees the whole thing and produces the straight
+    red without breaking stride. The away end boos, the home end celebrates,
+    and the manager's post-match interview is already a damage-limitation
+    exercise.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1900-present (VAR-era detection rates since 2018 much higher)"
+  region: "global"
+  reviewed_by: []

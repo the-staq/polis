@@ -1,0 +1,58 @@
+id: legover-feint
+name: "Legover feint (step-over)"
+category: deceptive-dribble
+difficulty: intermediate
+historical_origin: >
+  Popularized by Brazilian playmakers in the 1960s and 1970s — Garrincha and
+  Pelé were early canonical exponents — and refined into a signature move by
+  Ronaldinho, Robinho, and especially Cristiano Ronaldo in the 2000s and
+  2010s, who would chain multiple legovers in a single dribble.
+
+prerequisites:
+  - skill: balance
+    min: 55
+  - skill: ball_control
+    min: 60
+  - skill: pace
+    min: 65   # only effective if the player can accelerate out of the move
+
+context_examples:
+  - "Striker receives a pass at the edge of the box, defender tight on his right side"
+  - "Winger isolated 1v1 with the full-back on the touchline"
+  - "Attacking midfielder facing two defenders in the half-space channel"
+
+mechanics:
+  - "Player swings the leading leg over the top of the ball without making contact"
+  - "Body weight shifts to the dummy direction, defender commits to that side"
+  - "Player pushes the ball with the opposite foot in the actual chosen direction"
+  - "Acceleration follows immediately — the move only works if the defender is now a step behind"
+
+typical_outcomes:
+  - outcome: defender_beaten
+    likelihood: high_if_skill_high
+  - outcome: ball_lost_to_recovery_tackle
+    likelihood: medium_if_skill_low
+  - outcome: foul_drawn
+    likelihood: low
+  - outcome: defender_doesnt_bite_and_stays_balanced
+    likelihood: medium
+
+narrative_examples:
+  - >
+    Marsh-Bennett drops his shoulder, swings his right leg theatrically over
+    the ball — the defender bites, opens his stance — and the striker pushes
+    the ball past him on the outside with his left, accelerating toward the
+    byline before a cover defender can close the angle.
+  - >
+    Two quick legovers in succession; the second defender thinks he's read it
+    and lunges in, but Cobbledick rolls the ball back behind his own standing
+    leg, leaving him sprawling, and is suddenly facing an open box with the
+    goalkeeper to beat.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1960-present"
+  region: "global (Brazil-originated; standard in modern football)"
+  reviewed_by: []

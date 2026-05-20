@@ -1,0 +1,60 @@
+id: celebration-team-pile-on
+name: "Team pile-on celebration"
+category: emotional-team-bonding
+difficulty: novice
+historical_origin: >
+  The collective celebration — every available teammate sprinting toward the
+  goalscorer and forming a pile or huddle — emerged as the default modern
+  goal celebration in the 1990s, replacing the more reserved handshake-and-
+  jog-back style of earlier eras. Often associated with high-stakes goals:
+  late equalizers, derby goals, cup ties.
+
+prerequisites:
+  - state: goal_just_scored
+  - state: meaningful_match_context   # not 5-0 in a friendly
+
+context_examples:
+  - "Late equalizer in a relegation six-pointer"
+  - "Goal in a local derby against a fierce rival"
+  - "First goal back from injury for a popular player"
+  - "Cup final or playoff winner"
+
+mechanics:
+  - "Goalscorer sprints to a corner flag, often toward the home end"
+  - "Every outfield player on the pitch converges within 3–5 seconds"
+  - "Pile forms — sometimes literally on top of the scorer, sometimes a huddle"
+  - "Substitutes from the bench often join from the technical area"
+  - "Referee allows it for 15–20 seconds before signalling restart"
+
+typical_outcomes:
+  - outcome: emotional_bond_strengthened_across_squad
+    likelihood: very_high
+  - outcome: caution_for_excessive_celebration
+    likelihood: low_in_most_eras
+  - outcome: yellow_card_for_removing_shirt
+    likelihood: medium_if_scorer_removes_shirt
+  - outcome: home_crowd_decibel_spike
+    likelihood: certain_if_home_goal
+
+narrative_examples:
+  - >
+    Cobbledick wheels away toward the corner flag, both arms wide, and by the
+    time he has reached it the entire Hartwell team have caught him — a
+    twelve-man pile in the corner, the substitutes sprinting from the
+    technical area, the home end vibrating. The away keeper picks the ball
+    out of his net and walks slowly to the centre circle, knowing the
+    momentum has irreversibly turned.
+  - >
+    The equalizer in injury time, and the celebration is total — players who
+    were nowhere near the goal join the pile, the manager is already three
+    yards onto the pitch, the kit man has run on with water bottles for no
+    apparent reason. The referee gives them their twenty seconds before
+    blowing for the restart, and even he is smiling.
+
+metadata:
+  contributed_by: github:olumideomotoso
+  contributed_at: "2026-05-20"
+  license: CC-BY-4.0
+  era: "1990-present"
+  region: "global"
+  reviewed_by: []

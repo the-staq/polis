@@ -1,10 +1,20 @@
-"""Football match sim handlers — corpus-driven.
+"""Football match sim handlers — examples + LLM-as-environment driven.
 
-All event rates and outcome probabilities come from
-`./derived_distributions.yaml` (placeholder until the StatsBomb ingestion
-pipeline in polis-internal overwrites it with `provenance: computed`). No
-hardcoded probabilities — every random draw in this module is parameterized
-by the loaded distributions.
+Per DECISION-CALIBRATION-SOURCE.md: realistic sim behavior comes from
+community-authored few-shot example YAMLs in `./examples/` rather than
+commercial statistical corpora. The placeholder `./derived_distributions.yaml`
+stays as the deterministic CI / fast-path fallback (stub LLM hooks use Poisson
+rates from it; real LLM hooks use the examples).
+
+The dual-path architecture:
+  - StubLLMHook (CI, deterministic) → Poisson sampling against placeholder rates
+  - Real LLM hook (V0.5+, polis-internal) → LLM-as-environment with few-shot
+    examples filtered by event type, era, region
+
+Both paths share the same handler code. The handler loads BOTH examples and
+rates at bootstrap; the LLMHook implementation decides which to consume via
+the `examples` field on DecisionContext (stubs ignore it; real LLM hooks
+format it into prompts).
 
 This file plugs into the substrate sim kernel via file-path handler refs in
 `./rules.yaml` (e.g., `./handlers.py::bootstrap`). The kernel runs everything
@@ -13,25 +23,87 @@ else: heapq event queue, deterministic seeding, LLM-hook decision dispatch.
 Per V0-PLAN §5.1 rules:
 - Rule 1 (kernel never knows football): all football-specific logic lives here
 - Rule 3 (substrate is not football-shaped): basketball + football share the kernel
-- Rule 4 (calibration as discipline): tests verify event-count means within
-  tolerance of distribution means; sim is a generator of the same distributions
-  it's calibrated against
+- Rule 4 (calibration as discipline): stub-hook tests verify event-count means
+  within tolerance of placeholder distribution means; real-LLM-hook calibration
+  is a separate V0.5+ test (judge-LLM rates the narrative quality)
 """
 
 from __future__ import annotations
 
 import math
+from collections.abc import Iterable
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-from polis.sim import Action, DecisionContext, Sim
+from polis.sim import Action, DecisionContext, Example, Sim
 
 
 MATCH_DURATION_SECONDS = 5400.0  # 90 minutes
 HALF_TIME_AT_SECONDS = 2700.0    # 45 minutes
+
+
+@lru_cache(maxsize=8)
+def _load_examples(config_dir_str: str) -> dict[str, tuple[Example, ...]]:
+    """Walk ./examples/ subdirs and load all YAMLs, indexed by event_type.
+
+    Returns a dict mapping event_type → tuple of Example objects sorted by
+    filename (so 01-xxx comes before 02-yyy).
+
+    lru_cached by config_dir path. Examples are versioned in git; treat as
+    immutable per-process. Restart to pick up changes.
+
+    Per DECISION-CALIBRATION-SOURCE.md: contributors can add new example
+    YAMLs in any event-type subdirectory and they're picked up on next sim
+    run — no engine code changes, no schema migration.
+    """
+    examples_dir = Path(config_dir_str) / "examples"
+    if not examples_dir.exists():
+        return {}
+
+    by_event_type: dict[str, list[Example]] = {}
+    for event_dir in sorted(p for p in examples_dir.iterdir() if p.is_dir()):
+        event_type = event_dir.name
+        examples_for_type: list[Example] = []
+        for yaml_file in sorted(event_dir.glob("*.yaml")):
+            try:
+                with yaml_file.open() as f:
+                    doc = yaml.safe_load(f) or {}
+                examples_for_type.append(
+                    Example(
+                        id=doc.get("id", yaml_file.stem),
+                        event_type=event_type,
+                        name=doc.get("name", ""),
+                        category=doc.get("category", ""),
+                        difficulty=doc.get("difficulty", ""),
+                        mechanics=tuple(doc.get("mechanics", []) or []),
+                        typical_outcomes=tuple(doc.get("typical_outcomes", []) or []),
+                        narrative_examples=tuple(doc.get("narrative_examples", []) or []),
+                        metadata=dict(doc.get("metadata", {}) or {}),
+                    )
+                )
+            except Exception as e:  # noqa: BLE001 — bad example shouldn't kill bootstrap
+                print(f"skipping malformed example {yaml_file}: {e}")
+        if examples_for_type:
+            by_event_type[event_type] = tuple(examples_for_type)
+    return by_event_type
+
+
+def _examples_for(
+    examples_by_type: dict[str, tuple[Example, ...]],
+    event_type: str,
+    *,
+    max_n: int = 5,
+) -> tuple[Example, ...]:
+    """Return up to N examples for the given event type. V0: first N by filename.
+
+    V0.5+ enhancement: filter by current match state (era, region, score
+    state, time-of-game), select diverse examples to fit prompt budget.
+    """
+    pool = examples_by_type.get(event_type, ())
+    return pool[:max_n]
 
 
 @lru_cache(maxsize=8)
@@ -104,9 +176,12 @@ def _other_team(team: str) -> str:
 
 
 async def bootstrap(sim: Sim, _ctx: Action | None) -> None:
-    """Kick the match off. Loads rates, emits kickoff, schedules first event."""
+    """Kick the match off. Loads rates + examples, emits kickoff, schedules first event."""
     rates = _load_rates(str(sim.config_dir))
+    examples = _load_examples(str(sim.config_dir))
     sim.state["__rates"] = rates  # handlers read this; calibration tests ignore _-prefixed
+    sim.state["__examples"] = examples
+    sim.state["__example_counts"] = {k: len(v) for k, v in examples.items()}
     sim.state["score"] = {"home": 0, "away": 0}
     sim.state["yellows"] = {"home": 0, "away": 0}
     sim.state["reds"] = {"home": 0, "away": 0}
@@ -147,9 +222,15 @@ async def match_event(sim: Sim, _ctx: Action | None) -> None:
 
 
 async def shot_attempt(sim: Sim, _ctx: Action | None) -> None:
-    """A shot is taken. Decision point: shot kind chosen via LLM hook."""
+    """A shot is taken. Decision point: shot kind chosen via LLM hook.
+
+    Real LLM hooks (V0.5+) receive few-shot examples from ./examples/shot/
+    via the DecisionContext.examples field — used as anchors for narrative
+    generation. Stub hooks ignore examples and pick from legal_actions.
+    """
     team = sim.state["possession"]
     rates = sim.state["__rates"]
+    examples_by_type = sim.state.get("__examples", {})
 
     decision = await sim.llm_hook.decide(
         DecisionContext(
@@ -158,6 +239,7 @@ async def shot_attempt(sim: Sim, _ctx: Action | None) -> None:
             decision_type="shot_choice",
             legal_actions=["shoot_close", "shoot_far", "pass_back"],
             state={"score": dict(sim.state["score"]), "team": team, "minute": int(sim.now / 60)},
+            examples=_examples_for(examples_by_type, "shot"),
         )
     )
 
