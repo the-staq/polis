@@ -15,7 +15,7 @@ personality:
   backstory:
     - "Chairman's nephew. Joined the academy at 12 like everyone else."
     - "The dressing room watches how he handles the surname. He knows."
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_4h }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_4h }
 professions:
   - industry: football-modern-earth
     profession_id: player

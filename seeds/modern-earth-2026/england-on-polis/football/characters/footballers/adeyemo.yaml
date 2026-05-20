@@ -10,7 +10,7 @@ personality:
   archetype: ball-winner
   traits: [aggressive, unselfish, picks-himself-up-quick]
   values: [tackles-won, shielding-the-back-four]
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_4h }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_4h }
 professions:
   - industry: football-modern-earth
     profession_id: player

@@ -11,7 +11,7 @@ personality:
   traits: [confident, streaky, rides-the-good-weeks-too-hard]
   values: [moments-of-brilliance, social-media-presence]
   ambitions: [tier-2-transfer-on-form, breakout-season-this-year]
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_4h }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_4h }
 professions:
   - industry: football-modern-earth
     profession_id: player

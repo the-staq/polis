@@ -19,7 +19,7 @@ personality:
     - "Knee surgery summer 2025; came back at 90%. Knows next contract is his last."
 cognition:
   model: claude-3-5-sonnet-20251022
-  decision_frequency: every_4h
+  decision_frequency_wall: every_4h
   reasoning_temperature: 0.6
 professions:
   - industry: basketball-modern-earth

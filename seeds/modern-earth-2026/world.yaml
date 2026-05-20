@@ -30,7 +30,8 @@ geography:
 
 calendar:
   system: gregorian
-  in_world_day_per_real_day: 1.0
+  in_world_day_per_real_day: 12.0    # V0 default per DECISION-TIME-MODEL.md (12× wall-clock; 1 real-hour = half a world-day)
+  heartbeat_world_seconds: 3600       # WorldWorkflow emergent-state check every world-hour
   in_world_year_at_launch: 2026
   months_per_year: 12
   weeks_per_year: 52

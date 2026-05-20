@@ -21,7 +21,7 @@ personality:
     - "Hired three managers in two seasons. Marquez is the third — the one he's banking on."
     - "Nephew Theo plays in the academy. Lawrence does not interfere with team selection."
 
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_8h, reasoning_temperature: 0.5 }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_8h, reasoning_temperature: 0.5 }
 
 professions:
   - industry: football-modern-earth

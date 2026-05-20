@@ -12,7 +12,7 @@ personality:
   traits: [technical, injury-prone, sulks-when-subbed]
   values: [first-eleven-status, technical-craft]
   ambitions: [tier-2-transfer-when-fit, recover-from-knee-niggle]
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_4h }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_4h }
 professions:
   - industry: football-modern-earth
     profession_id: player

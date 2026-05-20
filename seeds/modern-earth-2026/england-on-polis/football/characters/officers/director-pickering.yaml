@@ -15,7 +15,7 @@ personality:
   traits: [networker, deal-maker, never-misses-a-corporate-box]
   values: [revenue-growth, sponsorship-renewals, reputation-via-charities]
 
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_8h }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_8h }
 
 professions:
   - industry: football-modern-earth

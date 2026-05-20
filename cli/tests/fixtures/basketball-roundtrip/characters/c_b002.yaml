@@ -16,7 +16,7 @@ personality:
   ambitions: [career_three_point_record, contract_in_top_tier]
 cognition:
   model: claude-3-5-sonnet-20251022
-  decision_frequency: every_4h
+  decision_frequency_wall: every_4h
   reasoning_temperature: 0.7
 professions:
   - industry: basketball-modern-earth

@@ -39,7 +39,7 @@ personality:
 
 cognition:
   model: claude-3-5-sonnet-20251022
-  decision_frequency: every_4h        # nominal; not invoked while deceased
+  decision_frequency_wall: every_4h        # nominal; not invoked while deceased
   reasoning_temperature: 0.6
 
 professions:

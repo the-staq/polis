@@ -19,7 +19,7 @@ personality:
     - "Former Tier 2 striker who pivoted into recruitment at 32. PhD-equivalent in football analytics."
     - "Brackensley personally recruited her in 2022. They speak twice a week."
 
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_4h, reasoning_temperature: 0.55 }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_4h, reasoning_temperature: 0.55 }
 
 professions:
   - industry: football-modern-earth

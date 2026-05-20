@@ -34,7 +34,7 @@ personality:
 
 cognition:
   model: claude-3-5-sonnet-20251022
-  decision_frequency: every_8h
+  decision_frequency_wall: every_8h
 
 professions:
   - industry: governance

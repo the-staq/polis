@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/world.schema.json",
   "title": "World",
-  "description": "A curated Polis world (the substrate's outermost container). Worlds are NOT user-creatable; the staq curates them. Each world defines the geographic basis, calendar / time mapping, physics, default economic posture, moderation floor, asset pack, and the cognition corpora that ground AI characters in this world's contemporary context.",
+  "description": "A curated Polis world (the substrate's outermost container). Worlds are NOT user-creatable; the staq curates them. Each world defines the geographic basis, calendar / time mapping, physics, default economic posture, moderation floor, asset pack, and the cognition corpora that ground AI characters in this world's contemporary context. v0.1.2 amends calendar per DECISION-TIME-MODEL.md: in_world_day_per_real_day default bumped 1.0 → 12.0 (one canonical clock at 12× wall-clock for Modern Earth 2026); adds heartbeat_world_seconds (default 3600) for WorldWorkflow emergent-state checks between scheduled events.",
   "type": "object",
-  "version": "0.1.1",
+  "version": "0.1.2",
 
   "required": [
     "id",
@@ -103,6 +103,7 @@
     "calendar": {
       "type": "object",
       "required": ["system", "in_world_day_per_real_day"],
+      "description": "World time configuration. Per DECISION-TIME-MODEL.md: Polis runs on a single canonical world clock per world that advances at a uniform ratio vs wall-clock. No per-viewer scaling, no fast-forward. The kernel emits events at world-time pace.",
       "properties": {
         "system": {
           "type": "string",
@@ -113,8 +114,15 @@
           "type": "number",
           "minimum": 0.1,
           "maximum": 100,
-          "default": 1.0,
-          "description": "BOUND: time mapping. 1.0 means in-world day = 1 real day; 24.0 means in-world day = 1 real hour (fast-cycle worlds). Capped to prevent meta-cycle attacks."
+          "default": 12.0,
+          "description": "BOUND: time mapping. 1.0 means in-world day = 1 real day (EVE-style 1:1); 12.0 = 1 real-hour produces 12 world-hours = half a world-day (Polis V0 default per DECISION-TIME-MODEL.md, Modern Earth 2026); 24.0 = 1 world-day per real-hour (fast-cycle); 48.0 = PRD §22 directional example (rejected as too aggressive for character life-arc texture). Recommended range per V0 decision: [8.0, 24.0]. Capped to prevent meta-cycle attacks."
+        },
+        "heartbeat_world_seconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 86400,
+          "default": 3600,
+          "description": "Per DECISION-TIME-MODEL.md §3.3: how often WorldWorkflow's heartbeat fires (in world-seconds) to check for emergent state between scheduled events. Default 3600 (1 world-hour ≈ 5 real-minutes at 12× rate). Lower values increase CPU + Temporal-timer cost; higher values mean emergent state lags."
         },
         "current_in_world_date": {
           "type": "string",

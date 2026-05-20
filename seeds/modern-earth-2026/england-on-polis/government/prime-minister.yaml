@@ -50,7 +50,7 @@ personality:
 cognition:
   model: claude-3-5-sonnet-20251022
   fallback_chain: [gpt-4o-2024-08-06, ollama/llama3.2]
-  decision_frequency: every_8h    # PM cadence — slower than footballers; more deliberative
+  decision_frequency_wall: every_8h    # PM cadence — slower than footballers; more deliberative
   reasoning_temperature: 0.55
   retrieval_namespaces:
     diary_source: ipfs://Qm.../c_pm_pell-whitcombe-private-papers

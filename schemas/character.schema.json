@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/character.schema.json",
   "title": "Character",
-  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces), professions, finances, relationships, principal-agent governance. v0.1.1 adds soft_skills (canonical 9-attribute taxonomy per soft_skills.schema.json) and per-profession skills_metadata (last skill-tick week, training-load) so engine SkillTickWorkflow can evolve hard-skill values over in-world time per polis/SKILLS-DESIGN.md. v0.1.2 adds state.vital_status (life_expectancy, biological_age_modifier, chronic_conditions, death_event) referencing mortality.schema.json so the substrate can model needs-driven and acute-cause death per polis/MORTALITY-DESIGN.md. v0.1.3 amends finances per DECISION-CURRENCY-MODEL.md: introduces coin_balance (V0 primary, readOnly from ledger) + currency_unit display field; recasts pol_balance as V0.5+ readOnly real-money rail; renames starter_capital_pol → starter_capital_coin to match Coin-first V0 posture.",
+  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces), professions, finances, relationships, affinities, principal-agent governance. v0.1.1 adds soft_skills (canonical 9-attribute taxonomy per soft_skills.schema.json) and per-profession skills_metadata. v0.1.2 adds state.vital_status (life_expectancy, biological_age_modifier, chronic_conditions, death_event) referencing mortality.schema.json per polis/MORTALITY-DESIGN.md. v0.1.3 amends finances per DECISION-CURRENCY-MODEL.md (coin_balance/pol_balance/currency_unit/starter_capital_coin). v0.1.4 amends cognition per DECISION-TIME-MODEL.md (renames decision_frequency → decision_frequency_wall to disambiguate wall-clock frame; adds event_subscriptions[] for reactive wakes) and adds affinities[] per DECISION-AFFINITY-PRIMITIVE.md (typed/weighted/factor-attributed emotional investments — fans, supporters, anti-rivals).",
   "type": "object",
-  "version": "0.1.3",
+  "version": "0.1.4",
 
   "required": [
     "id",
@@ -108,8 +108,8 @@
 
     "cognition": {
       "type": "object",
-      "required": ["model", "decision_frequency"],
-      "description": "Per-character cognition config. Pinned at spawn for in-life consistency (V0-PLAN A6). Per-character retrieval namespaces compose with industry/country/world layers (V0-PLAN §3.10).",
+      "required": ["model", "decision_frequency_wall"],
+      "description": "Per-character cognition config. Pinned at spawn for in-life consistency (V0-PLAN A6). Per-character retrieval namespaces compose with industry/country/world layers (V0-PLAN §3.10). Per DECISION-TIME-MODEL.md §3.4: two wake sources — wall-clock-paced proactive (decision_frequency_wall, cost-bounded) and world-clock event-driven reactive (event_subscriptions, scales with world activity).",
       "properties": {
         "model": {
           "type": "string",
@@ -124,11 +124,20 @@
           "type": ["string", "null"],
           "description": "Optional LoRA fine-tune (V1+; null at V0 per V0-PLAN §3.10 deferred)."
         },
-        "decision_frequency": {
+        "decision_frequency_wall": {
           "type": "string",
           "pattern": "^(continuous|every_[0-9]+(h|d|w))$",
           "default": "every_4h",
-          "description": "How often CharacterLifeWorkflow wakes (1h to 7d range; default 4h per PRD §6.6). Tunable per character."
+          "description": "How often CharacterLifeWorkflow wakes for PROACTIVE cognition, in WALL-CLOCK time (1h to 7d range; default 4h per PRD §6.6, locked in DECISION-TIME-MODEL.md §3.4). Tunable per character. Wall-clock anchored because world-clock cadence at 12× rate would break V0-PLAN R8 LLM-cost cap (was named decision_frequency pre-v0.1.4)."
+        },
+        "event_subscriptions": {
+          "type": "array",
+          "default": [],
+          "description": "World event types this character REACTIVELY wakes on (in addition to proactive wakes per decision_frequency_wall). Reactive wakes happen at world-time when the event fires. Per DECISION-TIME-MODEL.md §3.4. Examples: 'match_start' (for players + officers + fans), 'transfer_offer_received' (for the offered player + their agent), 'press_mention' (when a journalist names this character), 'injury_news' (for teammates + medical staff), 'club_news' (for affiliated fans), 'death_event' (for relatives + friends).",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{2,63}$"
+          }
         },
         "reasoning_temperature": {
           "type": "number",
@@ -299,6 +308,87 @@
           },
           "since_in_world": {"type": ["string", "null"], "format": "date"}
         }
+      }
+    },
+
+    "affinities": {
+      "type": "array",
+      "default": [],
+      "description": "Typed, weighted, factor-attributed emotional investments in entities (institutions, countries, industries, other characters). Per DECISION-AFFINITY-PRIMITIVE.md: generic substrate primitive — football fans, political supporters, religious adherents, brand loyalists, anti-rivals, career idols all share this shape. State updates are O(1) symbolic SQL writes during world event emission (~$0 LLM cost); reactive LLM cognition is importance-gated via event_subscriptions on the affected character. Initial formation at spawn via per-industry factor weights (geography + family + childhood_hero dominate for football).",
+      "items": {
+        "type": "object",
+        "required": ["target_type", "target_id", "strength", "formed_at"],
+        "properties": {
+          "target_type": {
+            "type": "string",
+            "enum": ["institution", "country", "industry", "character"]
+          },
+          "target_id": {
+            "type": "string",
+            "description": "FK to the target entity's id."
+          },
+          "strength": {
+            "type": "number",
+            "minimum": -1.0,
+            "maximum": 1.0,
+            "description": "Negative = anti-fan / hater. Positive = supporter / fan. Magnitude = intensity. 0.0 = indifferent (not stored; only non-zero affinities are listed)."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["fan", "supporter", "adherent", "loyalist", "idolizer", "hater", "rival", "customer", "employee_affinity"],
+            "description": "Semantic flavor. Same strength magnitude can mean different things across domains (fan vs supporter)."
+          },
+          "factors": {
+            "type": "array",
+            "description": "Why this affinity formed. Each factor contributes weight to strength; weighted sum approximates strength magnitude. Per-industry weight defaults declared in industry config.",
+            "items": {
+              "type": "object",
+              "required": ["kind", "weight"],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": ["geography", "family", "childhood_hero", "workplace", "social", "aesthetic", "anti_rival", "career_arc", "brand_loyalty", "religion", "event_attendance", "personal_experience", "ideology"]
+                },
+                "weight": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                "ref": {
+                  "type": "string",
+                  "description": "Optional FK to the referenced entity (hero character_id, geographic lot_id, family character_id, etc.)"
+                },
+                "note": {
+                  "type": "string",
+                  "maxLength": 280,
+                  "description": "Optional editorial — 'Mum brought me to the stadium aged 6, never missed a match since.'"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "formed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "World-time when the affinity first formed."
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "World-time of last strength change. Used by decay logic."
+          },
+          "reinforcement_events": {
+            "type": "array",
+            "description": "Recent world events that reinforced or weakened this affinity. Capped at 20 most-recent for storage; older events folded into strength delta history. Used by reactive cognition to recall 'why I still care.'",
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "properties": {
+                "event_id": {"type": "string"},
+                "sim_time": {"type": "string", "format": "date-time"},
+                "delta_strength": {"type": "number", "minimum": -1.0, "maximum": 1.0},
+                "note": {"type": "string", "maxLength": 140}
+              }
+            }
+          }
+        },
+        "additionalProperties": false
       }
     },
 

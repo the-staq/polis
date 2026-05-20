@@ -16,7 +16,7 @@ personality:
   ambitions: [transfer_to_top_tier]
 cognition:
   model: claude-3-5-sonnet-20251022
-  decision_frequency: every_4h
+  decision_frequency_wall: every_4h
 professions:
   - industry: basketball-modern-earth
     profession_id: player

@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/sim_result.schema.json",
   "title": "SimResult",
-  "description": "The persisted, replayable record of one simulation run produced by the polis/sim/ substrate kernel. Closes the loop on sim_config.schema.json's output_schema_ref. SimResult is the orchestration-side envelope wrapping the kernel's in-process FinalState (polis/sim/contract.py) with the metadata required for replay, audit, ledger settlement, and narrative surfaces (V0-PLAN §3.8). Per DECISION-SIM-ENGINE.md. v0.1.0 ships the universal envelope + Event sub-schema; per-industry outcome shapes are declared by each industry's SimConfig.output_schema_ref override.",
+  "description": "The persisted, replayable record of one simulation run produced by the polis/sim/ substrate kernel. Closes the loop on sim_config.schema.json's output_schema_ref. SimResult is the orchestration-side envelope wrapping the kernel's in-process FinalState (polis/sim/contract.py) with the metadata required for replay, audit, ledger settlement, and narrative surfaces (V0-PLAN §3.8). Per DECISION-SIM-ENGINE.md. v0.1.0 ships the universal envelope + Event sub-schema; per-industry outcome shapes are declared by each industry's SimConfig.output_schema_ref override. v0.1.1 adds world_time_at_start and world_time_at_end per DECISION-TIME-MODEL.md (kernel emits events at world-time pace; wall-clock and world-clock are tracked separately).",
   "type": "object",
-  "version": "0.1.0",
+  "version": "0.1.1",
 
   "required": [
     "sim_id",
@@ -14,6 +14,8 @@
     "seed",
     "started_at",
     "ended_at",
+    "world_time_at_start",
+    "world_time_at_end",
     "sim_duration_seconds",
     "terminated_by",
     "event_log",
@@ -66,6 +68,18 @@
       "type": "string",
       "format": "date-time",
       "description": "Wall-clock UTC timestamp when sim execution finished. ISO 8601."
+    },
+
+    "world_time_at_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Per DECISION-TIME-MODEL.md: world-clock timestamp when the sim began emitting events. Under the one-clock-no-fast-forward model, the kernel emits events at world-time pace — this is the world clock value at the first event. sim_duration_seconds equals (world_time_at_end - world_time_at_start)."
+    },
+
+    "world_time_at_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Per DECISION-TIME-MODEL.md: world-clock timestamp when the sim finished emitting events. (world_time_at_end - world_time_at_start) should equal sim_duration_seconds. Note: ended_at (wall-clock) may differ — at 12× world rate, a 90-world-minute match takes 7.5 wall-min for emission."
     },
 
     "sim_duration_seconds": {

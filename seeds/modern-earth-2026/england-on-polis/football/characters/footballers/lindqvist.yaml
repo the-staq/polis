@@ -12,7 +12,7 @@ personality:
   traits: [raw, fearless, watches-Czerny-warm-up]
   values: [breakthrough-season, repaying-academy-investment]
   ambitions: [first-team-regular-by-21, tier-2-transfer-by-23]
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_4h }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_4h }
 professions:
   - industry: football-modern-earth
     profession_id: player

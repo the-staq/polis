@@ -24,7 +24,7 @@ personality:
 
 cognition:
   model: claude-3-5-sonnet-20251022
-  decision_frequency: every_8h
+  decision_frequency_wall: every_8h
   reasoning_temperature: 0.45
 
 professions:

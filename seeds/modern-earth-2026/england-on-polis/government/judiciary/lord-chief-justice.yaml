@@ -28,7 +28,7 @@ personality:
 
 cognition:
   model: claude-3-5-sonnet-20251022
-  decision_frequency: every_24h    # courts move slowly
+  decision_frequency_wall: every_24h    # courts move slowly
   reasoning_temperature: 0.3       # precedent-driven; low creativity
 
 professions:

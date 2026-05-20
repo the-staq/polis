@@ -16,7 +16,7 @@ personality:
   backstory:
     - "Eighteen months at Hartwell. Two League Cup minutes. Krys hasn't missed a game in fourteen."
     - "Wraysmoor City's first-choice keeper is out for the season; they want him on a six-month loan."
-cognition: { model: claude-3-5-sonnet-20251022, decision_frequency: every_4h }
+cognition: { model: claude-3-5-sonnet-20251022, decision_frequency_wall: every_4h }
 professions:
   - industry: football-modern-earth
     profession_id: player
