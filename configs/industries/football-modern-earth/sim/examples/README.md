@@ -91,21 +91,36 @@ At sim bootstrap, the football handler (`../handlers.py`):
 
 1. Walks this directory tree, loading all YAMLs
 2. Builds an in-memory index keyed by event type + (later) era + region tags
-3. For each LLM-driven decision point (shot_attempt, foul, dribble), the
-   handler:
+3. For each LLM-driven decision_point in rules.yaml, the handler:
    - Filters examples by event type
-   - Optionally filters further by current match state (e.g., "minute >= 75 +
-     trailing by 1 goal" might prefer desperation-pattern examples)
    - Selects up to N examples (prompt budget; default 5)
-   - Formats as a few-shot prompt block
-   - Passes to `sim.llm_hook.decide_with_examples(...)` (substrate hook
-     signature)
-4. The LLM hook returns an action + a brief narrative reason
-5. Handler emits the resulting Event into the sim log
+   - Threads them through `DecisionContext.examples` (Sequence[Example])
+   - Stub hooks ignore examples; real LLM hooks (V0.5+, polis-internal)
+     format them as few-shot anchors in the prompt
 
 For CI / deterministic test runs, the StubLLMHook ignores examples and uses
 the Poisson rates from `../derived_distributions.yaml` instead. Production
 runs (V0.5+, polis-internal) wire a real LLM.
+
+### V0 wiring status
+
+Not every event-type subdirectory is wired through a decision_point yet. The
+substrate is community-extensible, but contributors who add examples in an
+un-wired subdirectory should know their examples are LOADED but UNUSED at V0:
+
+| Event type | Wired at V0? | Where threaded |
+|---|---|---|
+| `shot/` | ✅ V0 | `shot_attempt` decision_type `shot_choice` |
+| `foul/` | ✅ V0 | `foul` decision_type `foul_severity` |
+| `card/` | 🟡 V0.5+ | (color picked by corpus rates today; severity is the foul-level decision) |
+| `dribble/` | 🟡 V0.5+ | (no `dribble` event in rules.yaml; add decision_point + thread) |
+| `goal/` | 🟡 V0.5+ | (celebration / commentary decision, V0.5+) |
+| `pass/` | 🟡 V0.5+ | (no `pass` event in rules.yaml; add decision_point + thread) |
+| `save/` | 🟡 V0.5+ | (currently bundled into shot outcome; future: goalkeeper decision_point) |
+
+Adding examples to 🟡 subdirectories is still valuable — they're picked up
+automatically when V0.5+ wires the matching decision_point, no contributor
+work re-needed at that point.
 
 ## Adding a new event type
 

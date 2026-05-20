@@ -31,7 +31,6 @@ Per V0-PLAN §5.1 rules:
 from __future__ import annotations
 
 import math
-from collections.abc import Iterable
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -212,7 +211,12 @@ def _schedule_next_match_event(sim: Sim) -> None:
 
 
 async def match_event(sim: Sim, _ctx: Action | None) -> None:
-    """A noteworthy match event happens. Pick shot vs foul, dispatch."""
+    """A noteworthy match event happens. Pick shot vs foul, dispatch.
+
+    `bernoulli(0.4)` possession-flip is a V0 hand-tuned default per
+    DECISION-CALIBRATION-SOURCE.md; V0.5+ derives from per-possession-
+    sequence transition rates in the corpus (or examples-driven).
+    """
     rates = sim.state["__rates"]
     sim.state["possession"] = _other_team(sim.state["possession"]) if sim.rng.bernoulli(0.4) else sim.state["possession"]
     if sim.rng.bernoulli(rates["p_shot_given_event"]):
@@ -227,10 +231,18 @@ async def shot_attempt(sim: Sim, _ctx: Action | None) -> None:
     Real LLM hooks (V0.5+) receive few-shot examples from ./examples/shot/
     via the DecisionContext.examples field — used as anchors for narrative
     generation. Stub hooks ignore examples and pick from legal_actions.
+
+    V0 placeholder bias factors (1.4 / 0.7 / 1.7 / 0.5 below) modulate the
+    aggregate corpus rates by close vs far shot kind. These are NOT corpus-
+    sourced — they're hand-tuned defaults so the close/far decision has
+    behavioral consequence at V0. Per DECISION-CALIBRATION-SOURCE.md, V0.5+
+    sources per-shot conversion from per-shot xG (StatsBomb-style BYO data
+    OR community-authored example outcome distributions), making these
+    hardcoded multipliers go away.
     """
     team = sim.state["possession"]
     rates = sim.state["__rates"]
-    examples_by_type = sim.state.get("__examples", {})
+    examples_by_type = sim.state["__examples"]
 
     decision = await sim.llm_hook.decide(
         DecisionContext(
@@ -265,7 +277,11 @@ async def shot_attempt(sim: Sim, _ctx: Action | None) -> None:
 
     if sim.rng.bernoulli(on_target_p):
         sim.state["shots_on_target"][team] += 1
-        if sim.rng.bernoulli(goal_p / max(on_target_p, 1e-6)):
+        # Conditional P(goal | on_target). Clamped to [0, 0.99] to handle
+        # edge cases where corpus rates + bias multipliers push the ratio
+        # over 1.0 (small-sample real data, non-football industries).
+        p_goal_given_on_target = min(0.99, goal_p / max(on_target_p, 1e-6))
+        if sim.rng.bernoulli(p_goal_given_on_target):
             await _score(sim, team, decision.action_type)
         else:
             sim.emit(actor_id=f"{team}_goalkeeper", action_type="save",
@@ -292,14 +308,46 @@ async def _score(sim: Sim, team: str, shot_kind: str) -> None:
 
 
 async def foul(sim: Sim, _ctx: Action | None) -> None:
-    """A foul occurs. Roll for cards using corpus-derived rates."""
+    """A foul occurs. Decision point: foul severity chosen via LLM hook.
+
+    Real LLM hooks (V0.5+) receive few-shot examples from ./examples/foul/
+    (tactical-foul-on-counter, reckless-challenge, etc.) via DecisionContext.
+    Stub hooks pick from legal_actions; card probabilities still come from
+    corpus rates regardless of severity at V0 (V0.5+ will modulate card
+    probability by chosen severity per example outcome distributions).
+    """
     rates = sim.state["__rates"]
+    examples_by_type = sim.state["__examples"]
     perpetrator = _other_team(sim.state["possession"])  # the defender commits
     sim.state["fouls"][perpetrator] += 1
+
+    decision = await sim.llm_hook.decide(
+        DecisionContext(
+            sim_time=sim.now,
+            character_id=f"{perpetrator}_defender",
+            decision_type="foul_severity",
+            legal_actions=["tactical", "reckless", "professional", "mistimed"],
+            state={
+                "perpetrator_team": perpetrator,
+                "minute": int(sim.now / 60),
+                "score": dict(sim.state["score"]),
+                "perpetrator_cards": {
+                    "yellows": sim.state["yellows"][perpetrator],
+                    "reds": sim.state["reds"][perpetrator],
+                },
+            },
+            examples=_examples_for(examples_by_type, "foul"),
+        )
+    )
+
     sim.emit(
         actor_id=f"{perpetrator}_defender",
         action_type="foul",
-        payload={"team": perpetrator, "minute": int(sim.now / 60)},
+        payload={
+            "team": perpetrator,
+            "minute": int(sim.now / 60),
+            "severity": decision.action_type,
+        },
     )
 
     if sim.rng.bernoulli(rates["p_red_given_foul"]):
@@ -307,14 +355,24 @@ async def foul(sim: Sim, _ctx: Action | None) -> None:
         sim.emit(
             actor_id=f"{perpetrator}_defender",
             action_type="card",
-            payload={"team": perpetrator, "color": "red", "minute": int(sim.now / 60)},
+            payload={
+                "team": perpetrator,
+                "color": "red",
+                "minute": int(sim.now / 60),
+                "severity": decision.action_type,
+            },
         )
     elif sim.rng.bernoulli(rates["p_yellow_given_foul"]):
         sim.state["yellows"][perpetrator] += 1
         sim.emit(
             actor_id=f"{perpetrator}_defender",
             action_type="card",
-            payload={"team": perpetrator, "color": "yellow", "minute": int(sim.now / 60)},
+            payload={
+                "team": perpetrator,
+                "color": "yellow",
+                "minute": int(sim.now / 60),
+                "severity": decision.action_type,
+            },
         )
 
     _schedule_next_match_event(sim)

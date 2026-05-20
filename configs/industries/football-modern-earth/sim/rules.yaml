@@ -60,6 +60,9 @@ events:
 
   - id: "foul"
     handler: "./handlers.py::foul"
+    decision_point: true
+    decision_type: "foul_severity"
+    legal_actions: ["tactical", "reckless", "professional", "mistimed"]
 
   - id: "half_time"
     handler: "./handlers.py::half_time"

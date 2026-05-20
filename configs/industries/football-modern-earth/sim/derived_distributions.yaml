@@ -50,7 +50,10 @@ metrics:
     mean: 0.13
     stdev: 0.34
     n: 0
-  # Per-shot xG mean — sim handlers compute shot_conversion = goals/shots.
+  # Per-shot xG mean. RESERVED for V0.5+ per-shot xG model in sim handlers;
+  # V0 handlers compute shot_conversion = goals_per_match / shots_per_match
+  # (aggregate) and don't read this field. Kept here so the corpus output
+  # shape stays stable when the V0.5+ handler upgrade lands.
   shot_xg:
     mean: 0.097
     stdev: 0.142

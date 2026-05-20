@@ -185,9 +185,9 @@ def test_calibration_means_match_distribution_within_tolerance():
         sem = obs_stdev / (N_MATCHES ** 0.5) if obs_stdev > 0 else 1.0
         band = K_SIGMA * sem
         delta = abs(obs_mean - target["mean"])
-        assert delta <= band + 1.5, (
+        assert delta <= band, (
             f"{name} sim mean {obs_mean:.2f} ± {sem:.2f} drifts from "
-            f"distribution mean {target['mean']:.2f} by {delta:.2f}; band={band:.2f}+1.5"
+            f"distribution mean {target['mean']:.2f} by {delta:.2f}; band={band:.2f} (K={K_SIGMA}σ)"
         )
 
     metrics = dist["metrics"]
