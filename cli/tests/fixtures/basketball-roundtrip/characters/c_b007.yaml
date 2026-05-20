@@ -24,7 +24,7 @@ professions:
     experience_years: 3
     current_institution_id: ravensby-fishers
     career_level: 1
-finances: { pol_balance: 4800, starter_capital_pol: 0 }
+finances: { coin_balance: 4800, starter_capital_coin: 0 }
 relationships:
   - { target_id: lambeth-sports-agency, target_type: institution, relation: agent_client, strength: 0.78 }
 state:

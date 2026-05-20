@@ -45,7 +45,7 @@ soft_skills:
   ego: 40
   work_ethic: 90
 
-finances: { pol_balance: 38400, starter_capital_pol: 0 }
+finances: { coin_balance: 38400, starter_capital_coin: 0 }
 
 relationships:
   - { target_id: c_chairman_brackensley, target_type: character, relation: trusted_by, strength: 0.84 }

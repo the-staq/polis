@@ -29,7 +29,7 @@ professions:
     experience_years: 11
     current_institution_id: ravensby-fishers
     career_level: 4
-finances: { pol_balance: 12800, starter_capital_pol: 0 }
+finances: { coin_balance: 12800, starter_capital_coin: 0 }
 relationships:
   - { target_id: c_b001, target_type: character, relation: rival, strength: 0.71, since_in_world: "2024-11-15" }
 state:

@@ -19,7 +19,7 @@ identity:
     most third minutes.
 
 governance: { structure: shareholder_board, decision_threshold: 0.51 }
-capital: { initial_treasury_pol: 110000, current_treasury_pol: 108000 }
+capital: { initial_treasury_coin: 110000, current_treasury_coin: 108000 }
 
 staff:
   roles:

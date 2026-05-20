@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/institution.schema.json",
   "title": "Institution",
-  "description": "A user-created institution within an industry inside a country in a world. Captures identity, governance, capital structure, staff hierarchy with reporting lines, industry-specific operational shapes, parent-subsidiary relationships, compensation structure, and reputation. Per V0-PLAN §5.0 — depth means staff hierarchy is real, not a flat members[] list.",
+  "description": "A user-created institution within an industry inside a country in a world. Captures identity, governance, capital structure, staff hierarchy with reporting lines, industry-specific operational shapes, parent-subsidiary relationships, compensation structure, and reputation. Per V0-PLAN §5.0 — depth means staff hierarchy is real, not a flat members[] list. v0.1.1 amends capital per DECISION-CURRENCY-MODEL.md: introduces initial_treasury_coin (V0 primary, required) + current_treasury_coin (readOnly from ledger); recasts pol counterparts as V0.5+ real-money rail; same Coin-first rename applied to debt_facilities.principal_coin and share_capital_coin.",
   "type": "object",
-  "version": "0.1.0",
+  "version": "0.1.1",
 
   "required": [
     "id",
@@ -147,33 +147,69 @@
 
     "capital": {
       "type": "object",
-      "required": ["initial_treasury_pol"],
+      "required": ["initial_treasury_coin"],
+      "description": "Per DECISION-CURRENCY-MODEL.md: V0 ships Coin only. POL is V0.5+. Coin and POL never convert. Treasury balance fields (current_*) are readOnly views from the ledger per DECISION-LEDGER.md §10.2.",
       "properties": {
+        "initial_treasury_coin": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Capital at founding, in Coin (V0 primary currency). Was initial_treasury_pol pre-v0.1.1; renamed when Coin became V0 primary per DECISION-CURRENCY-MODEL.md."
+        },
+        "current_treasury_coin": {
+          "type": "number",
+          "minimum": 0,
+          "readOnly": true,
+          "description": "Snapshot of current Coin treasury — substrate-tracked, derived from the polis/sim ledger. Never authored."
+        },
         "initial_treasury_pol": {
           "type": "number",
           "minimum": 0,
-          "description": "Capital at founding."
+          "default": 0,
+          "description": "V0.5+ POL capital injection (wrapped USDC). Stays 0 at V0 when POL rail is dormant. When non-zero, requires KYC + chain settlement per DECISION-CHAIN.md."
         },
         "current_treasury_pol": {
           "type": "number",
           "minimum": 0,
-          "description": "Snapshot — substrate-tracked, not authored."
+          "default": 0,
+          "readOnly": true,
+          "description": "V0.5+ on-chain POL balance. Stays 0 at V0. Derived from the POL ledger after chain confirmation via the on-chain sweep pattern (DECISION-LEDGER.md §9)."
         },
         "debt_facilities": {
           "type": "array",
+          "description": "Inter-institution loans. At V0 all loans are Coin-denominated; principal_coin is required. principal_pol is V0.5+ when POL exists.",
           "items": {
             "type": "object",
-            "required": ["lender_institution_id", "principal_pol", "interest_rate"],
+            "required": ["lender_institution_id", "principal_coin", "interest_rate"],
             "properties": {
               "lender_institution_id": {"type": "string"},
-              "principal_pol": {"type": "number", "minimum": 0},
+              "principal_coin": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Loan principal in Coin (V0). Was principal_pol pre-v0.1.1."
+              },
+              "principal_pol": {
+                "type": "number",
+                "minimum": 0,
+                "default": 0,
+                "description": "V0.5+ POL-denominated principal. Stays 0 at V0."
+              },
               "interest_rate": {"type": "number", "minimum": 0, "maximum": 1},
               "term_months": {"type": "integer", "minimum": 1},
               "covenants": {"type": "array", "items": {"type": "string"}}
             }
           }
         },
-        "share_capital_pol": {"type": "number", "minimum": 0}
+        "share_capital_coin": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Equity capital denominated in Coin (V0). Was share_capital_pol pre-v0.1.1."
+        },
+        "share_capital_pol": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0,
+          "description": "V0.5+ POL-denominated share capital. Stays 0 at V0."
+        }
       }
     },
 

@@ -35,7 +35,7 @@ soft_skills:
   ego: 40
   work_ethic: 85
 
-finances: { pol_balance: 22800, starter_capital_pol: 0 }
+finances: { coin_balance: 22800, starter_capital_coin: 0 }
 relationships:
   - { target_id: c_adaeze-okoye, target_type: character, relation: respects, strength: 0.66 }
   - { target_id: c_marquez, target_type: character, relation: tactical-trust, strength: 0.74 }

@@ -48,8 +48,8 @@ governance:
       # 10 other clubs in real league; CI fixture only seeds 2
 
 capital:
-  initial_treasury_pol: 200000
-  current_treasury_pol: 245000
+  initial_treasury_coin: 200000
+  current_treasury_coin: 245000
 
 staff:
   roles:

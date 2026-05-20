@@ -35,8 +35,8 @@ governance:
       - { holder_id: c_b016, holder_type: character, shares: 1000, share_class: common }
 
 capital:
-  initial_treasury_pol: 180000
-  current_treasury_pol: 312000
+  initial_treasury_coin: 180000
+  current_treasury_coin: 312000
 
 staff:
   roles:

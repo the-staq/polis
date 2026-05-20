@@ -48,7 +48,7 @@ professions:
     current_institution_id: hm-government-foxbridge
     career_level: 3
 
-finances: { pol_balance: 13800, starter_capital_pol: 0 }
+finances: { coin_balance: 13800, starter_capital_coin: 0 }
 
 relationships:
   - { target_id: c_pm_pell-whitcombe, target_type: character, relation: party_loyal, strength: 0.68 }

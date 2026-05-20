@@ -74,8 +74,8 @@ soft_skills:
   work_ethic: 88
 
 finances:
-  pol_balance: 0                # estate distributed; record retained for audit
-  starter_capital_pol: 0
+  coin_balance: 0                # estate distributed; record retained for audit
+  starter_capital_coin: 0
 
 relationships:
   - { target_id: c_marsh-bennett, target_type: character, relation: mentee, strength: 0.80, since_in_world: "2014-09-01" }

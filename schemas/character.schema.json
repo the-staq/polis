@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/character.schema.json",
   "title": "Character",
-  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces), professions, finances, relationships, principal-agent governance. v0.1.1 adds soft_skills (canonical 9-attribute taxonomy per soft_skills.schema.json) and per-profession skills_metadata (last skill-tick week, training-load) so engine SkillTickWorkflow can evolve hard-skill values over in-world time per polis/SKILLS-DESIGN.md. v0.1.2 adds state.vital_status (life_expectancy, biological_age_modifier, chronic_conditions, death_event) referencing mortality.schema.json so the substrate can model needs-driven and acute-cause death per polis/MORTALITY-DESIGN.md.",
+  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces), professions, finances, relationships, principal-agent governance. v0.1.1 adds soft_skills (canonical 9-attribute taxonomy per soft_skills.schema.json) and per-profession skills_metadata (last skill-tick week, training-load) so engine SkillTickWorkflow can evolve hard-skill values over in-world time per polis/SKILLS-DESIGN.md. v0.1.2 adds state.vital_status (life_expectancy, biological_age_modifier, chronic_conditions, death_event) referencing mortality.schema.json so the substrate can model needs-driven and acute-cause death per polis/MORTALITY-DESIGN.md. v0.1.3 amends finances per DECISION-CURRENCY-MODEL.md: introduces coin_balance (V0 primary, readOnly from ledger) + currency_unit display field; recasts pol_balance as V0.5+ readOnly real-money rail; renames starter_capital_pol → starter_capital_coin to match Coin-first V0 posture.",
   "type": "object",
-  "version": "0.1.2",
+  "version": "0.1.3",
 
   "required": [
     "id",
@@ -226,11 +226,31 @@
 
     "finances": {
       "type": "object",
+      "description": "Per DECISION-CURRENCY-MODEL.md: V0 ships Coin only (off-chain, Postgres ledger). POL is V0.5+ real-money rail. Coin and POL never convert — parallel economies. Balance fields are readOnly views derived from the ledger (DECISION-LEDGER.md §10.2) — never authored at spawn.",
       "properties": {
-        "pol_balance": {"type": "number", "minimum": 0, "default": 0},
+        "coin_balance": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0,
+          "readOnly": true,
+          "description": "V0 primary balance — in-substrate Coin. Derived from polis/sim ledger via LedgerPort.get_balance. Authored only as starter_capital_coin at spawn; thereafter substrate-tracked."
+        },
+        "pol_balance": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0,
+          "readOnly": true,
+          "description": "V0.5+ on-chain POL balance (wrapped USDC). Stays 0 at V0 (no real-money rail). Derived from the POL ledger; never directly authored."
+        },
+        "currency_unit": {
+          "type": "string",
+          "default": "COIN",
+          "description": "Display unit for coin_balance. 'COIN' is the substrate default; per-country Coin symbols (e.g. 'HRT' for Hartshire pound per country.currency.symbol) apply at V0.5+ when country currencies launch as their own Coin instances per DECISION-CURRENCY-MODEL.md §3."
+        },
         "country_currency_balances": {
           "type": "object",
-          "description": "Map keyed by currency symbol. Substrate-tracked, not authored at spawn (except for starter capital)."
+          "description": "Map keyed by country currency symbol → balance. Per DECISION-CURRENCY-MODEL.md: country currencies launch as per-country Coin instances (off-chain at V0); on-chain country currencies are V1+ opt-in. Substrate-tracked, not authored at spawn (except for starter capital).",
+          "readOnly": true
         },
         "properties_owned": {
           "type": "array",
@@ -242,10 +262,11 @@
           "items": {"type": "string"},
           "description": "Foreign keys to institution.schema.json — full or partial ownership; details via institution.governance.ownership."
         },
-        "starter_capital_pol": {
+        "starter_capital_coin": {
           "type": "number",
           "minimum": 0,
-          "description": "Initial capital at spawn. Per PRD §11.1 — 5K POL default, varies by character_role."
+          "default": 0,
+          "description": "Initial Coin capital at spawn. Per PRD §11.1 — 5K Coin default at V0, varies by character_role. (Was starter_capital_pol pre-v0.1.3; renamed when Coin became V0 primary per DECISION-CURRENCY-MODEL.md.)"
         }
       }
     },

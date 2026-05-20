@@ -19,7 +19,7 @@ identity:
     not "The Awl."
 
 governance: { structure: shareholder_board, decision_threshold: 0.51 }
-capital: { initial_treasury_pol: 165000, current_treasury_pol: 178000 }
+capital: { initial_treasury_coin: 165000, current_treasury_coin: 178000 }
 
 staff:
   roles:

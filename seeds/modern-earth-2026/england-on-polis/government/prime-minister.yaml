@@ -72,8 +72,8 @@ professions:
     certifications_held: []
 
 finances:
-  pol_balance: 14400              # PM salary + accumulated savings; modest by office holders
-  starter_capital_pol: 0
+  coin_balance: 14400              # PM salary + accumulated savings; modest by office holders
+  starter_capital_coin: 0
 
 relationships:
   - { target_id: c_treasury_minister, target_type: character, relation: trusted_lieutenant, strength: 0.86, since_in_world: "2024-06-01" }

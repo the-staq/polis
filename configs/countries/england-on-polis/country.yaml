@@ -107,7 +107,8 @@ citizenship:
   stripping_requires_judicial_ruling: true
 
 currency:
-  enabled: false   # V0: country uses POL only, no separate country mint
+  enabled: false   # V0: country uses substrate-default COIN; no separate country mint
+  realm: coin      # V0 default per DECISION-CURRENCY-MODEL.md (off-chain). on-chain is V1+ opt-in
 
 taxation:
   income_tax:

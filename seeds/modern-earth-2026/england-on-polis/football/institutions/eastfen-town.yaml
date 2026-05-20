@@ -18,7 +18,7 @@ identity:
     who arrive on time find out why.
 
 governance: { structure: shareholder_board, decision_threshold: 0.51 }
-capital: { initial_treasury_pol: 130000, current_treasury_pol: 124000 }
+capital: { initial_treasury_coin: 130000, current_treasury_coin: 124000 }
 
 staff:
   roles:

@@ -38,8 +38,8 @@ governance:
       - { holder_id: ravensby-fishers-supporters-trust, holder_type: institution, shares: 480, share_class: cooperative }
 
 capital:
-  initial_treasury_pol: 60000
-  current_treasury_pol: 71000
+  initial_treasury_coin: 60000
+  current_treasury_coin: 71000
 
 staff:
   roles:

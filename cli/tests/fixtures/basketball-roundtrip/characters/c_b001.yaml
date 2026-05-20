@@ -36,8 +36,8 @@ professions:
     career_level: 2
     certifications_held: []
 finances:
-  pol_balance: 18400
-  starter_capital_pol: 0
+  coin_balance: 18400
+  starter_capital_coin: 0
 relationships:
   - { target_id: c_b018, target_type: character, relation: respects, strength: 0.82, since_in_world: "2024-09-01" }
   - { target_id: c_b006, target_type: character, relation: rival, strength: 0.71, since_in_world: "2024-11-15" }

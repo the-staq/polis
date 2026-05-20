@@ -25,8 +25,8 @@ governance:
   structure: shareholder_board
   decision_threshold: 0.51
 capital:
-  initial_treasury_pol: 540000
-  current_treasury_pol: 612000
+  initial_treasury_coin: 540000
+  current_treasury_coin: 612000
 
 staff:
   roles:

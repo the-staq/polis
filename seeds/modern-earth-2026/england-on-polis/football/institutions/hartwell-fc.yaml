@@ -42,8 +42,8 @@ governance:
       - { holder_id: c_director_pickering, holder_type: character, shares: 240, share_class: common }
 
 capital:
-  initial_treasury_pol: 184320   # matches design's hero stat ("₽184,320 treasury")
-  current_treasury_pol: 184320
+  initial_treasury_coin: 184320   # matches design's hero stat ("₽184,320 treasury")
+  current_treasury_coin: 184320
   debt_facilities: []
 
 staff:

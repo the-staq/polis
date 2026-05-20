@@ -92,8 +92,8 @@ soft_skills:
   work_ethic: 92
 
 finances:
-  pol_balance: 18200
-  starter_capital_pol: 0
+  coin_balance: 18200
+  starter_capital_coin: 0
 
 relationships:
   - { target_id: c_marsh-bennett, target_type: character, relation: trusts, strength: 0.78 }

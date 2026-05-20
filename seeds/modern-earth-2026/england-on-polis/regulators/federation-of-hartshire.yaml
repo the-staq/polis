@@ -33,8 +33,8 @@ governance:
     - { character_id: null, role: Treasurer, voting_weight: 1.0 }
 
 capital:
-  initial_treasury_pol: 1500000
-  current_treasury_pol: 1840000
+  initial_treasury_coin: 1500000
+  current_treasury_coin: 1840000
 
 staff:
   roles:

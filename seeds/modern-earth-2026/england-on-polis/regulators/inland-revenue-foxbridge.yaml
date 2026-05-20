@@ -29,8 +29,8 @@ governance:
     - { character_id: c_treasury_minister, role: Political Lead (Treasury Minister), appointed_in_world: "2024-06-01", voting_weight: 1.0 }
 
 capital:
-  initial_treasury_pol: 0
-  current_treasury_pol: 0
+  initial_treasury_coin: 0
+  current_treasury_coin: 0
 
 staff:
   roles:

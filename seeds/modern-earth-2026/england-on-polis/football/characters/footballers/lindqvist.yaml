@@ -37,7 +37,7 @@ soft_skills:
   ego: 35
   work_ethic: 85
 
-finances: { pol_balance: 2400, starter_capital_pol: 0 }
+finances: { coin_balance: 2400, starter_capital_coin: 0 }
 relationships:
   - { target_id: c_czerny, target_type: character, relation: mentor, strength: 0.81 }
   - { target_id: c_bonsu, target_type: character, relation: peer, strength: 0.72 }

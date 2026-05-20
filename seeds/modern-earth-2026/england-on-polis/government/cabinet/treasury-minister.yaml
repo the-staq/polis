@@ -54,8 +54,8 @@ professions:
     career_level: 4
 
 finances:
-  pol_balance: 22300
-  starter_capital_pol: 0
+  coin_balance: 22300
+  starter_capital_coin: 0
 
 relationships:
   - { target_id: c_pm_pell-whitcombe, target_type: character, relation: trusted_lieutenant, strength: 0.86, since_in_world: "2024-06-01" }

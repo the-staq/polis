@@ -37,7 +37,7 @@ soft_skills:
   ego: 60
   work_ethic: 92
 
-finances: { pol_balance: 26800, starter_capital_pol: 0 }
+finances: { coin_balance: 26800, starter_capital_coin: 0 }
 state:
   is_alive: true
   location_lot_id: lot_hartshire_hartwell_player-flats

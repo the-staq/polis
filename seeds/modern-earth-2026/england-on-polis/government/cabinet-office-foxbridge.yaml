@@ -29,8 +29,8 @@ governance:
     - { character_id: c_cabinet_secretary, role: Cabinet Secretary (head), appointed_in_world: "2018-04-15", voting_weight: 1.0 }
 
 capital:
-  initial_treasury_pol: 0
-  current_treasury_pol: 0
+  initial_treasury_coin: 0
+  current_treasury_coin: 0
 
 staff:
   roles:

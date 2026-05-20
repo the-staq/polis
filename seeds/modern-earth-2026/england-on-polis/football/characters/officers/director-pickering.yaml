@@ -41,7 +41,7 @@ soft_skills:
   ego: 65
   work_ethic: 80
 
-finances: { pol_balance: 51800, starter_capital_pol: 0 }
+finances: { coin_balance: 51800, starter_capital_coin: 0 }
 
 state: {  is_alive: true, location_lot_id: lot_hartshire_hartwell_cattlemarket-park, public_reputation: 56, current_form: 7.0, cycle_state: settled, vital_status: { life_expectancy_age: 79, biological_age_modifier: 1, chronic_conditions: [], death_event: null } }
 governance:

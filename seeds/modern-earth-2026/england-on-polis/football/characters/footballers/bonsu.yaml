@@ -36,7 +36,7 @@ soft_skills:
   ego: 30
   work_ethic: 88
 
-finances: { pol_balance: 14200, starter_capital_pol: 0 }
+finances: { coin_balance: 14200, starter_capital_coin: 0 }
 relationships:
   - { target_id: c_czerny, target_type: character, relation: mentee, strength: 0.78 }
   - { target_id: c_marsh-bennett, target_type: character, relation: respects, strength: 0.71 }

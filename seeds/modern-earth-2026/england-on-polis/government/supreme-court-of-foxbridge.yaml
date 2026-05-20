@@ -32,8 +32,8 @@ governance:
     # over time; each carries the 'judge' profession from the governance industry.
 
 capital:
-  initial_treasury_pol: 0
-  current_treasury_pol: 0
+  initial_treasury_coin: 0
+  current_treasury_coin: 0
 
 staff:
   roles:

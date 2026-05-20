@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/country.schema.json",
   "title": "Country",
-  "description": "A country template in a Polis world. Captures jurisdictional structure, government, laws, taxation, citizenship, regulatory bodies, foreign policy, plus the bound constraints that encode substrate guardrails (engine hard floors, constructive bounds, contribution review gates, runtime, cross-country, termination). Authored by the staq or via Tier 2 contribution; not in-app foundable.",
+  "description": "A country template in a Polis world. Captures jurisdictional structure, government, laws, taxation, citizenship, regulatory bodies, foreign policy, plus the bound constraints that encode substrate guardrails (engine hard floors, constructive bounds, contribution review gates, runtime, cross-country, termination). Authored by the staq or via Tier 2 contribution; not in-app foundable. v0.1.2 amends currency per DECISION-CURRENCY-MODEL.md: adds realm enum ('coin' V0 default | 'on-chain' V1+ opt-in). Country currencies launch as off-chain per-country Coin instances; on-chain-specific fields (initial_peg_pol, reserve_requirement, max_daily_mint_ratio) apply only when realm='on-chain'.",
   "type": "object",
-  "version": "0.1.1",
+  "version": "0.1.2",
 
   "required": [
     "id",
@@ -369,12 +369,18 @@
     "currency": {
       "type": "object",
       "required": ["enabled"],
-      "description": "Country's own currency (in addition to POL). Optional — country can use POL only.",
+      "description": "Country's own currency. Per DECISION-CURRENCY-MODEL.md: country currencies launch as per-country Coin instances (off-chain, Postgres ledger); on-chain country currencies are a V1+ opt-in via realm='on-chain'. Optional — country can use only the substrate-default COIN.",
       "properties": {
         "enabled": {
           "type": "boolean",
           "default": false,
-          "description": "If false (V0 default for england-on-polis), POL is the only legal tender; the rest of this object is ignored."
+          "description": "If false (V0 default for england-on-polis), the substrate-default COIN is the only legal tender; the rest of this object is ignored. When true, this country issues its own currency per realm."
+        },
+        "realm": {
+          "type": "string",
+          "enum": ["coin", "on-chain"],
+          "default": "coin",
+          "description": "Per DECISION-CURRENCY-MODEL.md: 'coin' (V0 default) means this currency lives off-chain in the Postgres ledger — instant transfers, no chain settlement, no gas. 'on-chain' (V1+ opt-in) means the currency mints as an ERC-20 (or SPL) on the chain locked in DECISION-CHAIN.md; AMM pool seeded against POL; subject to gas, audit, KYC, and on-chain settlement latency. On-chain-specific fields below (initial_peg_pol, monetary_policy.reserve_requirement, monetary_policy.max_daily_mint_ratio) apply only when realm='on-chain'."
         },
         "symbol": {"type": "string", "minLength": 2, "maxLength": 4},
         "name": {"type": "string"},
@@ -382,7 +388,7 @@
           "type": "number",
           "minimum": 0.0001,
           "maximum": 10000,
-          "description": "Initial peg vs POL. AMM pool seeded with this rate."
+          "description": "Initial peg vs POL. AMM pool seeded with this rate. APPLIES ONLY when realm='on-chain' (V1+); ignored when realm='coin' (V0 default)."
         },
         "monetary_policy": {
           "type": "object",

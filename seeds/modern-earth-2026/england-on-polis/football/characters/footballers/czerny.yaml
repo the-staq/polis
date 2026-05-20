@@ -72,8 +72,8 @@ soft_skills:
   work_ethic: 80
 
 finances:
-  pol_balance: 41800
-  starter_capital_pol: 0
+  coin_balance: 41800
+  starter_capital_coin: 0
 
 relationships:
   - { target_id: c_marquez, target_type: character, relation: respects, strength: 0.74 }

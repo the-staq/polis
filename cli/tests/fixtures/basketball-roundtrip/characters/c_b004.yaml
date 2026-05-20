@@ -28,7 +28,7 @@ professions:
     experience_years: 12
     current_institution_id: foxbridge-titans
     career_level: 5
-finances: { pol_balance: 84200, starter_capital_pol: 0 }
+finances: { coin_balance: 84200, starter_capital_coin: 0 }
 relationships:
   - { target_id: c_b001, target_type: character, relation: mentor, strength: 0.84 }
   - { target_id: c_b018, target_type: character, relation: confidante, strength: 0.91 }

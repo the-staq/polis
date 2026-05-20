@@ -57,8 +57,8 @@ governance:
       - { holder_id: c_user_renata_marquez, holder_type: character, shares: 100 }
 
 capital:
-  initial_treasury_pol: 5000     # met agency min_capital_pol from industry.yaml
-  current_treasury_pol: 8400
+  initial_treasury_coin: 5000     # met agency min_capital_pol from industry.yaml
+  current_treasury_coin: 8400
 
 staff:
   roles:
