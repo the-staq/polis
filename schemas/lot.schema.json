@@ -58,13 +58,13 @@
       "properties": {
         "provider": {
           "type": "string",
-          "enum": ["nominatim_osm", "user_pinned"],
-          "description": "V0 only nominatim_osm + user_pinned. Future bumps add mapbox / google_maps."
+          "enum": ["nominatim_osm", "mapbox", "user_pinned"],
+          "description": "V0: nominatim_osm (production), mapbox (local-dev only), user_pinned. Future bumps add google_maps."
         },
         "osm_type": {
           "type": ["string", "null"],
-          "enum": ["node", "way", "relation", null],
-          "description": "OSM feature type. Together with osm_id forms the unique identity. null for user_pinned (no upstream)."
+          "enum": ["node", "way", "relation", "mapbox_feature", null],
+          "description": "Provider-specific feature type. For nominatim_osm: node/way/relation. For mapbox: 'mapbox_feature' sentinel (synthesized because Mapbox doesn't expose OSM ids). null for user_pinned."
         },
         "osm_id": {
           "type": ["integer", "null"],
