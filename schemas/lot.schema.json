@@ -100,7 +100,8 @@
         "owner_id": {"type": ["string", "null"]},
         "owner_type": {
           "type": "string",
-          "enum": ["character", "institution", "country_treasury", "subdivision_council", "unowned"]
+          "enum": ["polis_sovereign", "character", "institution", "country_treasury", "subdivision_council", "unowned"],
+          "description": "polis_sovereign is the default at world creation per DECISION-OWNERSHIP-DEFAULT.md (11th locked decision). Lots are owned by Polis until acquired via commerce, grant, or transfer."
         },
         "acquired_in_world": {"type": ["string", "null"], "format": "date"},
         "acquisition_price_pol": {"type": ["number", "null"], "minimum": 0}
