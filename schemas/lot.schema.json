@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/lot.schema.json",
   "title": "Lot",
-  "description": "Smallest land unit in the substrate's geographic hierarchy (per PRD §6.7 + §7). Country → state/province → city → district → lot. Each lot has coordinates, zoning, ownership, optional rental, optional improvements, property tax, and natural endowments (per PRD §8.2 — endowments are the only zero-input economic class).",
+  "description": "Smallest land unit in the substrate's geographic hierarchy (per PRD §6.7 + §7). Country → state/province → city → district → lot. Each lot has coordinates, zoning, ownership, optional rental, optional improvements, property tax, and natural endowments (per PRD §8.2 — endowments are the only zero-input economic class). v0.3.0 adds Coin pricing fields (base_price_coin, monthly_cost_coin, trajectory_label) per DECISION-ONBOARDING-ALPHA.md D6 + D11 — V0 starter Lots are priced in Coin (V0 is Coin-only per V0-PLAN §1). The existing base_price_pol / current_price_pol fields stay as V0.5+ fields when POL issuance lands.",
   "type": "object",
-  "version": "0.2.0",
+  "version": "0.3.0",
 
   "required": [
     "id",
@@ -132,6 +132,24 @@
       "type": "number",
       "minimum": 0,
       "description": "Current market price. Substrate-tracked, not authored."
+    },
+
+    "base_price_coin": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "V0 starter purchase price in Coin (V0-PLAN §1 binding: Coin-only). Locked at lot seed by the pre-alpha founder script per DECISION-ONBOARDING-ALPHA.md §3.2. Wizard /onboard/lot deducts this from the user's starter Coin grant inside the atomic spawn transaction. Null for non-starter lots seeded post-alpha (where pricing flows through the V0.5+ POL pathway only). v0.3.0 added per DECISION-ONBOARDING-ALPHA.md D6."
+    },
+
+    "monthly_cost_coin": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "V0 monthly upkeep in Coin (rent + maintenance for the trajectory). Drives the wizard's runway-after-spawn computation (weeks = (wallet - price) / monthly). Substrate workflows debit this on the world-clock month boundary. Null when base_price_coin is null. v0.3.0 added per DECISION-ONBOARDING-ALPHA.md D6."
+    },
+
+    "trajectory_label": {
+      "type": ["string", "null"],
+      "enum": ["cheap-grind", "mid-stretch", "stretch", "debt-early", null],
+      "description": "V0 starter-trajectory category embedded in the Lot card UI (no separate trajectory wizard step per D6). Wizard /onboard/lot renders 4 cards, one per trajectory, per curated district. 'debt-early' is reserved for the V0.5+ loan mechanism (per D11: V0 does NOT ship loans; all V0 starter Lots are 'cheap-grind' | 'mid-stretch' | 'stretch'). Null for non-starter lots. v0.3.0 added per DECISION-ONBOARDING-ALPHA.md D6 + D11."
     },
 
     "ownership": {
