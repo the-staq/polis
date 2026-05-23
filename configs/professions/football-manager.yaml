@@ -1,0 +1,43 @@
+---
+# Profession: Football Manager
+# Per profession.schema.json v0.1.0; P1 substrate-design-locked.md D24 worked example
+# Calibration source: D23 HYBRID — ONS occupation "Sports & fitness occupations"
+# median + premium for management; rounded to 1500 Coin/wk in P0.5 v2 (was 1800 in v1).
+id: football-manager
+name: Football Manager
+description: Manages a football club's tactics, signings, and squad. High-wage profession; employer = football-club institution.
+
+# Per D24 formula: max(lot_one_time_purchase × 1.25, 2 × weekly_runway)
+# Camden 1BR lot ≈ 2400 Coin purchase + ≈ 200/wk upkeep + ≈ 200/wk consumption
+# = max(2400 × 1.25, 2 × (200+200)) = max(3000, 800) = 3000
+starter_grant_coin: 3000
+
+# Per ONS + P0.5 v2 tightening (was 1800 in v1; 1500 in v2 — still high relative to barista)
+wages_weekly_coin: 1500
+
+# Maps to institution.kind for spawn proc employer_party_id seeding
+employer_institution_template: football-club
+
+commerce_role_hints:
+  preferred_vendor_categories: [football-club, pub, gym]
+  required_utilities: [transit_weekly]
+
+skills_baseline:
+  tactics: 60
+  player_management: 55
+  press_conference: 45
+  scouting: 50
+
+cognition_routing:
+  decision_frequency_wall: every_4h
+  event_subscriptions:
+    - match_start
+    - match_end
+    - transfer_offer
+    - press_mention
+    - injury_news
+    - team_selection
+    - employer_event
+    - need_threshold
+
+version: "0.1.0"

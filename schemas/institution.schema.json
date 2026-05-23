@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/institution.schema.json",
   "title": "Institution",
-  "description": "A user-created institution within an industry inside a country in a world. Captures identity, governance, capital structure, staff hierarchy with reporting lines, industry-specific operational shapes, parent-subsidiary relationships, compensation structure, and reputation. Per V0-PLAN §5.0 — depth means staff hierarchy is real, not a flat members[] list. v0.1.1 amends capital per DECISION-CURRENCY-MODEL.md: introduces initial_treasury_coin (V0 primary, required) + current_treasury_coin (readOnly from ledger); recasts pol counterparts as V0.5+ real-money rail; same Coin-first rename applied to debt_facilities.principal_coin and share_capital_coin.",
+  "description": "A user-created institution within an industry inside a country in a world. Captures identity, governance, capital structure, staff hierarchy with reporting lines, industry-specific operational shapes, parent-subsidiary relationships, compensation structure, and reputation. Per V0-PLAN §5.0 — depth means staff hierarchy is real, not a flat members[] list. v0.1.1 amends capital per DECISION-CURRENCY-MODEL.md: introduces initial_treasury_coin (V0 primary, required) + current_treasury_coin (readOnly from ledger); recasts pol counterparts as V0.5+ real-money rail; same Coin-first rename applied to debt_facilities.principal_coin and share_capital_coin. **v0.1.2 (2026-05-23, P2 Phase A.3) ADDITIVE per P1 D12 institutions-as-employers:** adds kind (matches profession.employer_institution_template for spawn proc employer lookup); employer_of[] (denormalized character_id list for fast reverse-lookup; maintained transactionally per Codex #16 fix); wage_rates (per-institution profession_id → weekly Coin wage override; falls back to profession.wages_weekly_coin per Codex #17 lock); treasury_account_id (pgledger account holding institution treasury; seeded from polis_sovereign at world creation per Codex B8). All additive; backward-compatible with v0.1.1 institutions.",
   "type": "object",
-  "version": "0.1.1",
+  "version": "0.1.2",
 
   "required": [
     "id",
@@ -48,6 +48,32 @@
     "type": {
       "type": "string",
       "description": "Must be one of the institution_types declared by the industry (e.g. football allows 'club', 'league', 'federation', 'agency', 'media_outlet', 'academy')."
+    },
+
+    "kind": {
+      "type": "string",
+      "description": "Per P1 D12 (v0.1.2 add): substrate-level institution kind for spawn-proc employer lookup. Matches profession.employer_institution_template. Examples: cafe, pub, gym, football-club, grocery, transit-operator, freelance-marketplace. NULLable on existing v0.1.1 institutions (backward-compatible).",
+      "enum": ["cafe", "pub", "gym", "football-club", "grocery", "transit-operator", "freelance-marketplace", "other"]
+    },
+
+    "employer_of": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": [],
+      "description": "Per P1 D12 (v0.1.2 add) + Codex #16 fix: denormalized list of character_ids this institution employs. Maintained transactionally — spawn proc INSERTs to this array when setting character.professions[0].employer_party_id; CharacterLifeWorkflow termination removes. Source-of-truth is the join (character.professions[0].employer_party_id = institution.id); employer_of[] is the reverse-index cache for fast queries (e.g., needs_tick activity weekly wage credit iteration)."
+    },
+
+    "wage_rates": {
+      "type": "object",
+      "default": {},
+      "additionalProperties": {"type": "integer", "minimum": 0},
+      "description": "Per P1 D12 (v0.1.2 add) + Codex #17 lock: mapping of profession_id → weekly Coin wage paid BY THIS INSTITUTION to chars in that profession. OVERRIDES profession.wages_weekly_coin default. needs_tick activity weekly wage credit reads institution.wage_rates[char.profession_id], falls back to profession.wages_weekly_coin if missing. Allows per-institution wage premium/discount (e.g., Hartwell FC pays its assistant manager 1700 Coin/wk vs the football-manager profession default of 1500)."
+    },
+
+    "treasury_account_id": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "Per P1 D12 + D18 + Codex B8 (v0.1.2 add): pgledger account id (pgla_*) holding this institution's treasury. SEEDED at world creation (per phase A.6 data-migration step) by transferring from polis_sovereign_treasury. NULL on legacy v0.1.1 institutions; populated by the alembic migration that introduces this field for all existing institutions in the same migration."
     },
 
     "identity": {

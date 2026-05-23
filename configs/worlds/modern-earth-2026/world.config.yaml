@@ -1,0 +1,54 @@
+---
+# World config: Modern Earth 2026
+# Per world.schema.json v0.1.3 + P1 substrate-design-locked.md D3+D4
+# Per DECISION-WORLD-SHAPE.md (real-world ownership, need-based seeding, London anchor)
+# Per DECISION-TIME-MODEL.md (12x rate, single canonical clock)
+id: modern-earth-2026
+name: Modern Earth 2026
+description: V0 alpha — substrate-validation world. London anchor. Universal earn-to-spend loop with multi-axis essentials.
+era: modern-earth-2026
+tech_level: contemporary-2026
+
+geography:
+  countries: [england-on-polis]
+
+calendar:
+  system: gregorian
+  in_world_day_per_real_day: 12.0
+  heartbeat_world_seconds: 3600
+  current_in_world_date: "2026-08-15"
+  world_start_date_in_world: "2026-08-15"
+  # Per P1 D3+D4: AXES are world-content; SHAPE is substrate
+  needs_axes:
+    - hunger
+    - fatigue
+    - shelter
+    - social
+
+physics:
+  realism: newtonian
+
+economic_base:
+  currency: COIN
+
+moderation:
+  tier: alpha
+
+age_gate:
+  min_age: 18
+
+available_languages: [en]
+
+visibility: alpha-invite
+
+status: alpha
+
+industries_allowed: [football-modern-earth]
+
+cognition:
+  embedding_model: voyage-3
+
+# Per P1 substrate-design-locked.md polis_sovereign_treasury (N5):
+# unlimited mint at V0; inflation absorbed by D16' price ceiling.
+# V0.5+ tightens with property tax + commercial rent revenue feedback.
+polis_sovereign_mint_enabled: true

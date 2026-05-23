@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/character.schema.json",
   "title": "Character",
-  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces, event subscriptions, pending events cap), professions, finances, relationships, affinities, principal-agent governance. v0.1.1 adds soft_skills + per-profession skills_metadata. v0.1.2 adds state.vital_status per polis/MORTALITY-DESIGN.md. v0.1.3 amends finances per DECISION-CURRENCY-MODEL.md (coin_balance/pol_balance/currency_unit/starter_capital_coin). v0.1.4 amends cognition per DECISION-TIME-MODEL.md (renames decision_frequency → decision_frequency_wall; adds event_subscriptions[]) and adds affinities[] per DECISION-AFFINITY-PRIMITIVE.md. v0.1.5 adds cognition.pending_events_cap (default 100) — per-character override of the in-flight reactive event queue ceiling that CharacterLifeWorkflow enforces under signal flood.",
+  "description": "An autonomous AI agent in a Polis world. Per PRD §6.6: characters are NOT avatars — they are entities running their own lives via CharacterLifeWorkflow. Player is parent + boss + investor; character is the actor. Captures identity, personality, cognition (model pinning, decision frequency, retrieval namespaces, event subscriptions, pending events cap), professions, finances, relationships, affinities, principal-agent governance. v0.1.1 adds soft_skills + per-profession skills_metadata. v0.1.2 adds state.vital_status per polis/MORTALITY-DESIGN.md. v0.1.3 amends finances per DECISION-CURRENCY-MODEL.md (coin_balance/pol_balance/currency_unit/starter_capital_coin). v0.1.4 amends cognition per DECISION-TIME-MODEL.md (renames decision_frequency → decision_frequency_wall; adds event_subscriptions[]) and adds affinities[] per DECISION-AFFINITY-PRIMITIVE.md. v0.1.5 adds cognition.pending_events_cap (default 100) — per-character override of the in-flight reactive event queue ceiling that CharacterLifeWorkflow enforces under signal flood. **v0.2.0 (2026-05-23, P2 Phase A.1) RESHAPES state.needs from fixed-property 0-1 PRD §10.2 to substrate primitive per P1 substrate-design-locked.md D3/D5/D8/D14:** AXES are now world-content (per world.config.yaml.needs_axes; Modern Earth 2026 declares hunger/fatigue/shelter/social); VALUES are integers 0-100 (HIGH = more in need; caps at 100 per D8 friction-only); SEMANTIC DIRECTION: needs INCREASE with deprivation (decay toward 100 = MORE in need), DECREASE via goods consumption / profession perks / sovereign hardship grants. Replaces v0.1.5's 10-axis fixed-property 0-1 schema (no in-tree consumers per 2026-05-23 grep). Adds state.financial_status per D8 + D27.",
   "type": "object",
-  "version": "0.1.5",
+  "version": "0.2.0",
 
   "required": [
     "id",
@@ -407,19 +407,28 @@
         "location_lot_id": {"type": "string", "description": "Foreign key to lot.schema.json"},
         "needs": {
           "type": "object",
-          "description": "Per PRD §10.2 needs vector. Substrate-tracked, decays over time, restored by consumption.",
-          "properties": {
-            "hunger": {"type": "number", "minimum": 0, "maximum": 1},
-            "thirst": {"type": "number", "minimum": 0, "maximum": 1},
-            "energy": {"type": "number", "minimum": 0, "maximum": 1},
-            "health": {"type": "number", "minimum": 0, "maximum": 1},
-            "warmth": {"type": "number", "minimum": 0, "maximum": 1},
-            "comfort": {"type": "number", "minimum": 0, "maximum": 1},
-            "hygiene": {"type": "number", "minimum": 0, "maximum": 1},
-            "mood": {"type": "number", "minimum": 0, "maximum": 1},
-            "social": {"type": "number", "minimum": 0, "maximum": 1},
-            "purpose": {"type": "number", "minimum": 0, "maximum": 1}
-          }
+          "description": "Multi-axis essentials primitive per P1 substrate-design-locked.md D3+D5. SHAPE is substrate (every world has a needs dict); AXES are world-content (which axes apply lives in world.config.yaml.needs_axes — Modern Earth 2026 declares hunger/fatigue/shelter/social). VALUE SEMANTICS (per D5+B11 convention lock): integers 0-100 where HIGH = more in need; caps at 100 per D8 friction-only. growing: needs INCREASE with passage of time (consumption_per_world_day per profession). decreasing: needs DECREASE via goods purchase (per goods.need_axis_reductions positive magnitudes per D17), passive perks (e.g., shelter auto-decay when char owns lot), or sovereign hardship grants (D27).",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "default": {},
+          "examples": [
+            {"hunger": 45, "fatigue": 60, "shelter": 30, "social": 55}
+          ]
+        },
+        "prev_needs": {
+          "type": "object",
+          "description": "Per Codex B12 fix: needs_tick activity stores previous-tick needs values per char so threshold-crossing emission (D7 wake at 75/90/100) compares prev < threshold AND new >= threshold (avoids spamming signal every tick above threshold). Maintained by needs_tick; readers should treat as last-tick snapshot, not current-state truth.",
+          "additionalProperties": {"type": "integer", "minimum": 0, "maximum": 100},
+          "default": {}
+        },
+        "financial_status": {
+          "type": "string",
+          "enum": ["solvent", "in_debt", "hardship_recipient"],
+          "default": "solvent",
+          "description": "Per D8 friction-only + D27. solvent = normal. in_debt = balance hit 0 and tick couldn't credit; narrative tag in recap; profession-execution-quality -30%. hardship_recipient = D27 grant fired in last 7 world-days; recap quotes; auto-clears after 7 world-days without re-fire."
         },
         "public_reputation": {
           "type": "number",

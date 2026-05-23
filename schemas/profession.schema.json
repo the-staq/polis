@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/profession.schema.json",
+  "title": "Profession",
+  "description": "A profession config — content artifact loaded from polis/configs/professions/{profession_id}.yaml at app startup. Per P1 substrate-design-locked.md D24 + Phase A.2: file-based YAML config (NOT a DB table); matches polis/configs/industries/ pattern. Loaded via lru_cache; hot-reloadable in V0.5+. Each profession declares starter wealth math (for D24 trajectory model), wages math (for needs_tick weekly wage payment), employer institution template (so spawn proc can match a real institution-as-employer per D12), commerce role hints (for D17 vendor_selection + D15 initial commerce-web edges per CEO plan punted-section #1 default), skills baseline, and cognition routing defaults. V0.1.0 ships with 2 starter professions in polis/configs/professions/ (barista, football-manager); founder content authoring extends to ~6-10 per CEO plan §13.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "id",
+    "name",
+    "starter_grant_coin",
+    "wages_weekly_coin",
+    "employer_institution_template"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{2,63}$",
+      "description": "Slug. Matches the YAML filename (polis/configs/professions/{id}.yaml). Used by character.professions[].profession_id as FK; also matches institution.wage_rates[profession_id] for per-institution wage premium/discount overrides per Codex #17."
+    },
+
+    "name": {
+      "type": "string",
+      "description": "Human-readable name shown in wizard step 3 + recap output."
+    },
+
+    "description": {
+      "type": "string",
+      "description": "One-sentence wizard-card description. Should not exceed ~120 chars."
+    },
+
+    "starter_grant_coin": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Per P1 D24: starter Coin grant at spawn. Tuned per D24 formula: starter_grant_coin = round_up(max(lot_one_time_purchase × 1.25, 2 × weekly_runway)) where weekly_runway = lot_weekly_upkeep + weekly_consumption_baseline. Covers one-time lot purchase + ~2 weeks operating runway. Worked examples in P0.5 v2: barista=1500, football-manager=3000."
+    },
+
+    "wages_weekly_coin": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Per P1 D24 + P0.5 v2 empirical tuning: weekly Coin wage paid by employer institution. DEFAULT for the profession; per-institution overrides live on institution.wage_rates per Codex #17. ONS-calibrated where possible (UK ONS occupation × region median weekly earnings per D23 HYBRID calibration source)."
+    },
+
+    "wages_distribution_curve": {
+      "type": "object",
+      "description": "V0.5+: replaces wages_weekly_coin with a distribution (mean, p25, p50, p75 from ONS) for stochastic per-employee variation. V0 ships with wages_weekly_coin only; this field reserved.",
+      "additionalProperties": true
+    },
+
+    "employer_institution_template": {
+      "type": "string",
+      "description": "Maps to institution.kind. Per P1 D12: spawn proc uses this template to find a matching institution in the char's district when seeding employer_party_id (per Codex B2: loaded in Python before invoking spawn proc; passed as proc parameter). Examples: cafe, football-club, pub, freelance-marketplace."
+    },
+
+    "commerce_role_hints": {
+      "type": "object",
+      "description": "Per P1 D15 + CEO plan punted-section #1 default: hints used during atomic spawn to seed initial commerce-web edges (1 employer + 1 landlord + top-3 vendors per axis ≈ 12 edges). Founder may tune per character archetype at content-authoring time.",
+      "properties": {
+        "preferred_vendor_categories": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Categories the profession's chars preferentially affinity-seed at spawn (per AFFINITY-PRIMITIVE + D17 score formula)."
+        },
+        "required_utilities": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Per D17 utility-goods carve-out: non-need-meeting goods this profession requires (e.g., transit_weekly for non-resident districts)."
+        }
+      }
+    },
+
+    "skills_baseline": {
+      "type": "object",
+      "description": "Per character.schema professions[].skills initial values at spawn. Hand-tuned per profession.",
+      "additionalProperties": {"type": "integer", "minimum": 0, "maximum": 100}
+    },
+
+    "cognition_routing": {
+      "type": "object",
+      "description": "Defaults for character.cognition fields. Per DECISION-TIME-MODEL.md §3.4 cadence + DECISION-CHARACTERLIFEWORKFLOW event subscriptions.",
+      "properties": {
+        "decision_frequency_wall": {
+          "type": "string",
+          "description": "Per DECISION-TIME-MODEL.md default every_4h."
+        },
+        "event_subscriptions": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+
+    "version": {
+      "type": "string",
+      "description": "Profession config version. Bump when wage tables/consumption rates change post-alpha-feedback."
+    }
+  }
+}

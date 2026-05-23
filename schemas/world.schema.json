@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.polis.example/world.schema.json",
   "title": "World",
-  "description": "A curated Polis world (the substrate's outermost container). Worlds are NOT user-creatable; the staq curates them. Each world defines the geographic basis, calendar / time mapping, physics, default economic posture, moderation floor, asset pack, and the cognition corpora that ground AI characters in this world's contemporary context. v0.1.2 amends calendar per DECISION-TIME-MODEL.md: in_world_day_per_real_day default bumped 1.0 → 12.0 (one canonical clock at 12× wall-clock for Modern Earth 2026); adds heartbeat_world_seconds (default 3600) for WorldWorkflow emergent-state checks between scheduled events.",
+  "description": "A curated Polis world (the substrate's outermost container). Worlds are NOT user-creatable; the staq curates them. Each world defines the geographic basis, calendar / time mapping, physics, default economic posture, moderation floor, asset pack, and the cognition corpora that ground AI characters in this world's contemporary context. v0.1.2 amends calendar per DECISION-TIME-MODEL.md: in_world_day_per_real_day default bumped 1.0 → 12.0 (one canonical clock at 12× wall-clock for Modern Earth 2026); adds heartbeat_world_seconds (default 3600) for WorldWorkflow emergent-state checks between scheduled events. **v0.1.3 (2026-05-23, P2 Phase A.5) ADDITIVE per P1 D3+D4 substrate-vs-content boundary:** adds calendar.needs_axes — the per-world list of essentials axes this world declares. SHAPE is substrate (every world has a needs dict on character.state.needs); AXES are world-content (which axes apply to chars in THIS world). Modern Earth 2026 declares [hunger, fatigue, shelter, social]; future worlds (Mars-colony V2+) declare different axes ([atmospheric_pressure, radiation_dose, oxygen, social]) without schema migration. Empty array = world doesn't run needs primitive (e.g., Devnet test worlds).",
   "type": "object",
-  "version": "0.1.2",
+  "version": "0.1.3",
 
   "required": [
     "id",
@@ -123,6 +123,12 @@
           "maximum": 86400,
           "default": 3600,
           "description": "Per DECISION-TIME-MODEL.md §3.3: how often WorldWorkflow's heartbeat fires (in world-seconds) to check for emergent state between scheduled events. Default 3600 (1 world-hour ≈ 5 real-minutes at 12× rate). Lower values increase CPU + Temporal-timer cost; higher values mean emergent state lags."
+        },
+        "needs_axes": {
+          "type": "array",
+          "items": {"type": "string"},
+          "default": [],
+          "description": "Per P1 substrate-design-locked.md D3+D4 (v0.1.3 add): list of essentials-axis names this world declares. AXES are world-content per D3 substrate-vs-content boundary. character.state.needs is a substrate primitive (every world has it); AXES per this list. Modern Earth 2026 declares [hunger, fatigue, shelter, social]; future worlds (Mars-colony V2+) declare domain-appropriate axes. EMPTY = world doesn't run needs primitive (test/devnet worlds). Per P1 lint rule #2: substrate code MAY NOT hardcode axis names — always read from world.config.yaml.needs_axes."
         },
         "current_in_world_date": {
           "type": "string",

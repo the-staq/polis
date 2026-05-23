@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/good.schema.json",
+  "title": "Good",
+  "description": "A purchasable item / service / experience offered by a vendor institution. Per P1 substrate-design-locked.md D11 + D17 + F1=A (separate `goods` table). Loaded into goods table via alembic migration; queried by vendor_selection activity per char per tick (D17 score formula); price mutated by price_adjustment activity at end-of-world-week (D16' v2 formula: clip(old × (1 + 0.10 × utilization_pressure), max(cost_basis × 1.30, old × 0.90), old × 1.10)). Codex B6 fix: table-level GRANT to polis_app required. Codex B9 fix: floor (cost_basis × 1.30) and ceiling (old × 1.10) must respect floor ≤ ceiling invariant. Codex #14 fix: PK is composite (world_id, id) not just (id) so canonical IDs reuse across worlds.",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": [
+    "id",
+    "world_id",
+    "institution_id",
+    "price_coin",
+    "cost_basis_coin",
+    "need_axis_reductions",
+    "vendor_category"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{2,63}$",
+      "description": "Slug. Unique within a world (composite PK with world_id per Codex #14). Examples: cafe_meal, pub_dinner, gym_session, match_ticket."
+    },
+
+    "world_id": {
+      "type": "string",
+      "description": "FK to worlds.id. RLS scopes reads by current_setting('polis.world_id') per polis_extensions.sql pattern. Codex #13 fix: CHECK constraint enforces goods.world_id = (SELECT world_id FROM institutions WHERE id = goods.institution_id)."
+    },
+
+    "institution_id": {
+      "type": "string",
+      "description": "FK to institutions.id. The vendor party that receives Coin when a char purchases this good. Per P1 D12 institutions-as-employers — vendors are institutions too. Codex #13: same-world constraint enforced via CHECK or trigger."
+    },
+
+    "price_coin": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current price in Coin. Mutated by price_adjustment activity at end-of-world-week per D16' v2 formula. INITIAL value set at content authoring time."
+    },
+
+    "cost_basis_coin": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Per P1 D16' + P0.5 v2 cost_basis × 1.30 floor: vendor's input cost. Price can't go below cost_basis × 1.30 (minimum margin). Default heuristic for content authoring per Codex N10: cost_basis_coin = round(price_coin × 0.7)."
+    },
+
+    "need_axis_reductions": {
+      "type": "object",
+      "description": "Per P1 D17 v2 fix (positive magnitudes; Codex B11 direction lock): mapping of needs-axis-name → POSITIVE magnitude by which buying this good REDUCES that axis (lowers HIGH-need toward 0-met). Negative magnitudes (e.g., match_ticket fatigue: -5 means buying tires you SLIGHTLY) are allowed as side-effects but D17 score formula only counts POSITIVE reductions in its weighted_magnitude calculation. Axes MUST match world.config.yaml.needs_axes; lint rule (per P1 lint expansion #2) rejects axis names hardcoded in app code.",
+      "additionalProperties": {"type": "integer"}
+    },
+
+    "district": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "FK to districts.id (NULLABLE — null for district-agnostic goods like transit_weekly). When set, vendor_selection activity filters goods to char's district + district-agnostic via composite index ix_goods_world_district_category. Per P1 D15 pre-wired starter districts."
+    },
+
+    "vendor_category": {
+      "type": "string",
+      "enum": ["food", "drink", "rest", "social", "transport", "entertainment", "utility", "other"],
+      "description": "Per P1 D11 v2 schema: substrate-level vendor grouping for D17 score-formula context + observability metric aggregation per Codex #26 (cardinality control)."
+    },
+
+    "availability_world_hours": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 0, "maximum": 23},
+      "default": [],
+      "description": "Per P1 D11 v2: world-clock hours when this good is available (e.g., [17,18,19,20,21,22] for evening-only pub_dinner). EMPTY array = always-available 24/7. needs_tick activity filters by current world-time hour before vendor_selection."
+    },
+
+    "affinity_targets": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": [],
+      "description": "Per P1 D11 v2 + D17 + Codex #9 fix (RENAMED from `affinity_categories` for clarity): list of party_ids (character_id or institution_id) the affinity weighting binds to. D17 score-formula: affinity_strength = max(char.affinities[].strength for any affinity whose target_id ∈ good.affinity_targets, else 0). Typical entry: the vendor institution_id (so chars who have positive affinity for Camden Arms Cafe preferentially buy from it)."
+    },
+
+    "capacity_per_world_day": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 999,
+      "description": "Per P1 D11 v2 + Codex #19 fix: daily cap on how many units of this good can be sold per world-day. needs_tick activity tracks daily consumption per (good_id, world_date) via goods_daily_usage table; FCFS allocation per Codex #19 with locking/UPSERT to prevent overselling under parallel district ticks."
+    },
+
+    "cost_basis_floor_multiplier": {
+      "type": "number",
+      "minimum": 1.0,
+      "default": 1.30,
+      "description": "Per P0.5 v2 + Codex N3 tuning: minimum margin multiplier applied to cost_basis as price floor. price_adjustment activity uses floor = max(cost_basis_coin × cost_basis_floor_multiplier, old_price × 0.90). Defaults to 1.30 (30% minimum margin); founder content can tune per-good if needed."
+    },
+
+    "version": {
+      "type": "string",
+      "description": "Goods schema version. Bump when adding fields."
+    }
+  }
+}

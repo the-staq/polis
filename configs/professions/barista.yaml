@@ -1,0 +1,41 @@
+---
+# Profession: Barista
+# Per profession.schema.json v0.1.0; P1 substrate-design-locked.md D24 worked example
+# Calibration source: D23 HYBRID — ONS occupation "Coffee shop workers" median weekly
+# earnings UK 2025 ~£330; rounded to 280 Coin/wk in P0.5 v2 (after tightening).
+id: barista
+name: Barista
+description: Service-industry worker; employed at cafe-as-institution. Common entry-level profession.
+
+# Per D24 formula: max(lot_one_time_purchase × 1.25, 2 × weekly_runway)
+# Hackney starter lot ≈ 1200 Coin purchase + ≈ 60/wk upkeep + ≈ 108/wk consumption baseline
+# = max(1200 × 1.25, 2 × (60+108)) = max(1500, 336) = 1500
+starter_grant_coin: 1500
+
+# Per ONS + P0.5 v2 tightening (was 375 in v1; 280 in v2 produced realistic tight margins)
+wages_weekly_coin: 280
+
+# Maps to institution.kind for spawn proc employer_party_id seeding (per Codex B2 fix)
+employer_institution_template: cafe
+
+commerce_role_hints:
+  # Categories the barista preferentially affinity-seeds at spawn
+  preferred_vendor_categories: [cafe, pub]
+  # Per D17 utility-goods carve-out — non-need-meeting goods barista requires
+  required_utilities: [transit_weekly]
+
+skills_baseline:
+  customer_service: 50
+  endurance: 40
+  beverage_craft: 35
+  cash_handling: 45
+
+cognition_routing:
+  decision_frequency_wall: every_4h
+  event_subscriptions:
+    - transfer_offer
+    - press_mention
+    - employer_event
+    - need_threshold
+
+version: "0.1.0"
