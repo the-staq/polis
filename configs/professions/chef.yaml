@@ -1,0 +1,29 @@
+---
+id: chef
+name: Chef
+description: Professional cook in a restaurant or pub kitchen. High-skill hospitality.
+
+starter_grant_coin: 1800
+wages_weekly_coin: 550
+employer_institution_template: other
+
+commerce_role_hints:
+  preferred_vendor_categories: [grocery, cafe, pub]
+  required_utilities: [transit_weekly]
+
+skills_baseline:
+  cooking: 60
+  kitchen_management: 45
+  hygiene: 50
+  endurance: 55
+  creativity: 40
+
+cognition_routing:
+  decision_frequency_wall: every_4h
+  event_subscriptions:
+    - transfer_offer
+    - press_mention
+    - employer_event
+    - need_threshold
+
+version: "0.1.0"

@@ -1,0 +1,28 @@
+---
+id: gym-instructor
+name: Gym Instructor
+description: Fitness professional at a gym or leisure centre. Mid-wage with flexible hours.
+
+starter_grant_coin: 1500
+wages_weekly_coin: 450
+employer_institution_template: gym
+
+commerce_role_hints:
+  preferred_vendor_categories: [gym, cafe, grocery]
+  required_utilities: [transit_weekly]
+
+skills_baseline:
+  fitness_training: 55
+  nutrition: 40
+  first_aid: 35
+  customer_service: 40
+
+cognition_routing:
+  decision_frequency_wall: every_4h
+  event_subscriptions:
+    - transfer_offer
+    - press_mention
+    - employer_event
+    - need_threshold
+
+version: "0.1.0"

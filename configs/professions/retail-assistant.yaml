@@ -1,0 +1,28 @@
+---
+id: retail-assistant
+name: Retail Assistant
+description: Shop-floor worker at a grocery or department store. Entry-level with steady hours.
+
+starter_grant_coin: 1200
+wages_weekly_coin: 320
+employer_institution_template: grocery
+
+commerce_role_hints:
+  preferred_vendor_categories: [grocery, cafe]
+  required_utilities: [transit_weekly]
+
+skills_baseline:
+  customer_service: 45
+  cash_handling: 50
+  inventory: 30
+  endurance: 35
+
+cognition_routing:
+  decision_frequency_wall: every_4h
+  event_subscriptions:
+    - transfer_offer
+    - press_mention
+    - employer_event
+    - need_threshold
+
+version: "0.1.0"

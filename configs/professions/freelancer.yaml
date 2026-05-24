@@ -1,0 +1,27 @@
+---
+id: freelancer
+name: Freelancer
+description: Self-employed gig worker — delivery, tasking, odd jobs. Variable income, no institution employer.
+
+starter_grant_coin: 800
+wages_weekly_coin: 200
+employer_institution_template: ~
+
+commerce_role_hints:
+  preferred_vendor_categories: [cafe, grocery]
+  required_utilities: [transit_weekly]
+
+skills_baseline:
+  hustling: 45
+  time_management: 35
+  negotiation: 30
+  endurance: 40
+
+cognition_routing:
+  decision_frequency_wall: every_4h
+  event_subscriptions:
+    - transfer_offer
+    - press_mention
+    - need_threshold
+
+version: "0.1.0"

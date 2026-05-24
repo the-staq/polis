@@ -1,0 +1,28 @@
+---
+id: transit-operator
+name: Transit Operator
+description: Public transport driver or station staff for London's transit network. Stable public-sector wages.
+
+starter_grant_coin: 1500
+wages_weekly_coin: 600
+employer_institution_template: transit
+
+commerce_role_hints:
+  preferred_vendor_categories: [cafe, grocery]
+  required_utilities: [transit_weekly]
+
+skills_baseline:
+  driving: 55
+  customer_service: 40
+  safety: 60
+  route_knowledge: 50
+
+cognition_routing:
+  decision_frequency_wall: every_4h
+  event_subscriptions:
+    - transfer_offer
+    - press_mention
+    - employer_event
+    - need_threshold
+
+version: "0.1.0"
