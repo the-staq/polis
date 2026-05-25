@@ -1,0 +1,15 @@
+---
+id: hackney-transit-authority
+kind: transit
+name: Hackney Transit Authority
+description: Public transport for Hackney
+district: Hackney
+wage_rates:
+  transit-operator: 620
+goods:
+  - id: transit_single
+    price_coin: 3
+    cost_basis_coin: 2
+    need_axis_reductions: {}
+    vendor_category: transit
+    capacity_per_world_day: 1000

@@ -1,0 +1,21 @@
+---
+id: hackney-corner-grocery
+kind: grocery
+name: Hackney Corner Grocery
+description: Local grocery store
+district: Hackney
+wage_rates:
+  retail-assistant: 340
+goods:
+  - id: grocery_basic
+    price_coin: 8
+    cost_basis_coin: 5
+    need_axis_reductions: {hunger: 15}
+    vendor_category: grocery
+    capacity_per_world_day: 500
+  - id: grocery_meal_kit
+    price_coin: 15
+    cost_basis_coin: 9
+    need_axis_reductions: {hunger: 30, social: 4}
+    vendor_category: grocery
+    capacity_per_world_day: 100

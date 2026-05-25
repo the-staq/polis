@@ -1,0 +1,21 @@
+---
+id: fitlab-gym-hackney
+kind: gym
+name: FitLab Hackney
+description: Community gym with pool and classes
+district: Hackney
+wage_rates:
+  gym-instructor: 480
+goods:
+  - id: gym_session
+    price_coin: 8
+    cost_basis_coin: 4
+    need_axis_reductions: {fatigue: -5, social: 8}
+    vendor_category: gym
+    capacity_per_world_day: 250
+  - id: gym_pt_session
+    price_coin: 20
+    cost_basis_coin: 10
+    need_axis_reductions: {fatigue: -10, social: 12}
+    vendor_category: gym
+    capacity_per_world_day: 50

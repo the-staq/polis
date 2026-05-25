@@ -1,0 +1,28 @@
+---
+id: the-red-lion-pub
+kind: pub
+name: "The Red Lion"
+description: Traditional Hackney pub
+district: Hackney
+wage_rates:
+  pub-staff: 320
+  chef: 520
+goods:
+  - id: pub_pint
+    price_coin: 6
+    cost_basis_coin: 3
+    need_axis_reductions: {social: 10, fatigue: 5}
+    vendor_category: pub
+    capacity_per_world_day: 300
+  - id: pub_meal
+    price_coin: 14
+    cost_basis_coin: 9
+    need_axis_reductions: {hunger: 22}
+    vendor_category: pub
+    capacity_per_world_day: 100
+  - id: pub_snack
+    price_coin: 4
+    cost_basis_coin: 2
+    need_axis_reductions: {hunger: 8}
+    vendor_category: pub
+    capacity_per_world_day: 200

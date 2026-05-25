@@ -1,0 +1,21 @@
+---
+id: hackney-kitchen
+kind: other
+name: Hackney Kitchen
+description: Modern British bistro
+district: Hackney
+wage_rates:
+  chef: 580
+goods:
+  - id: restaurant_main
+    price_coin: 18
+    cost_basis_coin: 10
+    need_axis_reductions: {hunger: 30, social: 10}
+    vendor_category: other
+    capacity_per_world_day: 80
+  - id: restaurant_dessert
+    price_coin: 8
+    cost_basis_coin: 4
+    need_axis_reductions: {hunger: 8, social: 6}
+    vendor_category: other
+    capacity_per_world_day: 100

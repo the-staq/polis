@@ -1,0 +1,28 @@
+---
+id: camden-arms-cafe
+kind: cafe
+name: Camden Arms Cafe
+description: Popular Hackney cafe
+district: Hackney
+wage_rates:
+  barista: 300
+  chef: 500
+goods:
+  - id: cafe_coffee
+    price_coin: 4
+    cost_basis_coin: 2
+    need_axis_reductions: {fatigue: 8}
+    vendor_category: cafe
+    capacity_per_world_day: 200
+  - id: cafe_meal
+    price_coin: 12
+    cost_basis_coin: 8
+    need_axis_reductions: {hunger: 25}
+    vendor_category: cafe
+    capacity_per_world_day: 120
+  - id: cafe_pastry
+    price_coin: 5
+    cost_basis_coin: 3
+    need_axis_reductions: {hunger: 10, social: 3}
+    vendor_category: cafe
+    capacity_per_world_day: 150
