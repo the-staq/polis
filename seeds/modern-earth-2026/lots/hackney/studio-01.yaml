@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: hackney-studio-01
+world_id: modern-earth-2026
+district: hackney
+canonical_name: "Hackney Road Studio"
+lat: 51.5305
+lon: -0.0573
+zoning: residential
+base_price_coin: 900
+monthly_cost_coin: 55
+trajectory_label: cheap-grind
+size_sqm: 28
+description: "Compact studio near Broadway Market — cheap and cheerful"

@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: hackney-flat-01
+world_id: modern-earth-2026
+district: hackney
+canonical_name: "Mare Street Flat"
+lat: 51.5351
+lon: -0.0558
+zoning: residential
+base_price_coin: 1800
+monthly_cost_coin: 110
+trajectory_label: mid-stretch
+size_sqm: 52
+description: "One-bed flat on Mare Street — solid middle-ground option"

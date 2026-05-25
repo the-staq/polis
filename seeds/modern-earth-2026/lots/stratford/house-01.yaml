@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: stratford-house-01
+world_id: modern-earth-2026
+district: stratford
+canonical_name: "Stratford Grove House"
+lat: 51.5490
+lon: -0.0050
+zoning: residential
+base_price_coin: 3000
+monthly_cost_coin: 180
+trajectory_label: stretch
+size_sqm: 80
+description: "Three-bed terrace near Maryland station"

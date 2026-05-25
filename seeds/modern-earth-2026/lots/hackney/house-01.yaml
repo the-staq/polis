@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: hackney-house-01
+world_id: modern-earth-2026
+district: hackney
+canonical_name: "London Fields Terrace"
+lat: 51.5380
+lon: -0.0596
+zoning: residential
+base_price_coin: 3200
+monthly_cost_coin: 190
+trajectory_label: stretch
+size_sqm: 78
+description: "Two-bed terrace overlooking London Fields — for established residents"

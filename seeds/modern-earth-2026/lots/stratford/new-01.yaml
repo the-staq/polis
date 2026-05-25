@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: stratford-new-01
+world_id: modern-earth-2026
+district: stratford
+canonical_name: "Westfield Penthouse"
+lat: 51.5430
+lon: 0.0030
+zoning: residential
+base_price_coin: 5000
+monthly_cost_coin: 310
+trajectory_label: stretch
+size_sqm: 100
+description: "New penthouse overlooking the Queen Elizabeth Olympic Park"

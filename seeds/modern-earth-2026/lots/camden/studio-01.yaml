@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: camden-studio-01
+world_id: modern-earth-2026
+district: camden
+canonical_name: "Camden Town Bedsit"
+lat: 51.5385
+lon: -0.1400
+zoning: residential
+base_price_coin: 1100
+monthly_cost_coin: 65
+trajectory_label: cheap-grind
+size_sqm: 25
+description: "Small room near Camden Town station — tight but well-connected"

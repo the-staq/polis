@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: camden-house-01
+world_id: modern-earth-2026
+district: camden
+canonical_name: "Camden Square House"
+lat: 51.5421
+lon: -0.1318
+zoning: residential
+base_price_coin: 4200
+monthly_cost_coin: 250
+trajectory_label: stretch
+size_sqm: 90
+description: "Victorian townhouse on Camden Square — prestige address"

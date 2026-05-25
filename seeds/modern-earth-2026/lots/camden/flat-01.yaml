@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: camden-flat-01
+world_id: modern-earth-2026
+district: camden
+canonical_name: "Kentish Town Flat"
+lat: 51.5510
+lon: -0.1410
+zoning: residential
+base_price_coin: 2200
+monthly_cost_coin: 135
+trajectory_label: mid-stretch
+size_sqm: 55
+description: "One-bed flat near Kentish Town — quiet, leafy, commutable"

@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: hackney-loft-01
+world_id: modern-earth-2026
+district: hackney
+canonical_name: "Hackney Wick Loft"
+lat: 51.5440
+lon: -0.0210
+zoning: mixed_use
+base_price_coin: 4500
+monthly_cost_coin: 280
+trajectory_label: stretch
+size_sqm: 95
+description: "Spacious warehouse conversion in Hackney Wick arts quarter"

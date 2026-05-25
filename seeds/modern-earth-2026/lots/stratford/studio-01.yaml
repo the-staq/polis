@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: stratford-studio-01
+world_id: modern-earth-2026
+district: stratford
+canonical_name: "Stratford High Street Studio"
+lat: 51.5410
+lon: -0.0030
+zoning: residential
+base_price_coin: 800
+monthly_cost_coin: 50
+trajectory_label: cheap-grind
+size_sqm: 30
+description: "Budget studio near Stratford station — cheapest option in town"

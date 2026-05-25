@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: camden-flat-02
+world_id: modern-earth-2026
+district: camden
+canonical_name: "Primrose Hill Apartment"
+lat: 51.5470
+lon: -0.1520
+zoning: residential
+base_price_coin: 5500
+monthly_cost_coin: 340
+trajectory_label: stretch
+size_sqm: 110
+description: "Luxury flat near Primrose Hill with views across London"

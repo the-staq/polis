@@ -1,0 +1,14 @@
+---
+country: england-on-polis
+id: stratford-flat-01
+world_id: modern-earth-2026
+district: stratford
+canonical_name: "Olympic Village Flat"
+lat: 51.5450
+lon: -0.0070
+zoning: residential
+base_price_coin: 1600
+monthly_cost_coin: 95
+trajectory_label: mid-stretch
+size_sqm: 50
+description: "Modern flat in the Olympic Village development"
