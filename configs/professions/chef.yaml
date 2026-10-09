@@ -26,4 +26,29 @@ cognition_routing:
     - employer_event
     - need_threshold
 
-version: "0.1.0"
+surfaces:
+  dashboard:
+    metrics:
+      - id: kitchen_rating
+        label: "Kitchen rating"
+        icon: star
+        source: kitchen_rating
+      - id: meals_7d
+        label: "Meals served (7d)"
+        icon: clipboard
+        source: meals_7d
+      - id: health_score
+        label: "Health score"
+        icon: shield
+        source: health_score
+    primary_action:
+      label: "View kitchen"
+      icon: play
+      route: /workplace
+    feed_events:
+      - employer_event
+      - need_threshold
+  extra_surfaces:
+    - workplace
+
+version: "0.2.0"

@@ -25,4 +25,29 @@ cognition_routing:
     - employer_event
     - need_threshold
 
-version: "0.1.0"
+surfaces:
+  dashboard:
+    metrics:
+      - id: regulars_count
+        label: "Regular customers"
+        icon: users
+        source: regulars_count
+      - id: tips_7d
+        label: "Tips (7d)"
+        icon: coin
+        source: tips_7d
+      - id: shifts_this_week
+        label: "Shifts this week"
+        icon: calendar
+        source: shifts_this_week
+    primary_action:
+      label: "Start shift"
+      icon: play
+      route: /workplace
+    feed_events:
+      - employer_event
+      - need_threshold
+  extra_surfaces:
+    - workplace
+
+version: "0.2.0"

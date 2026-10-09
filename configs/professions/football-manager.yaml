@@ -40,4 +40,32 @@ cognition_routing:
     - employer_event
     - need_threshold
 
-version: "0.1.0"
+surfaces:
+  dashboard:
+    metrics:
+      - id: league_position
+        label: "League position"
+        icon: trophy
+        source: league_position
+      - id: form_5
+        label: "Form (last 5)"
+        icon: activity
+        source: form_5
+      - id: next_match
+        label: "Next match"
+        icon: calendar
+        source: next_match
+    primary_action:
+      label: "Match center"
+      icon: play
+      route: /match-center
+    feed_events:
+      - match_start
+      - match_end
+      - transfer_offer
+      - injury_news
+      - team_selection
+  extra_surfaces:
+    - match-center
+
+version: "0.2.0"

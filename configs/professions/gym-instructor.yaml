@@ -25,4 +25,29 @@ cognition_routing:
     - employer_event
     - need_threshold
 
-version: "0.1.0"
+surfaces:
+  dashboard:
+    metrics:
+      - id: clients_trained
+        label: "Clients trained (7d)"
+        icon: users
+        source: clients_trained
+      - id: class_rating
+        label: "Class rating"
+        icon: star
+        source: class_rating
+      - id: sessions_this_week
+        label: "Sessions this week"
+        icon: calendar
+        source: sessions_this_week
+    primary_action:
+      label: "View gym"
+      icon: play
+      route: /workplace
+    feed_events:
+      - employer_event
+      - need_threshold
+  extra_surfaces:
+    - workplace
+
+version: "0.2.0"
