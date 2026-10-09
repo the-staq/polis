@@ -1,0 +1,8 @@
+# Python dependencies for the test and schema-validation suite (CI and local).
+# Install: python -m pip install -r requirements-ci.txt
+pytest==9.1.1
+pytest-asyncio==1.4.0
+pyyaml==6.0.3
+jsonschema==4.26.0
+referencing==0.37.0
+pydantic==2.14.0

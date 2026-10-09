@@ -85,6 +85,27 @@ Full contributor guide: [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and on every push to `main`:
+
+- **`sim/tests`:** the simulation-kernel tests.
+- **`cli/tests/test_config_schemas.py`:** validates every YAML under `configs/` and `seeds/` against the schema in `schemas/` that applies to it.
+  - Mapping: the `SCHEMA_MAP` table at the top of the file says which schema applies to which files. `NO_SCHEMA` lists the files no schema describes.
+  - A new YAML file must be added to one of those two tables, or CI fails.
+  - Known data/schema mismatches are listed in `KNOWN_FAILURES`, with an issue for each. Their exact errors are recorded in `known_schema_errors.json`. A new error in one of those files still fails CI.
+- **`cli/tests/test_industry_schema.py`:** the `industry.schema.json` invariant checks.
+
+To run the same checks locally from the directory that **contains** your `polis` checkout (the sim tests import `polis.sim`):
+
+```bash
+python -m pip install -r polis/requirements-ci.txt
+PYTHONPATH=. python -m pytest -rfEsxX polis/sim/tests polis/cli/tests
+python polis/cli/tests/test_industry_schema.py
+```
+
+---
+
 ## Why open
 
 Polis's defensibility is **closed engine + open extension surface**. The same shape Roblox / AppExchange / Salesforce / Shopify proved at scale. Open schemas + SDK + reference configs let contributors author against the substrate without ever touching the engine. The engine being closed protects the moat; the schemas being open compound community value into the platform.
