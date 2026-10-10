@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.polis.example/venue.schema.json",
+  "title": "VenueFile",
+  "description": "Gameplay venues for one district: seeds/<world>/venues/<district>.yaml (CC BY 4.0). Per SPEC-CAREERS-AND-LOCATIONS §10 and §17. Each row says what a place is in the game (tier, kind, careers, needs met, sponsor slots) and where its name and point come from (name_source). Rows with name_source osm carry no name and no point: those live in the ODbL layer odbl/<city>/venues-osm.geojson (venue-osm.schema.json), joined by venue id at read time. V (institution) and B (business) venues are always fictional (name_source polis), or a real business name the business itself licenses (name_source licensed, Increment 2). Until the parcels table exists (P2.10) this file is the venue list; P2.10 migrates rows by id. v0.1.0 (2026-10-10, VENUE-OSM-0).",
+  "type": "object",
+  "version": "0.1.0",
+
+  "required": ["world", "district", "venues"],
+
+  "properties": {
+    "world": {"type": "string", "description": "World id, e.g. modern-earth-2026."},
+    "district": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,63}$",
+      "description": "District slug (seeds/<world>/districts/<slug>.yaml). Every row's district must equal it."
+    },
+    "venues": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/venue"}
+    }
+  },
+
+  "additionalProperties": false,
+
+  "$defs": {
+    "venue_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{2,63}$"
+    },
+
+    "venue": {
+      "type": "object",
+      "required": ["id", "district", "tier", "kind", "name_source"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/venue_id",
+          "description": "Unique across all venue files. For name_source osm, equals the venue_id of exactly one feature in odbl/."
+        },
+        "district": {"type": "string"},
+        "tier": {
+          "enum": ["L", "P", "V", "B"],
+          "description": "L landmark, P public place, V fictional institution, B fictional business (SPEC §10)."
+        },
+        "kind": {
+          "enum": [
+            "park",
+            "pitch",
+            "market",
+            "station_area",
+            "landmark",
+            "stadium",
+            "club_ground",
+            "cafe",
+            "pub",
+            "restaurant",
+            "grocery",
+            "gym",
+            "rooms",
+            "stall",
+            "transit_office",
+            "other"
+          ]
+        },
+        "name_source": {
+          "enum": ["osm", "polis", "generic", "licensed"],
+          "description": "osm: name and point come from odbl/ (L/P only). polis: our own name and hand-placed point. generic: no name of its own; shown as the parent venue's name plus slot_label (slot-labelled pitches). licensed: a real business name supplied by the business under a placement contract (B only, Increment 2)."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 64,
+          "description": "Display name for polis and licensed rows only."
+        },
+        "lat": {"type": "number", "minimum": -90, "maximum": 90},
+        "lon": {"type": "number", "minimum": -180, "maximum": 180},
+        "slot_label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32,
+          "description": "Our label for a slot inside a parent venue, e.g. \"Pitch 3\". Shown as \"<parent name> · <slot_label>\"."
+        },
+        "parent_venue_id": {
+          "$ref": "#/$defs/venue_id",
+          "description": "For generic slot rows: the venue the slot sits in. The slot takes the parent's point."
+        },
+        "host_venue_id": {
+          "$ref": "#/$defs/venue_id",
+          "description": "For a fictional vendor sited at a public place (e.g. a stall at an OSM market): the host venue. The vendor takes the host's point."
+        },
+        "careers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+          "description": "Career ids that use this venue (e.g. footballer)."
+        },
+        "activities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "description": "What a character can do here, e.g. training, sunday_league, cup_final, kickabout, fitness."
+        },
+        "needs_met": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["food", "sleep", "travel", "social", "fitness"]},
+          "description": "Needs a character can meet here by buying from a vendor (NEEDS-LITE: food and sleep; plus travel at station areas)."
+        },
+        "sponsor_slots": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Billboard or stall slots that can be sold (SPON-1). Selling a slot never renames the venue."
+        },
+        "note": {"type": "string", "maxLength": 500}
+      },
+      "additionalProperties": false,
+
+      "allOf": [
+        {
+          "if": {"properties": {"name_source": {"const": "osm"}}, "required": ["name_source"]},
+          "then": {
+            "properties": {"tier": {"enum": ["L", "P"]}},
+            "not": {
+              "anyOf": [
+                {"required": ["name"]},
+                {"required": ["lat"]},
+                {"required": ["lon"]},
+                {"required": ["slot_label"]},
+                {"required": ["parent_venue_id"]},
+                {"required": ["host_venue_id"]}
+              ]
+            }
+          }
+        },
+        {
+          "if": {"properties": {"tier": {"enum": ["V", "B"]}}, "required": ["tier"]},
+          "then": {"properties": {"name_source": {"enum": ["polis", "licensed"]}}}
+        },
+        {
+          "if": {"properties": {"name_source": {"const": "licensed"}}, "required": ["name_source"]},
+          "then": {"properties": {"tier": {"const": "B"}}}
+        },
+        {
+          "if": {"properties": {"name_source": {"enum": ["polis", "licensed"]}}, "required": ["name_source"]},
+          "then": {
+            "required": ["name"],
+            "not": {"anyOf": [{"required": ["slot_label"]}, {"required": ["parent_venue_id"]}]},
+            "oneOf": [
+              {"required": ["lat", "lon"], "not": {"required": ["host_venue_id"]}},
+              {
+                "required": ["host_venue_id"],
+                "not": {"anyOf": [{"required": ["lat"]}, {"required": ["lon"]}]}
+              }
+            ]
+          }
+        },
+        {
+          "if": {"properties": {"name_source": {"const": "generic"}}, "required": ["name_source"]},
+          "then": {
+            "required": ["slot_label", "parent_venue_id"],
+            "properties": {"tier": {"const": "P"}},
+            "not": {
+              "anyOf": [
+                {"required": ["name"]},
+                {"required": ["lat"]},
+                {"required": ["lon"]},
+                {"required": ["host_venue_id"]}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

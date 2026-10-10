@@ -37,6 +37,15 @@ where required and provide attribution per source.
 
 ----------------------------------------------------------------------
 
+Carve-out: files under polis/odbl/ are derived from OpenStreetMap and are
+licensed under the Open Database License 1.0 (contents under the Database
+Contents License 1.0), not CC BY 4.0. Data © OpenStreetMap contributors.
+See polis/odbl/LICENSE and polis/NOTICE. The CC BY venue rows in
+polis/seeds/*/venues/ carry no OpenStreetMap names or points; they join to
+odbl/ by venue id only.
+
+----------------------------------------------------------------------
+
 Tier 3 original creations (per CONTRIBUTING.md §3) are creator-owned with
 a license-to-host grant to the staq, NOT under CC-BY 4.0. Those
 contributions are governed by the separate Tier 3 Contributor License

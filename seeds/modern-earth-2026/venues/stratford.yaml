@@ -1,0 +1,132 @@
+# Schema: ../../../schemas/venue.schema.json
+#
+# Gameplay venues for Stratford (CC BY 4.0, like all seeds): the Stratford
+# area of Newham (Olympic Park, the station, West Ham Park), not the whole
+# borough. Rows with name_source: osm carry no name and no point: both come
+# from the ODbL layer ../../../odbl/london/venues-osm.geojson, joined by id at
+# read time. Rows with name_source: polis carry our own names: V and B venues
+# are fictional and never from OSM (SPEC §10). Their points are hand-placed
+# near, not on, the OSM places, or taken from a host venue (host_venue_id).
+# Station areas display as "<OSM name> station area"; operators are never shown.
+
+world: modern-earth-2026
+district: stratford
+venues:
+  # --- Public places (P, name and point from OSM) ----------------------------
+  - id: queen-elizabeth-olympic-park
+    district: stratford
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 2
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: west-ham-park
+    district: stratford
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 2
+    careers: [footballer]
+    activities: [sunday_league, training]
+  - id: stratford-park
+    district: stratford
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: victory-park
+    district: stratford
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: stratford-outdoor-market
+    district: stratford
+    tier: P
+    kind: market
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [food]
+    note: Food from fictional stalls (host_venue_id), never real traders.
+  - id: stratford-indoor-market
+    district: stratford
+    tier: P
+    kind: market
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [food]
+    note: Food from fictional stalls (host_venue_id), never real traders.
+  - id: stratford-station
+    district: stratford
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: stratford-international-station
+    district: stratford
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: maryland-station
+    district: stratford
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: stratford-high-street-station
+    district: stratford
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+
+  # --- Hand-labelled public place (SPEC §12: not an OSM feature) -------------
+  - id: olympic-park-stadium
+    district: stratford
+    tier: P
+    kind: stadium
+    name_source: polis
+    name: Olympic Park Stadium
+    host_venue_id: queen-elizabeth-olympic-park
+    careers: [footballer]
+    activities: [cup_final]
+    note: Hosts cup finals only. Placed at the park's point, never on a stadium footprint.
+
+  # --- Fictional venues (B, name_source polis) -------------------------------
+  # NEEDS-LITE: a cafe and a fictional market stall (food) and a rooms vendor (sleep).
+  - id: bowfield-corner-cafe
+    district: stratford
+    tier: B
+    kind: cafe
+    name_source: polis
+    name: Bowfield Corner Cafe
+    lat: 51.5428
+    lon: -0.0010
+    needs_met: [food, social]
+  - id: okafor-jollof-stall
+    district: stratford
+    tier: B
+    kind: stall
+    name_source: polis
+    name: Okafor Jollof Stall
+    host_venue_id: stratford-outdoor-market
+    needs_met: [food]
+  - id: leyfield-rooms
+    district: stratford
+    tier: B
+    kind: rooms
+    name_source: polis
+    name: Leyfield Rooms
+    lat: 51.5395
+    lon: 0.0035
+    needs_met: [sleep]

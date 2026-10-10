@@ -1,0 +1,245 @@
+# Schema: ../../../schemas/venue.schema.json
+#
+# Gameplay venues for Hackney (CC BY 4.0, like all seeds). Rows with
+# name_source: osm carry no name and no point: both come from the ODbL layer
+# ../../../odbl/london/venues-osm.geojson, joined by id at read time. Rows with
+# name_source: polis carry our own names: V and B venues are fictional and never
+# from OSM (SPEC §10). Their points are hand-placed near, not on, the OSM
+# places, or taken from a host venue (host_venue_id).
+# Station areas display as "<OSM name> station area"; operators are never shown.
+
+world: modern-earth-2026
+district: hackney
+venues:
+  # --- Public places (P, name and point from OSM) ----------------------------
+  - id: hackney-marshes
+    district: hackney
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 2
+    careers: [footballer]
+    activities: [sunday_league, training]
+    note: Hosts the slot-labelled pitches below.
+  - id: london-fields
+    district: hackney
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: hackney-downs
+    district: hackney
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: clissold-park
+    district: hackney
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: mabley-green
+    district: hackney
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [sunday_league, training]
+  - id: millfields-park
+    district: hackney
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [sunday_league, training]
+  - id: ridley-road-market
+    district: hackney
+    tier: P
+    kind: market
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [food]
+    note: Food from fictional stalls (host_venue_id), never real traders.
+  - id: broadway-market
+    district: hackney
+    tier: P
+    kind: market
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [food]
+    note: Food from fictional stalls (host_venue_id), never real traders.
+  - id: chatsworth-road-market
+    district: hackney
+    tier: P
+    kind: market
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [food]
+    note: Food from fictional stalls (host_venue_id), never real traders.
+  - id: hackney-central-station
+    district: hackney
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: dalston-junction-station
+    district: hackney
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: hackney-wick-station
+    district: hackney
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: london-fields-station
+    district: hackney
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+
+  # --- Hackney Marshes pitches (our slot labels; shown "<park> · Pitch N") ---
+  - id: hackney-marshes-pitch-1
+    district: hackney
+    tier: P
+    kind: pitch
+    name_source: generic
+    slot_label: Pitch 1
+    parent_venue_id: hackney-marshes
+    careers: [footballer]
+    activities: [sunday_league, training]
+    sponsor_slots: 1
+  - id: hackney-marshes-pitch-2
+    district: hackney
+    tier: P
+    kind: pitch
+    name_source: generic
+    slot_label: Pitch 2
+    parent_venue_id: hackney-marshes
+    careers: [footballer]
+    activities: [sunday_league, training]
+    sponsor_slots: 1
+  - id: hackney-marshes-pitch-3
+    district: hackney
+    tier: P
+    kind: pitch
+    name_source: generic
+    slot_label: Pitch 3
+    parent_venue_id: hackney-marshes
+    careers: [footballer]
+    activities: [sunday_league, training]
+    sponsor_slots: 1
+  - id: hackney-marshes-pitch-4
+    district: hackney
+    tier: P
+    kind: pitch
+    name_source: generic
+    slot_label: Pitch 4
+    parent_venue_id: hackney-marshes
+    careers: [footballer]
+    activities: [sunday_league, training]
+    sponsor_slots: 1
+  - id: hackney-marshes-pitch-5
+    district: hackney
+    tier: P
+    kind: pitch
+    name_source: generic
+    slot_label: Pitch 5
+    parent_venue_id: hackney-marshes
+    careers: [footballer]
+    activities: [sunday_league, training]
+    sponsor_slots: 1
+  - id: hackney-marshes-pitch-6
+    district: hackney
+    tier: P
+    kind: pitch
+    name_source: generic
+    slot_label: Pitch 6
+    parent_venue_id: hackney-marshes
+    careers: [footballer]
+    activities: [sunday_league, training]
+    sponsor_slots: 1
+
+  # --- Fictional venues (V and B, name_source polis) -------------------------
+  # Existing configs/institutions/*.yaml link here through their venue_id.
+  - id: hackney-kitchen
+    district: hackney
+    tier: B
+    kind: restaurant
+    name_source: polis
+    name: Hackney Kitchen
+    lat: 51.5450
+    lon: -0.0545
+    needs_met: [food, social]
+  - id: the-red-lion-pub
+    district: hackney
+    tier: B
+    kind: pub
+    name_source: polis
+    name: The Red Lion
+    lat: 51.5502
+    lon: -0.0668
+    needs_met: [food, social]
+  - id: hackney-corner-grocery
+    district: hackney
+    tier: B
+    kind: grocery
+    name_source: polis
+    name: Hackney Corner Grocery
+    lat: 51.5430
+    lon: -0.0598
+    needs_met: [food]
+  - id: fitlab-gym-hackney
+    district: hackney
+    tier: B
+    kind: gym
+    name_source: polis
+    name: FitLab Hackney
+    lat: 51.5468
+    lon: -0.0498
+    careers: [footballer]
+    activities: [fitness]
+    needs_met: [fitness]
+  - id: hackney-transit-authority
+    district: hackney
+    tier: V
+    kind: transit_office
+    name_source: polis
+    name: Hackney Transit Authority
+    host_venue_id: hackney-central-station
+    needs_met: [travel]
+    note: Fictional ticket desk at the station area; sells transit_single.
+  # NEEDS-LITE: a fictional stall at an OSM market (food) and a rooms vendor (sleep).
+  - id: bisi-pepper-pot
+    district: hackney
+    tier: B
+    kind: stall
+    name_source: polis
+    name: Bisi Pepper Pot
+    host_venue_id: ridley-road-market
+    needs_met: [food]
+  - id: marsh-lark-rooms
+    district: hackney
+    tier: B
+    kind: rooms
+    name_source: polis
+    name: Marsh Lark Rooms
+    lat: 51.5512
+    lon: -0.0430
+    needs_met: [sleep]

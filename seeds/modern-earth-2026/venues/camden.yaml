@@ -1,0 +1,152 @@
+# Schema: ../../../schemas/venue.schema.json
+#
+# Gameplay venues for Camden (CC BY 4.0, like all seeds). Rows with
+# name_source: osm carry no name and no point: both come from the ODbL layer
+# ../../../odbl/london/venues-osm.geojson, joined by id at read time. Rows with
+# name_source: polis carry our own names: V and B venues are fictional and never
+# from OSM (SPEC §10). Their points are hand-placed near, not on, the OSM
+# places, or taken from a host venue (host_venue_id).
+# Station areas display as "<OSM name> station area"; operators are never shown.
+
+world: modern-earth-2026
+district: camden
+venues:
+  # --- Public places (P, name and point from OSM) ----------------------------
+  - id: camden-market
+    district: camden
+    tier: P
+    kind: market
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [food]
+    note: Food from fictional stalls (host_venue_id), never real traders.
+  - id: inverness-street-market
+    district: camden
+    tier: P
+    kind: market
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [food]
+    note: Food from fictional stalls (host_venue_id), never real traders.
+  - id: primrose-hill
+    district: camden
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training]
+  - id: hampstead-heath
+    district: camden
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training]
+  - id: the-regents-park
+    district: camden
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 2
+    careers: [footballer]
+    activities: [sunday_league, training]
+  - id: talacre-gardens
+    district: camden
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: lewis-cubitt-park
+    district: camden
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: gasholder-park
+    district: camden
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: camden-gardens
+    district: camden
+    tier: P
+    kind: park
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: warren-sports-pitch
+    district: camden
+    tier: P
+    kind: pitch
+    name_source: osm
+    sponsor_slots: 1
+    careers: [footballer]
+    activities: [training, kickabout]
+  - id: camden-town-station
+    district: camden
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: kings-cross-st-pancras-station
+    district: camden
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: kentish-town-station
+    district: camden
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+  - id: chalk-farm-station
+    district: camden
+    tier: P
+    kind: station_area
+    name_source: osm
+    sponsor_slots: 2
+    needs_met: [travel]
+
+  # --- Fictional venues (B, name_source polis) -------------------------------
+  # configs/institutions/camden-arms-cafe.yaml links here through venue_id.
+  - id: camden-arms-cafe
+    district: camden
+    tier: B
+    kind: cafe
+    name_source: polis
+    name: Camden Arms Cafe
+    lat: 51.5408
+    lon: -0.1449
+    needs_met: [food, social]
+  # NEEDS-LITE: a fictional stall at an OSM market (food) and a rooms vendor (sleep).
+  - id: mira-dumpling-stall
+    district: camden
+    tier: B
+    kind: stall
+    name_source: polis
+    name: Mira Dumpling Stall
+    host_venue_id: camden-market
+    needs_met: [food]
+  - id: tallow-lane-rooms
+    district: camden
+    tier: B
+    kind: rooms
+    name_source: polis
+    name: Tallow Lane Rooms
+    lat: 51.5452
+    lon: -0.1420
+    needs_met: [sleep]
