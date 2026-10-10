@@ -24,9 +24,6 @@
     "/ additionalProperties",
     "/ required"
   ],
-  "configs/professions/freelancer.yaml": [
-    "/employer_institution_template type"
-  ],
   "configs/worlds/modern-earth-2026/world.config.yaml": [
     "/ additionalProperties",
     "/age_gate type",

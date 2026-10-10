@@ -198,11 +198,6 @@ NO_SCHEMA: tuple[NoSchemaRule, ...] = (
 # Known failures: xfail(strict=True) until the referenced issue is fixed.
 # --------------------------------------------------------------------------
 
-_PROFESSION_NULL_EMPLOYER = (
-    "the-staq/polis#1: profession.schema.json "
-    "requires employer_institution_template to be a string, but self-employed "
-    "professions use null, which the engine supports"
-)
 _CHARACTER_NEEDS_SCALE = (
     "the-staq/polis#2: state.needs still uses the "
     "pre-v0.2.0 0-1 float axes. character.schema.json v0.2.0 requires integers "
@@ -235,7 +230,6 @@ _INSTITUTION_KIND_TRANSIT = (
 )
 
 KNOWN_FAILURES: dict[str, str] = {
-    "configs/professions/freelancer.yaml": _PROFESSION_NULL_EMPLOYER,
     "seeds/modern-earth-2026/england-on-polis/football/characters/footballers/adaeze-okoye.yaml": _CHARACTER_NEEDS_SCALE,
     "seeds/modern-earth-2026/england-on-polis/football/characters/managers/marquez.yaml": _CHARACTER_NEEDS_SCALE,
     "seeds/modern-earth-2026/england-on-polis/government/prime-minister.yaml": _CHARACTER_NEEDS_SCALE,
