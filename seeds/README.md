@@ -74,3 +74,5 @@ Per OPEN-SOURCE.md Tier 2 (b): bountied work, founder-edited for voice. Most ref
 ## License
 
 CC-BY 4.0 per [`../LICENSE-CONTENT`](../LICENSE-CONTENT). Adapt and remix; attribute "the staq and contributors."
+
+**Venues.** `seeds/<world>/venues/*.yaml` (schema [`venue.schema.json`](../schemas/venue.schema.json)) is CC-BY 4.0 like the rest of this directory and carries no OpenStreetMap names or points. Real public places (parks, pitches, markets, station areas) get their name and point from the ODbL layer in [`../odbl/`](../odbl/), joined by venue id at read time. Clubs, institutions and businesses are fictional.

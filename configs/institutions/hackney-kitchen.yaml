@@ -4,6 +4,7 @@ kind: other
 name: Hackney Kitchen
 description: Modern British bistro
 district: Hackney
+venue_id: hackney-kitchen
 wage_rates:
   chef: 580
 goods:

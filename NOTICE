@@ -1,0 +1,12 @@
+Polis
+Copyright © 2026 the staq and contributors.
+
+Code, SDK, schemas and CLI are licensed under the Apache License 2.0 (LICENSE).
+Content configs and seeds are licensed under CC BY 4.0 (LICENSE-CONTENT).
+
+This repository contains data from OpenStreetMap,
+© OpenStreetMap contributors, under the Open Database License 1.0 (ODbL)
+(https://opendatacommons.org/licenses/odbl/1-0/). These files live under
+odbl/ and are not CC BY 4.0 or Apache-2.0. Their contents are under the
+Database Contents License 1.0. See odbl/LICENSE, odbl/README.md and
+https://www.openstreetmap.org/copyright.

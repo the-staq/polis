@@ -140,6 +140,7 @@ The Tier 3 CLA grants:
 Polis has a distinctive editorial voice. Reference content (Tier 2) and original creations (Tier 3) must hold this voice:
 
 - **Substrate-fictional, not real.** "England-on-Polis" not "England." "Foxbridge Defamation Act" not "UK Defamation Act 2013." LLM-judge refuses real names at the model layer.
+  - **Exception: real public places.** Real place names for parks, pitches, markets, station areas and place-word landmarks (L and P tiers) come from OpenStreetMap through [`odbl/`](odbl/) and are shown verbatim. Do not copy OSM names, points or ids into `configs/` or `seeds/`: add the OSM element to `odbl/picks/` and reference it by venue id. Businesses, clubs, institutions, people and brands stay fictional.
 - **Editorial, not chatbot.** Reads like a serious newspaper / academic reference, not generated SaaS marketing copy. No filler, throat-clearing, or hype words ("delve," "robust," "comprehensive," "unleash," etc.).
 - **Information-dense.** Tables, lists, named entities, real numbers. Tabular numerals on every number.
 - **Adapted from sources, not invented.** Most country / industry content can be adapted from public-domain or open-license sources (per `polis/configs/sources.yaml`). Adapt structure; preserve license attribution; substrate-fictionalize names.

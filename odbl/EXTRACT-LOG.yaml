@@ -1,0 +1,44 @@
+# Append-only log of OSM extracts into this folder (ODbL 1.0).
+# Written by polis-internal scripts/extract_osm_venues.py; do not edit entries.
+- date: '2026-10-10'
+  script_version: '1'
+  overpass_url: https://maps.mail.ru/osm/tools/overpass/api/interpreter
+  osm_base_timestamp: '2026-10-10T01:03:20Z'
+  osm_ids:
+  - node/119274464
+  - node/1670707917
+  - node/21596119
+  - node/3608653828
+  - node/5257403774
+  - node/5359714471
+  - node/5469588771
+  - node/5585857405
+  - node/6503115198
+  - node/6758674587
+  - node/6997712296
+  - node/7147521855
+  - node/7147535476
+  - relation/1384127
+  - relation/16248108
+  - relation/21255243
+  - relation/2200771
+  - relation/4501353
+  - relation/9046305
+  - way/117363818
+  - way/117371880
+  - way/13868329
+  - way/1426032700
+  - way/1426034582
+  - way/24722251
+  - way/287931052
+  - way/321722646
+  - way/347275186
+  - way/4082666
+  - way/4406359
+  - way/4481793
+  - way/453267219
+  - way/4680796
+  - way/536499671
+  - way/5993319
+  - way/79812484
+  - way/856806600
