@@ -4,6 +4,7 @@ kind: pub
 name: "The Red Lion"
 description: Traditional Hackney pub
 district: Hackney
+venue_id: the-red-lion-pub
 wage_rates:
   pub-staff: 320
   chef: 520

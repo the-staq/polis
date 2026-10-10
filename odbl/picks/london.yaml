@@ -1,0 +1,291 @@
+# OSM picks for London: the hand-picked list of public places (L and P tiers)
+# that polis names and places from OpenStreetMap. ODbL 1.0, see ../LICENSE.
+#
+# Each entry is one OSM element, chosen by id on openstreetmap.org. The
+# extractor (polis-internal scripts/extract_osm_venues.py) fetches exactly
+# these ids, keeps the name and a point, and writes ../london/venues-osm.geojson.
+# Nothing here is edited by hand from OSM data: to fix a name, fix it in OSM
+# and re-extract (see ../README.md).
+#
+# Fields:
+#   venue_id   our id; joins to seeds/<world>/venues/<district>.yaml (CC BY)
+#   osm_type   node | way | relation
+#   osm_id     OSM element id
+#   tier       L (landmark) or P (public place). V and B are never from OSM.
+#   kind       park | pitch | market | station_area | landmark
+#   district   polis district slug
+#   reason     why this place is in the game
+#
+# Left out on purpose (2026-10-10): Coram's Fields (a children's site), London
+# Stadium (kept as the polis hand label "Olympic Park Stadium", not an OSM
+# feature), Stratford Mall and BOXPARK (commercial brands), Homerton
+# (twin-place list). "Stratford" is the Stratford area of Newham (Olympic Park,
+# the station, West Ham Park), not the whole borough.
+#
+# Picked 2026-10-10 against OSM base 2026-10-10T00:47Z.
+
+picks:
+  # --- Hackney ---------------------------------------------------------------
+  - venue_id: hackney-marshes
+    osm_type: way
+    osm_id: 536499671
+    tier: P
+    kind: park
+    district: hackney
+    reason: Sunday-league home of London; hosts our slot-labelled pitches 1-6
+  - venue_id: london-fields
+    osm_type: way
+    osm_id: 4406359
+    tier: P
+    kind: park
+    district: hackney
+    reason: Central Hackney park; kickabouts and training runs
+  - venue_id: hackney-downs
+    osm_type: way
+    osm_id: 5993319
+    tier: P
+    kind: park
+    district: hackney
+    reason: Park with open grass for informal training
+  - venue_id: clissold-park
+    osm_type: way
+    osm_id: 4481793
+    tier: P
+    kind: park
+    district: hackney
+    reason: North Hackney park; recovery and fitness sessions
+  - venue_id: mabley-green
+    osm_type: relation
+    osm_id: 4501353
+    tier: P
+    kind: park
+    district: hackney
+    reason: Playing fields next to Hackney Wick
+  - venue_id: millfields-park
+    osm_type: relation
+    osm_id: 16248108
+    tier: P
+    kind: park
+    district: hackney
+    reason: Playing fields by the River Lea
+  - venue_id: ridley-road-market
+    osm_type: way
+    osm_id: 321722646
+    tier: P
+    kind: market
+    district: hackney
+    reason: Street market; fictional food stalls (NEEDS-LITE food)
+  - venue_id: broadway-market
+    osm_type: way
+    osm_id: 1426032700
+    tier: P
+    kind: market
+    district: hackney
+    reason: Street market; fictional food stalls
+  - venue_id: chatsworth-road-market
+    osm_type: way
+    osm_id: 1426034582
+    tier: P
+    kind: market
+    district: hackney
+    reason: Street market; fictional food stalls
+  - venue_id: hackney-central-station
+    osm_type: node
+    osm_id: 6997712296
+    tier: P
+    kind: station_area
+    district: hackney
+    reason: Station area; travel hub for Hackney
+  - venue_id: dalston-junction-station
+    osm_type: node
+    osm_id: 21596119
+    tier: P
+    kind: station_area
+    district: hackney
+    reason: Station area; travel to Dalston
+  - venue_id: hackney-wick-station
+    osm_type: node
+    osm_id: 7147521855
+    tier: P
+    kind: station_area
+    district: hackney
+    reason: Station area; link to the Marshes and the Olympic Park
+  - venue_id: london-fields-station
+    osm_type: node
+    osm_id: 7147535476
+    tier: P
+    kind: station_area
+    district: hackney
+    reason: Station area next to London Fields and Broadway Market
+
+  # --- Camden ----------------------------------------------------------------
+  - venue_id: camden-market
+    osm_type: node
+    osm_id: 3608653828
+    tier: P
+    kind: market
+    district: camden
+    reason: Camden's main market; fictional food stalls (NEEDS-LITE food)
+  - venue_id: inverness-street-market
+    osm_type: way
+    osm_id: 856806600
+    tier: P
+    kind: market
+    district: camden
+    reason: Street market off Camden High Street; fictional food stalls
+  - venue_id: primrose-hill
+    osm_type: way
+    osm_id: 4082666
+    tier: P
+    kind: park
+    district: camden
+    reason: Park and viewpoint; hill runs for training
+  - venue_id: hampstead-heath
+    osm_type: relation
+    osm_id: 21255243
+    tier: P
+    kind: park
+    district: camden
+    reason: Large heath; long runs and conditioning
+  - venue_id: the-regents-park
+    osm_type: relation
+    osm_id: 1384127
+    tier: P
+    kind: park
+    district: camden
+    reason: Royal park with sports pitches; Sunday league
+  - venue_id: talacre-gardens
+    osm_type: way
+    osm_id: 4680796
+    tier: P
+    kind: park
+    district: camden
+    reason: Kentish Town park with a games area
+  - venue_id: lewis-cubitt-park
+    osm_type: way
+    osm_id: 347275186
+    tier: P
+    kind: park
+    district: camden
+    reason: King's Cross park; meeting point
+  - venue_id: gasholder-park
+    osm_type: way
+    osm_id: 453267219
+    tier: P
+    kind: park
+    district: camden
+    reason: King's Cross canal-side park
+  - venue_id: camden-gardens
+    osm_type: way
+    osm_id: 79812484
+    tier: P
+    kind: park
+    district: camden
+    reason: Small park by Camden Town
+  - venue_id: warren-sports-pitch
+    osm_type: way
+    osm_id: 287931052
+    tier: P
+    kind: pitch
+    district: camden
+    reason: Named football pitch; small-sided games and training
+  - venue_id: camden-town-station
+    osm_type: node
+    osm_id: 1670707917
+    tier: P
+    kind: station_area
+    district: camden
+    reason: Station area; travel hub for Camden
+  - venue_id: kings-cross-st-pancras-station
+    osm_type: node
+    osm_id: 119274464
+    tier: P
+    kind: station_area
+    district: camden
+    reason: Station area; rail link to the airport node
+  - venue_id: kentish-town-station
+    osm_type: node
+    osm_id: 5359714471
+    tier: P
+    kind: station_area
+    district: camden
+    reason: Station area; travel to Kentish Town
+  - venue_id: chalk-farm-station
+    osm_type: node
+    osm_id: 5585857405
+    tier: P
+    kind: station_area
+    district: camden
+    reason: Station area near Primrose Hill
+
+  # --- Stratford (the Stratford area of Newham) -----------------------------
+  - venue_id: queen-elizabeth-olympic-park
+    osm_type: relation
+    osm_id: 2200771
+    tier: P
+    kind: park
+    district: stratford
+    reason: Olympic Park; hosts the cup-final stadium (hand label) and pitches
+  - venue_id: west-ham-park
+    osm_type: way
+    osm_id: 13868329
+    tier: P
+    kind: park
+    district: stratford
+    reason: Large park with football pitches; Sunday league
+  - venue_id: stratford-park
+    osm_type: way
+    osm_id: 24722251
+    tier: P
+    kind: park
+    district: stratford
+    reason: Local park; informal training
+  - venue_id: victory-park
+    osm_type: relation
+    osm_id: 9046305
+    tier: P
+    kind: park
+    district: stratford
+    reason: Park in the East Village
+  - venue_id: stratford-outdoor-market
+    osm_type: way
+    osm_id: 117371880
+    tier: P
+    kind: market
+    district: stratford
+    reason: Street market; fictional food stalls (NEEDS-LITE food)
+  - venue_id: stratford-indoor-market
+    osm_type: way
+    osm_id: 117363818
+    tier: P
+    kind: market
+    district: stratford
+    reason: Covered market; fictional food stalls
+  - venue_id: stratford-station
+    osm_type: node
+    osm_id: 5257403774
+    tier: P
+    kind: station_area
+    district: stratford
+    reason: Station area; main travel hub for East London
+  - venue_id: stratford-international-station
+    osm_type: node
+    osm_id: 6758674587
+    tier: P
+    kind: station_area
+    district: stratford
+    reason: Station area; fast rail
+  - venue_id: maryland-station
+    osm_type: node
+    osm_id: 6503115198
+    tier: P
+    kind: station_area
+    district: stratford
+    reason: Station area east of Stratford
+  - venue_id: stratford-high-street-station
+    osm_type: node
+    osm_id: 5469588771
+    tier: P
+    kind: station_area
+    district: stratford
+    reason: Station area south of the town centre

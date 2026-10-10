@@ -128,6 +128,7 @@ See [`SECURITY.md`](SECURITY.md) for vulnerability disclosure. Smart-contract bu
 
 - **Code, SDK, schemas, CLI:** Apache 2.0 — see [`LICENSE`](LICENSE)
 - **Content configs (worlds / countries / industries / institutions):** CC-BY 4.0 — see [`LICENSE-CONTENT`](LICENSE-CONTENT)
+- **OpenStreetMap place data (`odbl/`):** ODbL 1.0, contents DbCL 1.0, © OpenStreetMap contributors — see [`odbl/LICENSE`](odbl/LICENSE) and [`NOTICE`](NOTICE). Not CC-BY 4.0 or Apache 2.0
 - **Smart contract templates:** Apache 2.0 (factory-deployment-only via the staq)
 
 ---

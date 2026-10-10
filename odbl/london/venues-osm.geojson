@@ -1,0 +1,710 @@
+{
+  "attribution": "© OpenStreetMap contributors (https://www.openstreetmap.org/copyright)",
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0615166,
+          51.5368612
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Broadway Market",
+        "osm_id": 1426032700,
+        "osm_tag": "amenity=marketplace",
+        "osm_type": "way",
+        "osm_version": 1,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "broadway-market"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1414505,
+          51.5421168
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Camden Gardens",
+        "osm_id": 79812484,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 9,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "camden-gardens"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1471949,
+          51.5423781
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Camden Market",
+        "osm_id": 3608653828,
+        "osm_tag": "amenity=marketplace",
+        "osm_type": "node",
+        "osm_version": 12,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "camden-market"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1426957,
+          51.5394397
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Camden Town",
+        "osm_id": 1670707917,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 43,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "camden-town-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1534811,
+          51.5441141
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Chalk Farm",
+        "osm_id": 5585857405,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 14,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "chalk-farm-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0446587,
+          51.5532437
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Chatsworth Road Market",
+        "osm_id": 1426034582,
+        "osm_tag": "amenity=marketplace",
+        "osm_type": "way",
+        "osm_version": 1,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "chatsworth-road-market"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0877894,
+          51.5609926
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Clissold Park",
+        "osm_id": 4481793,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 31,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "clissold-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.074968,
+          51.5452841
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Dalston Junction",
+        "osm_id": 21596119,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 43,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "dalston-junction-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1281456,
+          51.5370116
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Gasholder Park",
+        "osm_id": 453267219,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 7,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "gasholder-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0568749,
+          51.5470605
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Hackney Central",
+        "osm_id": 6997712296,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 10,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "hackney-central-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.062305,
+          51.5537867
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Hackney Downs",
+        "osm_id": 5993319,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 25,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "hackney-downs"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0285892,
+          51.5564772
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Hackney Marshes",
+        "osm_id": 536499671,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 15,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "hackney-marshes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0241542,
+          51.5434383
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Hackney Wick",
+        "osm_id": 7147521855,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 17,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "hackney-wick-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1698264,
+          51.5671541
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Hampstead Heath",
+        "osm_id": 21255243,
+        "osm_tag": "leisure=park",
+        "osm_type": "relation",
+        "osm_version": 1,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "hampstead-heath"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1439843,
+          51.5394921
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Inverness Street Market",
+        "osm_id": 856806600,
+        "osm_tag": "amenity=marketplace",
+        "osm_type": "way",
+        "osm_version": 5,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "inverness-street-market"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1388654,
+          51.5501727
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Kentish Town",
+        "osm_id": 5359714471,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 20,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "kentish-town-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1239491,
+          51.530609
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "King's Cross St Pancras",
+        "osm_id": 119274464,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 53,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "kings-cross-st-pancras-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1252222,
+          51.538152
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Lewis Cubitt Park",
+        "osm_id": 347275186,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 11,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "lewis-cubitt-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0604479,
+          51.5405754
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "London Fields",
+        "osm_id": 4406359,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 30,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "london-fields"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0577737,
+          51.5410518
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "London Fields",
+        "osm_id": 7147535476,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 11,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "london-fields-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0317414,
+          51.5489062
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Mabley Green",
+        "osm_id": 4501353,
+        "osm_tag": "leisure=park",
+        "osm_type": "relation",
+        "osm_version": 6,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "mabley-green"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.0063775,
+          51.5461244
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Maryland",
+        "osm_id": 6503115198,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 15,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "maryland-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0472941,
+          51.5601616
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Millfields Park",
+        "osm_id": 16248108,
+        "osm_tag": "leisure=park",
+        "osm_type": "relation",
+        "osm_version": 3,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "millfields-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1616396,
+          51.5390612
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Primrose Hill",
+        "osm_id": 4082666,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 36,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "primrose-hill"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0150579,
+          51.5450402
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Queen Elizabeth Olympic Park",
+        "osm_id": 2200771,
+        "osm_tag": "leisure=park",
+        "osm_type": "relation",
+        "osm_version": 31,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "queen-elizabeth-olympic-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0730727,
+          51.5481428
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Ridley Road Market",
+        "osm_id": 321722646,
+        "osm_tag": "amenity=marketplace",
+        "osm_type": "way",
+        "osm_version": 11,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "ridley-road-market"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0001288,
+          51.5376469
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Stratford High Street",
+        "osm_id": 5469588771,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 14,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "stratford-high-street-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0007095,
+          51.5416306
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Stratford Indoor Market",
+        "osm_id": 117363818,
+        "osm_tag": "amenity=marketplace",
+        "osm_type": "way",
+        "osm_version": 3,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "stratford-indoor-market"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0087494,
+          51.5447954
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Stratford International",
+        "osm_id": 6758674587,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 12,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "stratford-international-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.0020204,
+          51.5414421
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Stratford Outdoor Market",
+        "osm_id": 117371880,
+        "osm_tag": "amenity=marketplace",
+        "osm_type": "way",
+        "osm_version": 2,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "stratford-outdoor-market"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.0071792,
+          51.5383223
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Stratford Park",
+        "osm_id": 24722251,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 23,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "stratford-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0035472,
+          51.541289
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Stratford",
+        "osm_id": 5257403774,
+        "osm_tag": "railway=station",
+        "osm_type": "node",
+        "osm_version": 25,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "stratford-station"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.148116,
+          51.5469724
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Talacre Gardens",
+        "osm_id": 4680796,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 10,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "talacre-gardens"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1555546,
+          51.5301451
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "The Regent's Park",
+        "osm_id": 1384127,
+        "osm_tag": "leisure=park",
+        "osm_type": "relation",
+        "osm_version": 53,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "the-regents-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.0094659,
+          51.5469007
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Victory Park",
+        "osm_id": 9046305,
+        "osm_tag": "leisure=park",
+        "osm_type": "relation",
+        "osm_version": 1,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "victory-park"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          -0.1384258,
+          51.5237562
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "Warren Sports Pitch",
+        "osm_id": 287931052,
+        "osm_tag": "leisure=pitch",
+        "osm_type": "way",
+        "osm_version": 6,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "warren-sports-pitch"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          0.0178617,
+          51.5391992
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "name": "West Ham Park",
+        "osm_id": 13868329,
+        "osm_tag": "leisure=park",
+        "osm_type": "way",
+        "osm_version": 45,
+        "retrieved_at": "2026-10-10T01:03:20Z",
+        "venue_id": "west-ham-park"
+      },
+      "type": "Feature"
+    }
+  ],
+  "license": "ODbL-1.0",
+  "type": "FeatureCollection"
+}

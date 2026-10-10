@@ -4,6 +4,7 @@ kind: transit
 name: Hackney Transit Authority
 description: Public transport for Hackney
 district: Hackney
+venue_id: hackney-transit-authority
 wage_rates:
   transit-operator: 620
 goods:

@@ -4,6 +4,7 @@ kind: gym
 name: FitLab Hackney
 description: Community gym with pool and classes
 district: Hackney
+venue_id: fitlab-gym-hackney
 wage_rates:
   gym-instructor: 480
 goods:

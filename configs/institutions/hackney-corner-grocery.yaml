@@ -4,6 +4,7 @@ kind: grocery
 name: Hackney Corner Grocery
 description: Local grocery store
 district: Hackney
+venue_id: hackney-corner-grocery
 wage_rates:
   retail-assistant: 340
 goods:

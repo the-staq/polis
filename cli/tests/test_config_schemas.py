@@ -110,6 +110,9 @@ SCHEMA_MAP: tuple[SchemaRule, ...] = (
     # seeds/ (instances; seeds/README.md: "both validate against the same schemas")
     SchemaRule("seeds/*/world.yaml", "world.schema.json"),
     SchemaRule("seeds/*/lots/**/*.yaml", "lot.schema.json"),
+    # Gameplay venues (CC BY). OSM names and points live in odbl/, which is not
+    # scanned here; cli/tests/test_odbl_dataset.py checks that layer.
+    SchemaRule("seeds/*/venues/*.yaml", "venue.schema.json"),
     SchemaRule("seeds/*/*/geography/lots/**/*.yaml", "lot.schema.json"),
     SchemaRule("seeds/*/*/*/characters/**/*.yaml", "character.schema.json"),
     SchemaRule("seeds/*/*/*/contracts/*.yaml", "contract.schema.json"),
