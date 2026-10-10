@@ -87,7 +87,7 @@
         },
         "host_venue_id": {
           "$ref": "#/$defs/venue_id",
-          "description": "For a fictional vendor sited at a public place (e.g. a stall at an OSM market): the host venue. The vendor takes the host's point."
+          "description": "For a B stall sited at a public place (e.g. a stall at an OSM market), or a hand-labelled L/P place inside one: the host venue, whose point it takes. V venues never use it: they sit on their own non-OSM point (SPEC §10)."
         },
         "careers": {
           "type": "array",
@@ -137,6 +137,14 @@
         {
           "if": {"properties": {"tier": {"enum": ["V", "B"]}}, "required": ["tier"]},
           "then": {"properties": {"name_source": {"enum": ["polis", "licensed"]}}}
+        },
+        {
+          "if": {"properties": {"tier": {"const": "V"}}, "required": ["tier"]},
+          "then": {"not": {"required": ["host_venue_id"]}}
+        },
+        {
+          "if": {"properties": {"tier": {"const": "B"}}, "required": ["tier", "host_venue_id"]},
+          "then": {"properties": {"kind": {"const": "stall"}}}
         },
         {
           "if": {"properties": {"name_source": {"const": "licensed"}}, "required": ["name_source"]},

@@ -352,8 +352,10 @@ def test_venue_schema_accepts(row: dict) -> None:
         {"id": "x-slot", "tier": "P", "kind": "pitch", "name_source": "generic", "slot_label": "Pitch 1", "parent_venue_id": "x-park", "lat": 51.5, "lon": -0.1},
         {"id": "x-cafe", "tier": "B", "kind": "cafe", "name_source": "polis", "name": "Some Cafe"},
         {"id": "x-park", "tier": "P", "kind": "park", "name_source": "licensed", "name": "Sold Park", "lat": 51.5, "lon": -0.1},
+        {"id": "x-office", "tier": "V", "kind": "transit_office", "name_source": "polis", "name": "X Office", "host_venue_id": "x-station"},
+        {"id": "x-cafe", "tier": "B", "kind": "cafe", "name_source": "polis", "name": "Some Cafe", "host_venue_id": "x-park"},
     ],
-    ids=["osm-name", "osm-point", "osm-B", "osm-V", "generic-B", "generic-point", "polis-no-point", "licensed-P"],
+    ids=["osm-name", "osm-point", "osm-B", "osm-V", "generic-B", "generic-point", "polis-no-point", "licensed-P", "V-hosted", "B-hosted-not-stall"],
 )
 def test_venue_schema_rejects(row: dict) -> None:
     assert _row_errors(row), f"venue.schema.json accepted {row}"

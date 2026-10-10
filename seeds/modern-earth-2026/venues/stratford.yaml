@@ -6,7 +6,8 @@
 # from the ODbL layer ../../../odbl/london/venues-osm.geojson, joined by id at
 # read time. Rows with name_source: polis carry our own names: V and B venues
 # are fictional and never from OSM (SPEC §10). Their points are hand-placed
-# near, not on, the OSM places, or taken from a host venue (host_venue_id).
+# near, not on, the OSM places; a B stall may instead take a P host's point
+# (host_venue_id), and so may the hand-labelled stadium.
 # Station areas display as "<OSM name> station area"; operators are never shown.
 
 world: modern-earth-2026

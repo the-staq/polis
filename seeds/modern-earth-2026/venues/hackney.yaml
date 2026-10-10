@@ -5,7 +5,7 @@
 # ../../../odbl/london/venues-osm.geojson, joined by id at read time. Rows with
 # name_source: polis carry our own names: V and B venues are fictional and never
 # from OSM (SPEC §10). Their points are hand-placed near, not on, the OSM
-# places, or taken from a host venue (host_venue_id).
+# places; a B stall may instead take a P host's point (host_venue_id).
 # Station areas display as "<OSM name> station area"; operators are never shown.
 
 world: modern-earth-2026
@@ -222,9 +222,13 @@ venues:
     kind: transit_office
     name_source: polis
     name: Hackney Transit Authority
-    host_venue_id: hackney-central-station
+    lat: 51.5462
+    lon: -0.0558
     needs_met: [travel]
-    note: Fictional ticket desk at the station area; sells transit_single.
+    note: >-
+      Fictional ticket office on its own point near, not on, the Hackney
+      Central station area (V venues never sit on an OSM point, SPEC §10);
+      sells transit_single.
   # NEEDS-LITE: a fictional stall at an OSM market (food) and a rooms vendor (sleep).
   - id: bisi-pepper-pot
     district: hackney

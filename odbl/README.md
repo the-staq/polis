@@ -8,7 +8,7 @@ This folder is the only place in Polis that holds OpenStreetMap data. It is not 
 
 Polis names and places real **public places** from OpenStreetMap: parks, football pitches, markets, station areas and place-word landmarks (the L and P tiers in the venue model). Everything else in the game, including clubs, institutions, pubs, cafés, gyms and rooms, is fictional and never comes from OSM. A real business name appears only when the business licenses it to us.
 
-There is no cap on the number of OSM features. The layer is a derivative database of OpenStreetMap and is published here, in full, under the ODbL. This folder is our offer under ODbL §4.6: it contains the derivative database itself and the method used to make it (the picks file, the extractor described below, and the extract log).
+There is no cap on the number of OSM features. The layer is a derivative database of OpenStreetMap and is published here, in full, under the ODbL. This folder is our offer under ODbL §4.6: it contains the derivative database itself, the picks file that defines it and the extract log. The method is described below; the extractor that runs it is in Polis's private runtime repository and is not published.
 
 ## Files
 
@@ -29,12 +29,14 @@ The schema for the GeoJSON is [`../schemas/venue-osm.schema.json`](../schemas/ve
 4. **One source per data type.** London public-place names come from OSM only. They are never topped up from another dataset or by hand. NaPTAN is used for routing, not for station-area names.
 5. **Deterministic output.** Features are sorted by `venue_id` and written as sorted-key JSON. `retrieved_at` is the OSM base timestamp of the Overpass response.
 
-The extractor is `scripts/extract_osm_venues.py` with the `app/maps/overpass/` package in the Polis runtime repository. It reads the picks file, writes the GeoJSON and appends to the log; it touches no database.
+The extractor is `scripts/extract_osm_venues.py` with the `app/maps/overpass/` package in Polis's private runtime repository (not published). It reads the picks file, writes the GeoJSON and appends to the log; it touches no database. Its default endpoint is `https://overpass-api.de/api/interpreter`.
+
+**Provenance of the current extract.** The first extract (2026-10-10, the only entry in `EXTRACT-LOG.yaml`) was pulled from the `maps.mail.ru` Overpass mirror, because `overpass-api.de` was not reachable from the build environment that day. The data is the same OpenStreetMap data under the same licence; only the service differs, and that mirror's terms of use are not yet checked. The next refresh must use `overpass-api.de`, and the log will show it.
 
 ## Refreshing
 
 1. Edit `picks/<city>.yaml` (add, remove or change an element id).
-2. Run the extractor against an Overpass endpoint. It records the endpoint URL and the OSM base timestamp in `EXTRACT-LOG.yaml`.
+2. Run the extractor with `--strict` against `https://overpass-api.de/api/interpreter` (its default). It records the endpoint URL and the OSM base timestamp in `EXTRACT-LOG.yaml`.
 3. Check the report: every pick must be kept. If a pick is dropped, remove it from the picks file with a comment saying why.
 4. Run `python -m pytest cli/tests/test_odbl_dataset.py` and commit the picks, GeoJSON and log together.
 
