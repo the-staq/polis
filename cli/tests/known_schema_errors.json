@@ -1,0 +1,143 @@
+{
+  "configs/institutions/camden-arms-cafe.yaml": [
+    "/ additionalProperties",
+    "/ required"
+  ],
+  "configs/institutions/fitlab-gym-hackney.yaml": [
+    "/ additionalProperties",
+    "/ required"
+  ],
+  "configs/institutions/hackney-corner-grocery.yaml": [
+    "/ additionalProperties",
+    "/ required"
+  ],
+  "configs/institutions/hackney-kitchen.yaml": [
+    "/ additionalProperties",
+    "/ required"
+  ],
+  "configs/institutions/hackney-transit-authority.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/kind enum"
+  ],
+  "configs/institutions/the-red-lion-pub.yaml": [
+    "/ additionalProperties",
+    "/ required"
+  ],
+  "configs/professions/freelancer.yaml": [
+    "/employer_institution_template type"
+  ],
+  "configs/worlds/modern-earth-2026/world.config.yaml": [
+    "/ additionalProperties",
+    "/age_gate type",
+    "/cognition required",
+    "/economic_base required",
+    "/era enum",
+    "/geography required",
+    "/industries_allowed type",
+    "/moderation required",
+    "/physics required",
+    "/visibility enum"
+  ],
+  "seeds/modern-earth-2026/england-on-polis/football/characters/footballers/adaeze-okoye.yaml": [
+    "/state/needs/comfort type",
+    "/state/needs/energy type",
+    "/state/needs/health type",
+    "/state/needs/hunger type",
+    "/state/needs/hygiene type",
+    "/state/needs/mood type",
+    "/state/needs/purpose type",
+    "/state/needs/social type",
+    "/state/needs/thirst type",
+    "/state/needs/warmth type"
+  ],
+  "seeds/modern-earth-2026/england-on-polis/football/characters/managers/marquez.yaml": [
+    "/state/needs/comfort type",
+    "/state/needs/energy type",
+    "/state/needs/health type",
+    "/state/needs/hunger type",
+    "/state/needs/hygiene type",
+    "/state/needs/mood type",
+    "/state/needs/purpose type",
+    "/state/needs/social type",
+    "/state/needs/thirst type",
+    "/state/needs/warmth type"
+  ],
+  "seeds/modern-earth-2026/england-on-polis/government/prime-minister.yaml": [
+    "/state/needs/comfort type",
+    "/state/needs/energy type",
+    "/state/needs/health type",
+    "/state/needs/hunger type",
+    "/state/needs/hygiene type",
+    "/state/needs/mood type",
+    "/state/needs/purpose type",
+    "/state/needs/social type",
+    "/state/needs/thirst type",
+    "/state/needs/warmth type"
+  ],
+  "seeds/modern-earth-2026/england-on-polis/regulators/federation-of-hartshire.yaml": [
+    "/governance/board/0/character_id type",
+    "/governance/board/1/character_id type",
+    "/governance/board/2/character_id type"
+  ],
+  "seeds/modern-earth-2026/lots/camden/flat-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/camden/flat-02.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/camden/house-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/camden/studio-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/hackney/flat-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/hackney/house-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/hackney/loft-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/hackney/studio-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/stratford/flat-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/stratford/house-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/stratford/new-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ],
+  "seeds/modern-earth-2026/lots/stratford/studio-01.yaml": [
+    "/ additionalProperties",
+    "/ required",
+    "/id pattern"
+  ]
+}

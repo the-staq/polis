@@ -23,7 +23,30 @@
 # This is the V0 starter set. Expand as corpora ingestion progresses per
 # FOUNDATION-PLAN.md.
 
-sources: []
+sources:
+  - id: openstreetmap
+    title: OpenStreetMap (hand-picked public places, by element id)
+    url: https://www.openstreetmap.org/copyright
+    license: ODbL-1.0
+    attribution: "© OpenStreetMap contributors"
+    used_in:
+      - odbl/**
+    adapted_to: odbl/london/venues-osm.geojson
+    adaptation_notes: >-
+      L and P venue names and points only (parks, pitches, markets, station
+      areas, place-word landmarks), fetched by OSM id from the Overpass API.
+      Name copied verbatim; ways and relations reduced to their center point;
+      all other tags and outlines discarded; operator never shown. Picks with
+      brand tags, sensitive tags or names that fail the recap scrub are
+      dropped, never edited. Published as a derivative database under ODbL 1.0
+      (contents DbCL 1.0) in odbl/; CC BY files join by venue_id only. Extract
+      runs are logged in odbl/EXTRACT-LOG.yaml.
+    ingestion_date: "2026-10-10"
+    chunk_count: null
+    embedding_model: null
+    license_review_status: pending
+    license_review_at: null
+    license_review_by: tbd
 
 # === Football industry — governance corpora ===
 # (Will populate during foundation-work week 5-7 per FOUNDATION-PLAN.md)

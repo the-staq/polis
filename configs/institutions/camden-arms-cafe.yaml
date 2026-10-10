@@ -2,8 +2,9 @@
 id: camden-arms-cafe
 kind: cafe
 name: Camden Arms Cafe
-description: Popular Hackney cafe
-district: Hackney
+description: Popular Camden cafe
+district: Camden
+venue_id: camden-arms-cafe
 wage_rates:
   barista: 300
   chef: 500
